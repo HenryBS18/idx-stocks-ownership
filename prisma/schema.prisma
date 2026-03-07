@@ -22,7 +22,7 @@ model Stock {
 model StockInvestor {
   id                Int    @id @default(autoincrement()) @db.Integer()
   ticker            String @db.Char(4)
-  investorName      String @db.VarChar(100)
+  investorName      String @db.VarChar(150)
   investorType      String @db.Char(2)
   localForeign      String @db.Char(1)
   domicile          String @db.VarChar(100)
