@@ -13,27 +13,27 @@ model User {
 }
 
 model Stock {
-  ticker String @id
-  name   String
+  ticker String @id @db.Char(4)
+  name   String @db.VarChar(60)
 
   stockInvestor StockInvestor[]
 }
 
 model StockInvestor {
-  id                String @id @default(nanoid())
-  ticker            String
-  investorName      String
-  investorType      String
-  localForeign      String
-  domicile          String
-  scripless         Int
-  scrip             Int
-  totalHoldingShare Int
+  id                Int    @id @default(autoincrement()) @db.Integer()
+  ticker            String @db.Char(4)
+  investorName      String @db.VarChar(100)
+  investorType      String @db.Char(2)
+  localForeign      String @db.Char(1)
+  domicile          String @db.VarChar(100)
+  scripless         BigInt @db.BigInt()
+  scrip             BigInt @db.BigInt()
+  totalHoldingShare BigInt @db.BigInt()
   percentage        Float
   stock             Stock  @relation(fields: [ticker], references: [ticker])
 }
 
 model Info {
-  id             String @id @default(uuid())
-  idxLastUpdated String
+  id             Int    @id @default(autoincrement()) @db.Integer()
+  idxLastUpdated String @db.VarChar(26)
 }
