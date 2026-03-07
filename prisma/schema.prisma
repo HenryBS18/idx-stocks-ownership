@@ -32,3 +32,8 @@ model StockInvestor {
   percentage        Float
   stock             Stock  @relation(fields: [ticker], references: [ticker])
 }
+
+model Info {
+  id             String @id @default(uuid())
+  idxLastUpdated String
+}
