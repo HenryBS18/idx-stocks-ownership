@@ -11,6 +11,7 @@ export type IdxFileData = {
 }
 
 export type StockRaw = {
+  infoId: number
   ticker: string
   name: string
   investorName: string

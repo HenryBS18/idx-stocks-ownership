@@ -1,7 +1,8 @@
 import fs from 'fs'
 // @ts-ignore
 import extractor from 'pdf-table-extractor'
-import { IdxFileData, Stock, StockRaw, TickerName } from "../../types"
+import { IdxFileData, Stock, StockRaw, TickerName } from "~~/server/types"
+import { datetimeParser } from "~~/server/utils/datetime-parser"
 
 export default defineEventHandler(async (event) => {
   console.time()
@@ -42,28 +43,27 @@ export default defineEventHandler(async (event) => {
     }, TARGET_TITLE)
 
     const { url, time } = data!
-    const info = await prisma.info.findFirst()
-
-    if (info && info.idxLastUpdated === time) {
-      return { message: 'Already Updated to the Latest Data' }
-    }
-
-    await operate(url)
-
-    if (info) {
-      await prisma.info.update({
-        where: { id: info.id },
-        data: { idxLastUpdated: time }
-      })
-
-      return { message: 'Updated' }
-    }
-
-    await prisma.info.create({
-      data: {
+    const info = await prisma.info.findFirst({
+      where: {
         idxLastUpdated: time
       }
     })
+
+    if (info) {
+      return { message: 'Already Updated to the Latest Data' }
+    }
+
+    const { month, year } = datetimeParser(time)
+
+    const newInfo = await prisma.info.create({
+      data: {
+        idxLastUpdated: time,
+        month: month - 1,
+        year
+      }
+    })
+
+    await operate(url, newInfo.id)
 
     return { message: 'Created' }
   } catch (error) {
@@ -80,7 +80,7 @@ export default defineEventHandler(async (event) => {
   }
 })
 
-const operate = async (url: string) => {
+const operate = async (url: string, infoId: number) => {
   const { browser, page } = await browserPage()
 
   await page.goto(url, { waitUntil: "networkidle2" })
@@ -115,6 +115,7 @@ const operate = async (url: string) => {
               if (table[0] === "DATE") continue
 
               data.push({
+                infoId: infoId,
                 ticker: table[1],
                 name: table[2],
                 investorName: table[3],
@@ -152,9 +153,9 @@ const operate = async (url: string) => {
     })
 
     const stock: Stock[] = stockRaw.map(({
-      ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
+      infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
     }) => ({
-      ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
+      infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
     }))
 
     const chunk = 1000
