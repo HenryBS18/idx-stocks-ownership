@@ -20,20 +20,26 @@ model Stock {
 }
 
 model StockInvestor {
-  id                Int    @id @default(autoincrement()) @db.Integer()
-  ticker            String @db.Char(4)
-  investorName      String @db.VarChar(150)
-  investorType      String @db.Char(2)
-  localForeign      String @db.Char(1)
-  domicile          String @db.VarChar(100)
-  scripless         BigInt @db.BigInt()
-  scrip             BigInt @db.BigInt()
-  totalHoldingShare BigInt @db.BigInt()
-  percentage        Float
-  stock             Stock  @relation(fields: [ticker], references: [ticker])
+  id                Int     @id @default(autoincrement()) @db.Integer()
+  ticker            String  @db.Char(4)
+  investorName      String  @db.VarChar(150)
+  investorType      String  @db.Char(2)
+  localForeign      String  @db.Char(1)
+  domicile          String  @db.VarChar(100)
+  scripless         BigInt  @db.BigInt()
+  scrip             BigInt  @db.BigInt()
+  totalHoldingShare BigInt  @db.BigInt()
+  percentage        Decimal @db.Decimal(5, 2)
+  infoId            Int     @db.Integer
+  stock             Stock   @relation(fields: [ticker], references: [ticker])
+  info              Info    @relation(fields: [infoId], references: [id])
 }
 
 model Info {
   id             Int    @id @default(autoincrement()) @db.Integer()
   idxLastUpdated String @db.VarChar(26)
+  month          Int    @db.Integer
+  year           Int    @db.Integer
+
+  stockInvestor StockInvestor[]
 }
