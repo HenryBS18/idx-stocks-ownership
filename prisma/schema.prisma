@@ -33,6 +33,8 @@ model StockInvestor {
   infoId            Int     @db.Integer
   stock             Stock   @relation(fields: [ticker], references: [ticker])
   info              Info    @relation(fields: [infoId], references: [id])
+
+  @@index([infoId, ticker])
 }
 
 model Info {
@@ -42,4 +44,6 @@ model Info {
   year           Int    @db.Integer
 
   stockInvestor StockInvestor[]
+
+  @@index([year, month])
 }
