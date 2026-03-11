@@ -4,4 +4,7 @@ export default defineNuxtConfig({
   ssr: process.env.NODE_ENV !== 'development',
   modules: ['@nuxt/ui'],
   css: ['~/assets/css/main.css'],
+  nitro: {
+    preset: 'bun',
+  },
 })
