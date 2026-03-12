@@ -24,3 +24,8 @@ logs
 !.env.example
 
 /**/generated/prisma
+tmp
+pdf
+/**/venv
+__pycache__
+Makefile
