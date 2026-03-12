@@ -1,6 +1,5 @@
-import fs from "fs"
-import path from "path"
 import { Stock, StockRaw, TickerName } from "~~/server/types"
+
 export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event)
 
@@ -8,25 +7,26 @@ export default defineEventHandler(async (event) => {
     message: 'Formdata is required'
   }
 
-  let idxLastUpdated = ''
-  let filePath = ''
-
   try {
-    for (const part of formData) {
-      if (part.name === 'idxLastUpdated') {
-        idxLastUpdated = part.data.toString()
-      }
+    const filePart = formData.find(p => p.name === "file")
+    const idxPart = formData.find(p => p.name === "idxLastUpdated")
 
-      if (part.name === 'file') {
-        filePath = path.join(process.cwd(), 'tmp', `${crypto.randomUUID()}.json`)
-        await fs.promises.writeFile(filePath, part.data)
-      }
+    if (!filePart) {
+      setResponseStatus(event, 500)
+      return { message: "file missing" }
     }
 
-    const file = Bun.file(filePath)
-    const dataJson = await file.json() as StockRaw[]
-    console.log(idxLastUpdated)
-    console.log(dataJson)
+    if (!idxPart) {
+      setResponseStatus(event, 400)
+      return { message: "idxLastUpdated missing" }
+    }
+
+    const idxLastUpdated = idxPart!.data.toString()
+
+    if (!idxLastUpdated) {
+      setResponseStatus(event, 400)
+      return { message: 'idxLastUpated not valid' }
+    }
 
     const info = await prisma.info.findFirst({
       where: { idxLastUpdated }
@@ -36,10 +36,12 @@ export default defineEventHandler(async (event) => {
       return { message: 'Already Updated to the Latest Data' }
     }
 
+    const fileBuffer = filePart?.data
+    const dataJson = JSON.parse(fileBuffer!.toString()) as StockRaw[]
+
     const { month, year } = datetimeParser(idxLastUpdated)
 
     await prisma.$transaction(async (tx) => {
-      console.log('creating info')
       const newInfo = await tx.info.create({
         data: {
           idxLastUpdated,
@@ -63,7 +65,6 @@ export default defineEventHandler(async (event) => {
         }
       }
 
-      console.log('creating ticker name')
       await tx.stock.createMany({
         data: tickerName,
         skipDuplicates: true,
@@ -75,7 +76,6 @@ export default defineEventHandler(async (event) => {
         infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
       }))
 
-      console.log('creating stock investor')
       const chunk = 1000
       for (let i = 0; i < stock.length; i += chunk) {
         await tx.stockInvestor.createMany({
@@ -87,12 +87,12 @@ export default defineEventHandler(async (event) => {
       timeout: 1000 * 60
     })
 
-    console.log('process completed')
-
     return { message: 'Created' }
   } catch (error) {
-    return error
-  } finally {
-    await Bun.file(filePath).delete()
+    if (error instanceof Error) {
+      return {
+        message: error.message
+      }
+    }
   }
-})  
+})
