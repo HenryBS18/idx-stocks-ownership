@@ -7,11 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  username String @id
-  password String
-}
-
 model Stock {
   ticker String @id @db.Char(4)
   name   String @db.VarChar(60)
