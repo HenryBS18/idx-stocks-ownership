@@ -1,4 +1,4 @@
-import { Stock, StockRaw, TickerName } from "~~/server/types"
+import { Stock, StockInvestor, TickerName } from "~~/server/types"
 
 export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event)
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const fileBuffer = filePart?.data
-    const dataJson = JSON.parse(fileBuffer!.toString()) as StockRaw[]
+    const dataJson = JSON.parse(fileBuffer!.toString()) as StockInvestor[]
 
     const { month, year } = datetimeParser(idxLastUpdated)
 
@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
         }
       })
 
-      const stockRaw: StockRaw[] = dataJson.map((stock) => ({
+      const stockRaw: StockInvestor[] = dataJson.map((stock) => ({
         ...stock,
         infoId: newInfo.id
       }))

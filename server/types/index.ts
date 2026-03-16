@@ -10,7 +10,7 @@ export type IdxFileData = {
   url: string
 }
 
-export type StockRaw = {
+export type StockInvestor = {
   infoId: number
   ticker: string
   name: string
@@ -24,6 +24,6 @@ export type StockRaw = {
   percentage: number
 }
 
-export type Stock = Omit<StockRaw, 'name'>
+export type Stock = Omit<StockInvestor, 'name'>
 
-export type TickerName = Pick<StockRaw, 'ticker' | 'name'>
+export type TickerName = Pick<StockInvestor, 'ticker' | 'name'>

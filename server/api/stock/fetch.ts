@@ -1,7 +1,7 @@
 import fs from 'fs'
 // @ts-ignore
 import extractor from 'pdf-table-extractor'
-import { IdxFileData, Stock, StockRaw, TickerName } from "~~/server/types"
+import { IdxFileData, Stock, StockInvestor, TickerName } from "~~/server/types"
 import { datetimeParser } from "~~/server/utils/datetime-parser"
 
 export default defineEventHandler(async (event) => {
@@ -104,7 +104,7 @@ const operate = async (url: string, infoId: number) => {
   await fs.promises.writeFile(path, pdfBuffer)
 
   try {
-    const stockRaw: StockRaw[] = await new Promise((resolve, reject) => {
+    const stockRaw: StockInvestor[] = await new Promise((resolve, reject) => {
       extractor(path, (result: any) => {
         try {
           const pageTables = result.pageTables
