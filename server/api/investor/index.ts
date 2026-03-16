@@ -1,0 +1,100 @@
+import { InvestorStock } from "~~/server/types"
+
+export default defineCachedEventHandler(async (event) => {
+  const { year, month } = getQuery(event)
+
+  const date = new Date()
+  const yearInt = year ? parseInt(year.toString(), 10) : date.getFullYear()
+  const monthInt = month ? parseInt(month.toString(), 10) : date.getMonth() + 1
+
+  if (isNaN(yearInt) || isNaN(monthInt)) {
+    setResponseStatus(event, 400)
+
+    return {
+      message: "Year dan month harus berupa angka"
+    }
+  }
+
+  if (monthInt < 1 || monthInt > 12) {
+    setResponseStatus(event, 400)
+
+    return {
+      message: "Month harus antara 1 - 12"
+    }
+  }
+
+  const info = await prisma.info.findFirst({
+    where: {
+      month: monthInt,
+      year: yearInt,
+    }
+  })
+
+  if (!info) {
+    setResponseStatus(event, 404)
+
+    return {
+      message: 'Data tidak tersedia'
+    }
+  }
+
+  if (yearInt > info.year || (yearInt === info.year && monthInt > info.month)) {
+    setResponseStatus(event, 404)
+
+    return {
+      message: 'Data belum tersedia'
+    }
+  }
+
+  if (yearInt < 2026 || (yearInt === 2026 && monthInt < 2)) {
+    setResponseStatus(event, 404)
+
+    return {
+      message: 'Data dibawah februari 2026 tidak tersedia'
+    }
+  }
+
+  const investors = await prisma.stockInvestor.findMany({
+    select: {
+      investorName: true,
+      ticker: true,
+      totalHoldingShare: true,
+      percentage: true,
+      stock: {
+        select: {
+          name: true
+        }
+      }
+    },
+    where: {
+      infoId: info.id,
+    },
+    orderBy: {
+      investorName: "asc"
+    }
+  })
+
+  const investorStock: InvestorStock[] = Object.values(
+    investors.reduce<Record<string, InvestorStock>>((acc, row) => {
+      if (!acc[row.investorName]) {
+        acc[row.investorName] = {
+          investorName: row.investorName,
+          stocks: []
+        }
+      }
+
+      acc[row.investorName]?.stocks.push({
+        ticker: row.ticker,
+        name: row.stock.name,
+        totalHoldingShare: parseInt(row.totalHoldingShare.toString()),
+        percentage: parseFloat(row.percentage.toString())
+      })
+
+      return acc
+    }, {})
+  )
+
+  return investorStock
+}, {
+  maxAge: 60 * 60 * 1
+})
