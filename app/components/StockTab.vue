@@ -69,7 +69,11 @@ onMounted(() => {
   <div class="px-4 py-2">
     <div class="flex items-end justify-between">
       <div class="flex space-x-10">
-        <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ leadingIcon: 'size-4' }" />
+        <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1' }">
+          <template v-if="search?.length" #trailing>
+            <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
+          </template>
+        </UInput>
 
         <div class="flex">
           <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
