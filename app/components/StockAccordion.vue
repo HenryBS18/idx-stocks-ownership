@@ -8,7 +8,7 @@ const props = defineProps<{
 
 const open = ref<number[]>([])
 
-function toggle(i: number) {
+const toggle = (i: number) => {
   open.value = open.value.includes(i) ? [] : [i]
 }
 
