@@ -14,8 +14,8 @@ const showStockAccordion = ref(false)
 
 onMounted(() => {
   requestAnimationFrame(async () => {
-    const { data } = await useFetch('/api/stock')
-    stocks.value = data.value
+    const data = await $fetch('/api/stock')
+    stocks.value = data
     showStockAccordion.value = true
   })
 })
@@ -30,14 +30,13 @@ onMounted(() => {
         list: 'w-full',
         trigger: 'flex-1 justify-center cursor-pointer',
         indicator: 'h-1',
-
       }">
         <template #stock>
           <div class="px-4 py-2">
             <UInput icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ leadingIcon: 'size-4' }" />
 
             <div v-if="!showStockAccordion && stocks.length === 0" class="mt-6 space-y-3">
-              <USkeleton class="h-16 w-full rounded-lg" v-for="i in 20" :key="i" />
+              <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
             </div>
 
             <StockAccordion v-else :stocks="stocks" />
