@@ -22,10 +22,7 @@ const tabItems: TabsItem[] = [
         </template>
 
         <template #investor>
-          <div class="px-4 py-2">
-            <UInput icon="i-lucide-search" placeholder="Cari investor..." />
-            <p>Investor table here</p>
-          </div>
+          <InvestorTab />
         </template>
       </UTabs>
     </div>

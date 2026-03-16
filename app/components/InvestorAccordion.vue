@@ -1,0 +1,48 @@
+<script setup lang="ts">
+import type { TableColumn } from "@nuxt/ui"
+import type { InvestorStock } from "~/types"
+
+const props = defineProps<{
+  investors: InvestorStock[]
+}>()
+
+const open = ref<number[]>([])
+
+const toggle = (i: number) => {
+  open.value = open.value.includes(i) ? [] : [i]
+}
+
+const stockColumns: TableColumn<unknown, unknown>[] = [
+  { accessorKey: 'ticker', header: 'Kode Saham' },
+  { accessorKey: 'name', header: 'Nama Saham' },
+  {
+    accessorKey: 'totalHoldingShare',
+    header: 'Total Lembar Saham',
+    cell: ({ row }: any) =>
+      Number(row.original.totalHoldingShare).toLocaleString()
+  },
+  {
+    accessorKey: 'percentage',
+    header: '%',
+  }
+]
+</script>
+
+<template>
+  <UScrollArea class="mt-8 h-[calc(100vh-224px)]">
+    <div v-for="(investor, i) in investors" :key="investor.investorName">
+      <div class="flex items-center gap-3 p-4 cursor-pointer" @click="toggle(i)">
+
+        <span class="font-semibold text-gray-600">{{ investor.investorName }}</span>
+
+        <div class="ml-auto">
+          <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
+        </div>
+      </div>
+
+      <div v-if="open.includes(i)">
+        <UTable :data="investor.stocks" :columns="stockColumns" />
+      </div>
+    </div>
+  </UScrollArea>
+</template>

@@ -18,3 +18,18 @@ export type StockResponse = {
   lastUpdated: string
   data: Stock[]
 }
+
+export type InvestorStock = {
+  investorName: string
+  stocks: {
+    ticker: string
+    name: string
+    totalHoldingShare: number
+    percentage: number
+  }[]
+}
+
+export type InvestorStockResponse = {
+  lastUpdated: string
+  data: InvestorStock[]
+}
