@@ -28,7 +28,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
 </script>
 
 <template>
-  <div class="mt-8 space-y-3">
+  <UScrollArea class="mt-8 h-[calc(100vh-224px)]">
     <div v-for="(stock, i) in stocks" :key="stock.ticker">
       <div class="flex items-center gap-3 p-4 cursor-pointer" @click="toggle(i)">
         <UBadge :label="stock.ticker" size="lg" />
@@ -46,5 +46,5 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
         <UTable :data="stock.investors" :columns="investorColumns" />
       </div>
     </div>
-  </div>
+  </UScrollArea>
 </template>
