@@ -23,7 +23,11 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     cell: ({ row }: any) =>
       Number(row.original.totalHoldingShare).toLocaleString()
   },
-  { accessorKey: 'percentage', header: '%' }
+  {
+    accessorKey: 'percentage',
+    header: '%',
+    footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
+  }
 ]
 </script>
 
