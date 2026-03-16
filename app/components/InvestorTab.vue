@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watchDebounced } from "@vueuse/core"
 import type { InvestorStock, InvestorStockResponse } from "~/types"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
@@ -7,6 +8,7 @@ const investors = ref<InvestorStock[]>([])
 const lastUpdatedDate = ref<string>('')
 const showInvestorsAccordion = ref<boolean>(false)
 const search = ref<string>("")
+const searchDebounced = ref("")
 const sortField = ref<'alphabet'>('alphabet')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
@@ -18,8 +20,8 @@ const toggleAlphabetSort = () => {
 const filteredInvestors = computed<InvestorStock[]>(() => {
   let result = [...investors.value]
 
-  if (search.value) {
-    const q = search.value.toLowerCase()
+  if (searchDebounced.value) {
+    const q = searchDebounced.value.toLowerCase()
 
     result = result.filter(investor =>
       investor.investorName.toLowerCase().includes(q)
@@ -38,6 +40,10 @@ const filteredInvestors = computed<InvestorStock[]>(() => {
 
   return result
 })
+
+watchDebounced(search, (v) => {
+  searchDebounced.value = v
+}, { debounce: 500 })
 
 onMounted(() => {
   requestAnimationFrame(async () => {

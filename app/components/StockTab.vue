@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { watchDebounced } from "@vueuse/core"
 import type { Stock, StockResponse } from "~/types"
 
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
@@ -7,6 +8,7 @@ const stocks = ref<Stock[]>([])
 const lastUpdatedDate = ref<string>('')
 const showStockAccordion = ref<boolean>(false)
 const search = ref<string>("")
+const searchDebounced = ref("")
 const sortField = ref<'alphabet' | 'freeFloat'>('alphabet')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
@@ -23,8 +25,8 @@ const toggleFreeFloatSort = () => {
 const filteredStocks = computed<Stock[]>(() => {
   let result = [...stocks.value]
 
-  if (search.value) {
-    const q = search.value.toLowerCase()
+  if (searchDebounced.value) {
+    const q = searchDebounced.value.toLowerCase()
 
     result = result.filter(stock =>
       stock.ticker.toLowerCase().includes(q) ||
@@ -48,6 +50,10 @@ const filteredStocks = computed<Stock[]>(() => {
 
   return result
 })
+
+watchDebounced(search, (v) => {
+  searchDebounced.value = v
+}, { debounce: 500 })
 
 onMounted(() => {
   requestAnimationFrame(async () => {
