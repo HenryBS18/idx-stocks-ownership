@@ -1,4 +1,5 @@
 import { InvestorStock } from "~~/server/types"
+import { getLastDate } from "~~/server/utils/get-last-date"
 
 export default defineCachedEventHandler(async (event) => {
   const { year, month } = getQuery(event)
@@ -94,7 +95,7 @@ export default defineCachedEventHandler(async (event) => {
   )
 
   return {
-    latestUpdated: info.idxLastUpdated,
+    lastUpdated: getLastDate(info.month, info.year),
     data: investorStock,
   }
 }, {
