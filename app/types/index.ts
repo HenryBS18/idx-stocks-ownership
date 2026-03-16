@@ -13,3 +13,8 @@ export type Stock = {
   freeFloat: number
   investors: Investor[]
 }
+
+export type StockResponse = {
+  lastUpdated: string
+  data: Stock[]
+}

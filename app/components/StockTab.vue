@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Stock } from "~/types"
+import type { Stock, StockResponse } from "~/types"
 
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
 
@@ -50,7 +50,7 @@ const filteredStocks = computed<Stock[]>(() => {
 
 onMounted(() => {
   requestAnimationFrame(async () => {
-    const data = await $fetch<Stock[]>('/api/stock')
+    const { data } = await $fetch<StockResponse>('/api/stock')
     stocks.value = data
     showStockAccordion.value = true
   })
@@ -77,12 +77,10 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="mt-8 h-[calc(100vh-224px)]">
-      <div v-if="!showStockAccordion && filteredStocks.length === 0" class="space-y-3">
-        <USkeleton class="w-full h-16 rounded-lg" v-for="i in 5" :key="i" />
-      </div>
-
-      <StockAccordion v-else :stocks="filteredStocks" />
+    <div v-if="!showStockAccordion && filteredStocks.length === 0" class="space-y-3">
+      <USkeleton class="w-full h-16 rounded-lg" v-for="i in 5" :key="i" />
     </div>
+
+    <StockAccordion v-else :stocks="filteredStocks" />
   </div>
 </template>
