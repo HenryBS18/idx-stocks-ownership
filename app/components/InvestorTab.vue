@@ -4,6 +4,7 @@ import type { InvestorStock, InvestorStockResponse } from "~/types"
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
 const investors = ref<InvestorStock[]>([])
+const lastUpdatedDate = ref<string>('')
 const showInvestorsAccordion = ref<boolean>(false)
 const search = ref<string>("")
 const sortField = ref<'alphabet'>('alphabet')
@@ -40,8 +41,9 @@ const filteredInvestors = computed<InvestorStock[]>(() => {
 
 onMounted(() => {
   requestAnimationFrame(async () => {
-    const { data } = await $fetch<InvestorStockResponse>('/api/investor')
+    const { data, lastUpdated } = await $fetch<InvestorStockResponse>('/api/investor')
     investors.value = data
+    lastUpdatedDate.value = lastUpdated
     showInvestorsAccordion.value = true
   })
   console.log('mounted');
@@ -50,16 +52,19 @@ onMounted(() => {
 
 <template>
   <div class="px-4 py-2">
-    <div class="flex space-x-10">
-      <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." />
+    <div class="flex items-end justify-between">
+      <div class="flex space-x-10">
+        <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." />
 
-      <div class="flex">
-        <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
-          ? 'i-lucide-arrow-up-a-z'
-          : 'i-lucide-arrow-down-z-a'
-          " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid"
-          @click="toggleAlphabetSort" />
+        <div class="flex">
+          <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
+            ? 'i-lucide-arrow-up-a-z'
+            : 'i-lucide-arrow-down-z-a'
+            " variant="outline" class="cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid" @click="toggleAlphabetSort" />
+        </div>
       </div>
+
+      <p class="text-sm text-gray-600">Last Updated: {{ lastUpdatedDate }}</p>
     </div>
 
     <div v-if="!showInvestorsAccordion && filteredInvestors.length === 0" class="mt-6 space-y-3">

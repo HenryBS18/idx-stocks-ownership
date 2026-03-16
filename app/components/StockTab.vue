@@ -4,6 +4,7 @@ import type { Stock, StockResponse } from "~/types"
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
 
 const stocks = ref<Stock[]>([])
+const lastUpdatedDate = ref<string>('')
 const showStockAccordion = ref<boolean>(false)
 const search = ref<string>("")
 const sortField = ref<'alphabet' | 'freeFloat'>('alphabet')
@@ -50,8 +51,9 @@ const filteredStocks = computed<Stock[]>(() => {
 
 onMounted(() => {
   requestAnimationFrame(async () => {
-    const { data } = await $fetch<StockResponse>('/api/stock')
+    const { data, lastUpdated } = await $fetch<StockResponse>('/api/stock')
     stocks.value = data
+    lastUpdatedDate.value = lastUpdated
     showStockAccordion.value = true
   })
 })
@@ -59,22 +61,26 @@ onMounted(() => {
 
 <template>
   <div class="px-4 py-2">
-    <div class="flex space-x-10">
-      <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ leadingIcon: 'size-4' }" />
+    <div class="flex items-end justify-between">
+      <div class="flex space-x-10">
+        <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ leadingIcon: 'size-4' }" />
 
-      <div class="flex">
-        <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
-          ? 'i-lucide-arrow-up-a-z'
-          : 'i-lucide-arrow-down-z-a'
-          " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid"
-          @click="toggleAlphabetSort" />
+        <div class="flex">
+          <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
+            ? 'i-lucide-arrow-up-a-z'
+            : 'i-lucide-arrow-down-z-a'
+            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid"
+            @click="toggleAlphabetSort" />
 
-        <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
-          ? 'i-lucide-arrow-up-0-1'
-          : 'i-lucide-arrow-down-1-0'
-          " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
-          @click="toggleFreeFloatSort" />
+          <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
+            ? 'i-lucide-arrow-up-0-1'
+            : 'i-lucide-arrow-down-1-0'
+            " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
+            @click="toggleFreeFloatSort" />
+        </div>
       </div>
+
+      <p class="text-sm text-gray-600">Last Updated: {{ lastUpdatedDate }}</p>
     </div>
 
     <div v-if="!showStockAccordion && filteredStocks.length === 0" class="space-y-3">
