@@ -3,23 +3,36 @@ import { InvestorStock } from "~~/server/types"
 export default defineCachedEventHandler(async (event) => {
   const { year, month } = getQuery(event)
 
-  const date = new Date()
-  const yearInt = year ? parseInt(year.toString(), 10) : date.getFullYear()
-  const monthInt = month ? parseInt(month.toString(), 10) : date.getMonth() + 1
+  let yearInt: number
+  let monthInt: number
 
-  if (isNaN(yearInt) || isNaN(monthInt)) {
-    setResponseStatus(event, 400)
+  if (!year && !month) {
+    const latestInfo = await prisma.info.findFirst({
+      orderBy: [
+        { year: "desc" },
+        { month: "desc" }
+      ]
+    })
 
-    return {
-      message: "Year dan month harus berupa angka"
+    if (!latestInfo) {
+      setResponseStatus(event, 404)
+      return { message: "Data tidak tersedia" }
     }
-  }
 
-  if (monthInt < 1 || monthInt > 12) {
-    setResponseStatus(event, 400)
+    yearInt = latestInfo.year
+    monthInt = latestInfo.month
+  } else {
+    yearInt = parseInt(year!.toString(), 10)
+    monthInt = parseInt(month!.toString(), 10)
 
-    return {
-      message: "Month harus antara 1 - 12"
+    if (isNaN(yearInt) || isNaN(monthInt)) {
+      setResponseStatus(event, 400)
+      return { message: "Year dan month harus berupa angka" }
+    }
+
+    if (monthInt < 1 || monthInt > 12) {
+      setResponseStatus(event, 400)
+      return { message: "Month harus antara 1 - 12" }
     }
   }
 
@@ -32,26 +45,12 @@ export default defineCachedEventHandler(async (event) => {
 
   if (!info) {
     setResponseStatus(event, 404)
-
-    return {
-      message: 'Data tidak tersedia'
-    }
-  }
-
-  if (yearInt > info.year || (yearInt === info.year && monthInt > info.month)) {
-    setResponseStatus(event, 404)
-
-    return {
-      message: 'Data belum tersedia'
-    }
+    return { message: "Data tidak tersedia" }
   }
 
   if (yearInt < 2026 || (yearInt === 2026 && monthInt < 2)) {
     setResponseStatus(event, 404)
-
-    return {
-      message: 'Data dibawah februari 2026 tidak tersedia'
-    }
+    return { message: "Data dibawah februari 2026 tidak tersedia" }
   }
 
   const investors = await prisma.stockInvestor.findMany({
@@ -94,7 +93,10 @@ export default defineCachedEventHandler(async (event) => {
     }, {})
   )
 
-  return investorStock
+  return {
+    latestUpdated: info.idxLastUpdated,
+    data: investorStock,
+  }
 }, {
   maxAge: 60 * 60 * 1
 })
