@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watchDebounced } from "@vueuse/core"
-import type { Stock, StockResponse } from "~/types"
+import type { Stock, StockResponse, StockSortField } from "~/types"
 
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
 
@@ -9,21 +9,11 @@ const lastUpdatedDate = ref<string>('')
 const showStockAccordion = ref<boolean>(false)
 const search = ref<string>("")
 const searchDebounced = ref("")
-const sortField = ref<'alphabet' | 'freeFloat' | 'investor-count'>('alphabet')
+const sortField = ref<StockSortField>('ticker')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
-const toggleAlphabetSort = () => {
-  sortField.value = 'alphabet'
-  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-}
-
-const toggleFreeFloatSort = () => {
-  sortField.value = 'freeFloat'
-  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-}
-
-const toggleInvestorCountSort = () => {
-  sortField.value = 'investor-count'
+const toggleSort = (field: StockSortField) => {
+  sortField.value = field
   sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
 }
 
@@ -42,7 +32,7 @@ const filteredStocks = computed<Stock[]>(() => {
   result.sort((a, b) => {
     let compare = 0
 
-    if (sortField.value === 'alphabet') {
+    if (sortField.value === 'ticker') {
       compare = a.ticker.localeCompare(b.ticker)
     }
 
@@ -85,23 +75,23 @@ onMounted(() => {
         </UInput>
 
         <div class="flex">
-          <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
+          <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-a-z'
             : 'i-lucide-arrow-down-z-a'
-            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid"
-            @click="toggleAlphabetSort" />
+            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'ticker'" active-variant="solid"
+            @click="toggleSort('ticker')" />
 
           <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-0-1'
             : 'i-lucide-arrow-down-1-0'
             " variant="outline" class="rounded-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
-            @click="toggleFreeFloatSort" />
+            @click="toggleSort('freeFloat')" />
 
           <UButton label="Jumlah Investor" :trailing-icon="sortField === 'investor-count' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-0-1'
             : 'i-lucide-arrow-down-1-0'
             " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'investor-count'"
-            active-variant="solid" @click="toggleInvestorCountSort" />
+            active-variant="solid" @click="toggleSort('investor-count')" />
         </div>
       </div>
 

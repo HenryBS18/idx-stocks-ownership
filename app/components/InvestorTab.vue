@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { watchDebounced } from "@vueuse/core"
-import type { InvestorStock, InvestorStockResponse } from "~/types"
+import type { InvestorSortField, InvestorStock, InvestorStockResponse } from "~/types"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
@@ -9,16 +9,11 @@ const lastUpdatedDate = ref<string>('')
 const showInvestorsAccordion = ref<boolean>(false)
 const search = ref<string>("")
 const searchDebounced = ref("")
-const sortField = ref<'alphabet' | 'stock-count'>('alphabet')
+const sortField = ref<InvestorSortField>('nama')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
-const toggleAlphabetSort = () => {
-  sortField.value = 'alphabet'
-  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-}
-
-const toggleStockCountSort = () => {
-  sortField.value = 'stock-count'
+const toggleSort = (field: InvestorSortField) => {
+  sortField.value = field
   sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
 }
 
@@ -36,7 +31,7 @@ const filteredInvestors = computed<InvestorStock[]>(() => {
   result.sort((a, b) => {
     let compare = 0
 
-    if (sortField.value === 'alphabet') {
+    if (sortField.value === 'nama') {
       compare = a.investorName.localeCompare(b.investorName)
     }
 
@@ -61,7 +56,6 @@ onMounted(() => {
     lastUpdatedDate.value = lastUpdated
     showInvestorsAccordion.value = true
   })
-  console.log('mounted');
 })
 </script>
 
@@ -76,17 +70,17 @@ onMounted(() => {
         </UInput>
 
         <div class="flex">
-          <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
+          <UButton label="Nama" :trailing-icon="sortField === 'nama' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-a-z'
             : 'i-lucide-arrow-down-z-a'
-            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid"
-            @click="toggleAlphabetSort" />
+            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'nama'" active-variant="solid"
+            @click="toggleSort('nama')" />
 
           <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stock-count' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-0-1'
             : 'i-lucide-arrow-down-1-0'
             " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'" active-variant="solid"
-            @click="toggleStockCountSort" />
+            @click="toggleSort('stock-count')" />
         </div>
       </div>
 

@@ -37,3 +37,7 @@ export type InvestorStockResponse = {
   lastUpdated: string
   data: InvestorStock[]
 }
+
+export type StockSortField = 'ticker' | 'freeFloat' | 'investor-count'
+
+export type InvestorSortField = 'nama' | 'stock-count'
