@@ -60,7 +60,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="px-4 py-2">
+  <div class="py-2">
     <div class="flex items-end justify-between">
       <div class="flex space-x-10">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." :ui="{ trailing: 'pe-1' }">

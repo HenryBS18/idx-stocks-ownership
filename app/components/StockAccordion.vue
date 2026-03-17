@@ -15,7 +15,7 @@ const toggle = (i: number) => {
 const investorColumns: TableColumn<unknown, unknown>[] = [
   {
     header: '#',
-    cell: ({ row }) => row.index + 1
+    cell: ({ row }) => row.index + 1,
   },
   {
     header: 'Nama Investor',
@@ -40,31 +40,34 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
       Number(row.original.totalHoldingShare).toLocaleString()
   },
   {
-    header: '%',
+    header: 'Kepemilikan (%)',
     accessorKey: 'percentage',
+    cell: ({ row }: any) => row.original.percentage + '%',
     footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
   }
 ]
 </script>
 
 <template>
-  <UScrollArea class="mt-8 h-[calc(100vh-224px)]">
-    <div v-for="(stock, i) in stocks" :key="stock.ticker">
-      <div class="flex items-center gap-3 p-4 cursor-pointer" @click="toggle(i)">
-        <UBadge :label="stock.ticker" size="lg" />
+  <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4">
+    <div class="space-y-4">
+      <div v-for="(stock, i) in stocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
+        <div class="flex items-center gap-3 p-4 cursor-pointer" @click="toggle(i)">
+          <UBadge :label="stock.ticker" size="lg" />
 
-        <span class="font-semibold text-gray-600">{{ stock.name }}</span>
+          <span class="text-sm font-semibold text-gray-600">{{ stock.name }}</span>
 
-        <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" />
-        <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" />
+          <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" />
+          <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" />
 
-        <div class="ml-auto">
-          <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
+          <div class="ml-auto">
+            <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
+          </div>
         </div>
-      </div>
 
-      <div v-if="open.includes(i)">
-        <UTable :data="stock.investors" :columns="investorColumns" />
+        <div v-if="open.includes(i)" class="border-t border-gray-200">
+          <UTable :data="stock.investors" :columns="investorColumns" />
+        </div>
       </div>
     </div>
   </UScrollArea>
