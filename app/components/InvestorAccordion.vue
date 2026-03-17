@@ -35,9 +35,9 @@ const stockColumns: TableColumn<unknown, unknown>[] = [
 
         <span class="font-semibold text-gray-600">{{ investor.investorName }}</span>
 
-        <UBadge :label="`Jumlah Saham: ${investor.stockCount}`" color="info" variant="soft" />
-        <UBadge :label="`${investor.investorType}`" color="error" variant="soft" v-if="investor.investorType" />
-        <UBadge :label="`${investor.localForeign}`" color="primary" variant="soft" v-if="investor.localForeign" />
+        <UBadge :label="`${investor.stockCount} saham`" color="secondary" variant="soft" />
+        <UBadge :label="investor.investorType" color="error" variant="soft" v-if="investor.investorType" />
+        <UBadge :label="investor.localForeign" color="primary" variant="soft" v-if="investor.localForeign" />
 
         <div class="ml-auto">
           <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
