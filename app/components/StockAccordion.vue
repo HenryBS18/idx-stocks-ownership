@@ -13,19 +13,35 @@ const toggle = (i: number) => {
 }
 
 const investorColumns: TableColumn<unknown, unknown>[] = [
-  { accessorKey: 'investorName', header: 'Nama Investor' },
-  { accessorKey: 'investorType', header: 'Tipe' },
-  { accessorKey: 'localForeign', header: 'Lokal/Foreign' },
-  { accessorKey: 'domicile', header: 'Domisili' },
   {
-    accessorKey: 'totalHoldingShare',
+    header: '#',
+    cell: ({ row }) => row.index + 1
+  },
+  {
+    header: 'Nama Investor',
+    accessorKey: 'investorName',
+  },
+  {
+    header: 'Tipe',
+    accessorKey: 'investorType',
+  },
+  {
+    header: 'Lokal/Foreign',
+    accessorKey: 'localForeign',
+  },
+  {
+    header: 'Domisili',
+    accessorKey: 'domicile',
+  },
+  {
     header: 'Total Lembar Saham',
+    accessorKey: 'totalHoldingShare',
     cell: ({ row }: any) =>
       Number(row.original.totalHoldingShare).toLocaleString()
   },
   {
-    accessorKey: 'percentage',
     header: '%',
+    accessorKey: 'percentage',
     footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
   }
 ]

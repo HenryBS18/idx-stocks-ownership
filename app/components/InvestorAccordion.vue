@@ -13,17 +13,27 @@ const toggle = (i: number) => {
 }
 
 const stockColumns: TableColumn<unknown, unknown>[] = [
-  { accessorKey: 'ticker', header: 'Kode Saham' },
-  { accessorKey: 'name', header: 'Nama Saham' },
   {
-    accessorKey: 'totalHoldingShare',
+    header: '#',
+    cell: ({ row }) => row.index + 1
+  },
+  {
+    header: 'Kode Saham',
+    accessorKey: 'ticker',
+  },
+  {
+    header: 'Nama Saham',
+    accessorKey: 'name',
+  },
+  {
     header: 'Total Lembar Saham',
+    accessorKey: 'totalHoldingShare',
     cell: ({ row }: any) =>
       Number(row.original.totalHoldingShare).toLocaleString()
   },
   {
-    accessorKey: 'percentage',
     header: '%',
+    accessorKey: 'percentage',
   }
 ]
 </script>
