@@ -1,5 +1,7 @@
 import { InvestorStock } from "~~/server/types"
+import { getInvestorType } from "~~/server/utils/get-investor-type"
 import { getLastDate } from "~~/server/utils/get-last-date"
+import { getLocalForeign } from "~~/server/utils/get-local-foreign"
 
 export default defineCachedEventHandler(async (event) => {
   const { year, month } = getQuery(event)
@@ -57,6 +59,8 @@ export default defineCachedEventHandler(async (event) => {
   const investors = await prisma.stockInvestor.findMany({
     select: {
       investorName: true,
+      investorType: true,
+      localForeign: true,
       ticker: true,
       totalHoldingShare: true,
       percentage: true,
@@ -79,6 +83,8 @@ export default defineCachedEventHandler(async (event) => {
       if (!acc[row.investorName]) {
         acc[row.investorName] = {
           investorName: row.investorName,
+          investorType: row.investorType,
+          localForeign: row.localForeign,
           stockCount: 0,
           stocks: []
         }
@@ -94,8 +100,11 @@ export default defineCachedEventHandler(async (event) => {
       return acc
     }, {})
   ).map((investor) => ({
-    ...investor,
-    stockCount: investor.stocks.length
+    investorName: investor.investorName,
+    investorType: getInvestorType(investor.investorType),
+    localForeign: getLocalForeign(investor.localForeign),
+    stockCount: investor.stocks.length,
+    stocks: investor.stocks,
   }))
 
   return {

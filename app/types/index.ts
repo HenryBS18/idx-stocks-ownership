@@ -21,6 +21,8 @@ export type StockResponse = {
 
 export type InvestorStock = {
   investorName: string
+  investorType: string
+  localForeign: string
   stockCount: number
   stocks: {
     ticker: string

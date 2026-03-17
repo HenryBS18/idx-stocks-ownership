@@ -30,6 +30,8 @@ export type TickerName = Pick<StockInvestor, 'ticker' | 'name'>
 
 export type InvestorStock = {
   investorName: string
+  investorType?: string
+  localForeign?: string
   stockCount: number
   stocks: Pick<StockInvestor, 'ticker' | 'name' | 'totalHoldingShare' | 'percentage'>[]
 }

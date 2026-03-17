@@ -12,3 +12,20 @@ export const monthsInNumber: Record<string, number> = {
   November: 11,
   Desember: 12
 }
+
+export const investorTypeString: Record<string, string> = {
+  ID: 'Individu',
+  CP: 'Korporat',
+  MF: 'Reksadana',
+  IB: 'Bank',
+  IS: 'Asuransi',
+  SC: 'Sekuritas',
+  PF: 'Dana Pensiun',
+  FD: 'Yayasan',
+  OT: 'Lainnya'
+}
+
+export const localForeignString: Record<string, string> = {
+  D: 'Lokal',
+  F: 'Asing'
+}
