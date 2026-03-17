@@ -99,7 +99,7 @@ export default defineCachedEventHandler(async (event) => {
     data: investorStock,
   }
 }, {
-  maxAge: 60 * 60 * 1,
+  maxAge: 60 * 60 * 24,
   getKey: (event) => {
     const { year, month } = getQuery(event)
     return `investor-${year ?? "latest"}-${month ?? "latest"}`
