@@ -3,13 +3,14 @@ type Investor = {
   investorType: string
   localForeign: string
   domicile: string
-  totalHoldingShare: string
-  percentage: string
+  totalHoldingShare: number
+  percentage: number
 }
 
 export type Stock = {
   ticker: string
   name: string
+  investorCount: number
   freeFloat: number
   investors: Investor[]
 }

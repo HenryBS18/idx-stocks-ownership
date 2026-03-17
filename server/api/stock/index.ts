@@ -59,8 +59,6 @@ export default defineCachedEventHandler(async (event) => {
             investorType: true,
             localForeign: true,
             domicile: true,
-            scripless: true,
-            scrip: true,
             totalHoldingShare: true,
             percentage: true,
           },
@@ -75,6 +73,8 @@ export default defineCachedEventHandler(async (event) => {
     })
 
     const stocks = stocksQuery.map((s) => {
+      const investorCount = s.stockInvestor.length
+
       const float = parseFloat(
         s.stockInvestor
           .reduce((acc, curr) => acc + parseFloat(curr.percentage.toString()), 0)
@@ -86,9 +86,14 @@ export default defineCachedEventHandler(async (event) => {
       return {
         ticker: s.ticker,
         name: s.name,
+        investorCount,
         float,
         freeFloat,
-        investors: s.stockInvestor,
+        investors: s.stockInvestor.map((investor) => ({
+          ...investor,
+          totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
+          percentage: parseFloat(investor.percentage.toString()),
+        })),
       }
     })
 

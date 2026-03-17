@@ -9,7 +9,7 @@ const lastUpdatedDate = ref<string>('')
 const showStockAccordion = ref<boolean>(false)
 const search = ref<string>("")
 const searchDebounced = ref("")
-const sortField = ref<'alphabet' | 'freeFloat'>('alphabet')
+const sortField = ref<'alphabet' | 'freeFloat' | 'investor-count'>('alphabet')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
 const toggleAlphabetSort = () => {
@@ -19,6 +19,11 @@ const toggleAlphabetSort = () => {
 
 const toggleFreeFloatSort = () => {
   sortField.value = 'freeFloat'
+  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+}
+
+const toggleInvestorCountSort = () => {
+  sortField.value = 'investor-count'
   sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
 }
 
@@ -43,6 +48,10 @@ const filteredStocks = computed<Stock[]>(() => {
 
     if (sortField.value === 'freeFloat') {
       compare = Number(a.freeFloat) - Number(b.freeFloat)
+    }
+
+    if (sortField.value === 'investor-count') {
+      compare = Number(a.investorCount) - Number(b.investorCount)
     }
 
     return sortOrder.value === 'asc' ? compare : -compare
@@ -85,8 +94,14 @@ onMounted(() => {
           <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-0-1'
             : 'i-lucide-arrow-down-1-0'
-            " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
+            " variant="outline" class="rounded-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
             @click="toggleFreeFloatSort" />
+
+          <UButton label="Jumlah Investor" :trailing-icon="sortField === 'investor-count' && sortOrder === 'asc'
+            ? 'i-lucide-arrow-up-0-1'
+            : 'i-lucide-arrow-down-1-0'
+            " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'investor-count'"
+            active-variant="solid" @click="toggleInvestorCountSort" />
         </div>
       </div>
 

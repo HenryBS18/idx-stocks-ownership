@@ -56,6 +56,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
         <span class="font-semibold text-gray-600">{{ stock.name }}</span>
 
         <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" />
+        <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" />
 
         <div class="ml-auto">
           <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
