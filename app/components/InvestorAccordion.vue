@@ -35,6 +35,8 @@ const stockColumns: TableColumn<unknown, unknown>[] = [
 
         <span class="font-semibold text-gray-600">{{ investor.investorName }}</span>
 
+        <UBadge :label="`Jumlah Saham: ${investor.stockCount}`" color="info" variant="soft" />
+
         <div class="ml-auto">
           <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
         </div>

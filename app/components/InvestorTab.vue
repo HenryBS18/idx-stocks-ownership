@@ -9,11 +9,16 @@ const lastUpdatedDate = ref<string>('')
 const showInvestorsAccordion = ref<boolean>(false)
 const search = ref<string>("")
 const searchDebounced = ref("")
-const sortField = ref<'alphabet'>('alphabet')
+const sortField = ref<'alphabet' | 'stock-count'>('alphabet')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
 const toggleAlphabetSort = () => {
   sortField.value = 'alphabet'
+  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+}
+
+const toggleStockCountSort = () => {
+  sortField.value = 'stock-count'
   sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
 }
 
@@ -33,6 +38,10 @@ const filteredInvestors = computed<InvestorStock[]>(() => {
 
     if (sortField.value === 'alphabet') {
       compare = a.investorName.localeCompare(b.investorName)
+    }
+
+    if (sortField.value === 'stock-count') {
+      compare = Number(a.stockCount) - Number(b.stockCount)
     }
 
     return sortOrder.value === 'asc' ? compare : -compare
@@ -70,7 +79,14 @@ onMounted(() => {
           <UButton label="Alphabet" :trailing-icon="sortField === 'alphabet' && sortOrder === 'asc'
             ? 'i-lucide-arrow-up-a-z'
             : 'i-lucide-arrow-down-z-a'
-            " variant="outline" class="cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid" @click="toggleAlphabetSort" />
+            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'alphabet'" active-variant="solid"
+            @click="toggleAlphabetSort" />
+
+          <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stock-count' && sortOrder === 'asc'
+            ? 'i-lucide-arrow-up-0-1'
+            : 'i-lucide-arrow-down-1-0'
+            " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'" active-variant="solid"
+            @click="toggleStockCountSort" />
         </div>
       </div>
 

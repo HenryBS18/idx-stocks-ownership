@@ -79,6 +79,7 @@ export default defineCachedEventHandler(async (event) => {
       if (!acc[row.investorName]) {
         acc[row.investorName] = {
           investorName: row.investorName,
+          stockCount: 0,
           stocks: []
         }
       }
@@ -92,7 +93,10 @@ export default defineCachedEventHandler(async (event) => {
 
       return acc
     }, {})
-  )
+  ).map((investor) => ({
+    ...investor,
+    stockCount: investor.stocks.length
+  }))
 
   return {
     lastUpdated: getLastDate(info.month, info.year),

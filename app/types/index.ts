@@ -21,6 +21,7 @@ export type StockResponse = {
 
 export type InvestorStock = {
   investorName: string
+  stockCount: number
   stocks: {
     ticker: string
     name: string
