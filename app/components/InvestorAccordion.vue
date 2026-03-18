@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui"
+import { useInfiniteScroll } from "@vueuse/core"
 import type { InvestorStock } from "~/types"
 
 const props = defineProps<{
@@ -7,10 +8,14 @@ const props = defineProps<{
 }>()
 
 const open = ref<number[]>([])
+const el = useTemplateRef<HTMLElement>('el')
 
-const toggle = (i: number) => {
-  open.value = open.value.includes(i) ? [] : [i]
-}
+const pageSize = 20
+const visibleCount = ref(pageSize)
+
+const visibleInvestors = computed(() =>
+  props.investors.slice(0, visibleCount.value)
+)
 
 const stockColumns: TableColumn<unknown, unknown>[] = [
   {
@@ -37,12 +42,31 @@ const stockColumns: TableColumn<unknown, unknown>[] = [
     cell: ({ row }: any) => row.original.percentage + '%',
   }
 ]
+
+const toggle = (i: number) => {
+  open.value = open.value.includes(i) ? [] : [i]
+}
+
+onMounted(() => {
+  useInfiniteScroll(
+    el,
+    () => {
+      if (visibleCount.value < props.investors.length) {
+        visibleCount.value += pageSize
+      }
+    },
+    {
+      distance: 100,
+      behavior: "smooth",
+    }
+  )
+})
 </script>
 
 <template>
-  <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4">
+  <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4" ref="el">
     <div class="space-y-4">
-      <div v-for="(investor, i) in investors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
+      <div v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div class="flex items-center gap-3 p-4 cursor-pointer" @click="toggle(i)">
 
           <span class="font-semibold text-gray-600">{{ investor.investorName }}</span>
