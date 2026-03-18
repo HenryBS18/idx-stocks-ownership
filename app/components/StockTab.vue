@@ -12,11 +12,6 @@ const searchDebounced = ref("")
 const sortField = ref<StockSortField>('ticker')
 const sortOrder = ref<'asc' | 'desc'>('asc')
 
-const toggleSort = (field: StockSortField) => {
-  sortField.value = field
-  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-}
-
 const filteredStocks = computed<Stock[]>(() => {
   let result = [...stocks.value]
 
@@ -49,6 +44,11 @@ const filteredStocks = computed<Stock[]>(() => {
 
   return result
 })
+
+const toggleSort = (field: StockSortField) => {
+  sortField.value = field
+  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+}
 
 watchDebounced(search, (v) => {
   searchDebounced.value = v
