@@ -67,7 +67,7 @@ onMounted(() => {
 <template>
   <div class="py-2">
     <div class="flex items-end justify-between">
-      <div class="flex space-x-10">
+      <div class="flex space-x-10 items-center">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1' }">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
@@ -93,9 +93,13 @@ onMounted(() => {
             " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'investor-count'"
             active-variant="solid" @click="toggleSort('investor-count')" />
         </div>
+
+        <USeparator class="h-6" orientation="vertical" color="primary" />
+
+        <p class="text-sm text-gray-500">{{ filteredStocks.length.toLocaleString() }} emiten</p>
       </div>
 
-      <p class="text-sm text-gray-600">Last Updated: {{ lastUpdatedDate }}</p>
+      <p class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
     <div v-if="!showStockAccordion && filteredStocks.length === 0" class="space-y-3">

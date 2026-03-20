@@ -62,7 +62,7 @@ onMounted(() => {
 <template>
   <div class="py-2">
     <div class="flex items-end justify-between">
-      <div class="flex space-x-10">
+      <div class="flex space-x-10 items-center">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." :ui="{ trailing: 'pe-1' }">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
@@ -82,9 +82,13 @@ onMounted(() => {
             " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'" active-variant="solid"
             @click="toggleSort('stock-count')" />
         </div>
+
+        <USeparator class="h-6" orientation="vertical" color="primary" />
+
+        <p class="text-sm text-gray-500">{{ filteredInvestors.length.toLocaleString() }} investor</p>
       </div>
 
-      <p class="text-sm text-gray-600">Last Updated: {{ lastUpdatedDate }}</p>
+      <p class="text-sm text-gray-600">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
     <div v-if="!showInvestorsAccordion && filteredInvestors.length === 0" class="mt-6 space-y-3">
