@@ -67,7 +67,7 @@ onMounted(() => {
   <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4" ref="el">
     <div class="space-y-4">
       <div v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
-        <div class="flex items-center gap-3 p-4 cursor-pointer" @click="toggle(i)">
+        <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-200" @click="toggle(i)">
 
           <span class="font-semibold text-gray-600">{{ investor.investorName }}</span>
 
@@ -81,7 +81,10 @@ onMounted(() => {
         </div>
 
         <div v-if="open.includes(i)" class="border-t border-gray-200">
-          <UTable :data="investor.stocks" :columns="stockColumns" />
+          <UTable :data="investor.stocks" :columns="stockColumns" :ui="{
+            thead: 'bg-gray-200',
+            tr: 'hover:bg-gray-200'
+          }" />
         </div>
       </div>
     </div>
