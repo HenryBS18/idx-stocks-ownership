@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { watchDebounced } from "@vueuse/core"
-import type { InvestorSortField, InvestorStock, InvestorStockResponse } from "~/types"
+import type { InvestorOrigin, InvestorSortField, InvestorStock, InvestorStockResponse, Sort } from "~/types"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
 const investors = ref<InvestorStock[]>([])
 const lastUpdatedDate = ref<string>('')
 const showInvestorsAccordion = ref<boolean>(false)
-const search = ref<string>("")
-const searchDebounced = ref("")
+const search = ref<string>('')
+const searchDebounced = ref<string>('')
 const sortField = ref<InvestorSortField>('nama')
-const sortOrder = ref<'asc' | 'desc'>('asc')
+const sortOrder = ref<Sort>('asc')
+const investorOrigin = ref<InvestorOrigin[]>(['Semua', 'Asing', 'Lokal'])
+const selectedInvestorOrigin = ref<InvestorOrigin>('Semua')
 
 const filteredInvestors = computed<InvestorStock[]>(() => {
   let result = [...investors.value]
@@ -18,9 +20,16 @@ const filteredInvestors = computed<InvestorStock[]>(() => {
   if (searchDebounced.value) {
     const q = searchDebounced.value.toLowerCase()
 
-    result = result.filter(investor =>
-      investor.investorName.toLowerCase().includes(q)
-    )
+    result = result.filter(investor => investor.investorName.toLowerCase().includes(q))
+  }
+
+  switch (selectedInvestorOrigin.value) {
+    case 'Asing':
+      result = result.filter(investor => investor.localForeign === 'Asing')
+      break
+    case "Lokal":
+      result = result.filter(investor => investor.localForeign === 'Lokal')
+      break
   }
 
   result.sort((a, b) => {
@@ -62,25 +71,39 @@ onMounted(() => {
 <template>
   <div class="py-2">
     <div class="flex items-end justify-between">
-      <div class="flex space-x-10 items-center">
+      <div class="flex items-center space-x-4">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." :ui="{ trailing: 'pe-1' }">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
           </template>
         </UInput>
 
-        <div class="flex">
-          <UButton label="Nama" :trailing-icon="sortField === 'nama' && sortOrder === 'asc'
-            ? 'i-lucide-arrow-up-a-z'
-            : 'i-lucide-arrow-down-z-a'
-            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'nama'" active-variant="solid"
-            @click="toggleSort('nama')" />
+        <USeparator class="h-6" orientation="vertical" color="primary" />
 
-          <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stock-count' && sortOrder === 'asc'
-            ? 'i-lucide-arrow-up-0-1'
-            : 'i-lucide-arrow-down-1-0'
-            " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'" active-variant="solid"
-            @click="toggleSort('stock-count')" />
+        <div class="flex items-center space-x-2">
+          <p class="text-sm text-gray-500">ASAL</p>
+
+          <USelect v-model="selectedInvestorOrigin" :items="investorOrigin" />
+        </div>
+
+        <USeparator class="h-6" orientation="vertical" color="primary" />
+
+        <div class="flex items-center space-x-2">
+          <p class="text-sm text-gray-500">URUTKAN</p>
+
+          <div class="flex">
+            <UButton label="Nama" :trailing-icon="sortField === 'nama' && sortOrder === 'asc'
+              ? 'i-lucide-arrow-up-a-z'
+              : 'i-lucide-arrow-down-z-a'
+              " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'nama'" active-variant="solid"
+              @click="toggleSort('nama')" />
+
+            <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stock-count' && sortOrder === 'asc'
+              ? 'i-lucide-arrow-up-0-1'
+              : 'i-lucide-arrow-down-1-0'
+              " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'" active-variant="solid"
+              @click="toggleSort('stock-count')" />
+          </div>
         </div>
 
         <USeparator class="h-6" orientation="vertical" color="primary" />

@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { watchDebounced } from "@vueuse/core"
-import type { Stock, StockResponse, StockSortField } from "~/types"
+import type { Sort, Stock, StockResponse, StockSortField } from "~/types"
 
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
 
 const stocks = ref<Stock[]>([])
 const lastUpdatedDate = ref<string>('')
 const showStockAccordion = ref<boolean>(false)
-const search = ref<string>("")
-const searchDebounced = ref("")
+const search = ref<string>('')
+const searchDebounced = ref<string>('')
 const sortField = ref<StockSortField>('ticker')
-const sortOrder = ref<'asc' | 'desc'>('asc')
+const sortOrder = ref<Sort>('asc')
 
 const filteredStocks = computed<Stock[]>(() => {
   let result = [...stocks.value]
@@ -67,31 +67,37 @@ onMounted(() => {
 <template>
   <div class="py-2">
     <div class="flex items-end justify-between">
-      <div class="flex space-x-10 items-center">
+      <div class="flex items-center space-x-4">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1' }">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
           </template>
         </UInput>
 
-        <div class="flex">
-          <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
-            ? 'i-lucide-arrow-up-a-z'
-            : 'i-lucide-arrow-down-z-a'
-            " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'ticker'" active-variant="solid"
-            @click="toggleSort('ticker')" />
+        <USeparator class="h-6" orientation="vertical" color="primary" />
 
-          <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
-            ? 'i-lucide-arrow-up-0-1'
-            : 'i-lucide-arrow-down-1-0'
-            " variant="outline" class="rounded-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
-            @click="toggleSort('freeFloat')" />
+        <div class="flex items-center space-x-2">
+          <p class="text-sm text-gray-500">URUTKAN</p>
 
-          <UButton label="Jumlah Investor" :trailing-icon="sortField === 'investor-count' && sortOrder === 'asc'
-            ? 'i-lucide-arrow-up-0-1'
-            : 'i-lucide-arrow-down-1-0'
-            " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'investor-count'"
-            active-variant="solid" @click="toggleSort('investor-count')" />
+          <div class="flex">
+            <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
+              ? 'i-lucide-arrow-up-a-z'
+              : 'i-lucide-arrow-down-z-a'
+              " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'ticker'" active-variant="solid"
+              @click="toggleSort('ticker')" />
+
+            <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
+              ? 'i-lucide-arrow-up-0-1'
+              : 'i-lucide-arrow-down-1-0'
+              " variant="outline" class="rounded-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
+              @click="toggleSort('freeFloat')" />
+
+            <UButton label="Jumlah Investor" :trailing-icon="sortField === 'investor-count' && sortOrder === 'asc'
+              ? 'i-lucide-arrow-up-0-1'
+              : 'i-lucide-arrow-down-1-0'
+              " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'investor-count'"
+              active-variant="solid" @click="toggleSort('investor-count')" />
+          </div>
         </div>
 
         <USeparator class="h-6" orientation="vertical" color="primary" />
