@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DropdownMenuItem } from "@nuxt/ui"
 import { watchDebounced } from "@vueuse/core"
 import type { InvestorOrigin, InvestorSortField, InvestorStock, InvestorStockResponse, Sort } from "~/types"
 
@@ -13,23 +14,34 @@ const sortField = ref<InvestorSortField>('nama')
 const sortOrder = ref<Sort>('asc')
 const investorOrigin = ref<InvestorOrigin[]>(['Semua', 'Asing', 'Lokal'])
 const selectedInvestorOrigin = ref<InvestorOrigin>('Semua')
+const investorType = [
+  'Semua',
+  'Individu',
+  'Korporat',
+  'Reksadana',
+  'Bank',
+  'Asuransi',
+  'Sekuritas',
+  'Dana Pensiun',
+  'Yayasan',
+  'Lainnya'
+]
+const selectedInvestorType = ref<string[]>(['Semua'])
 
 const filteredInvestors = computed<InvestorStock[]>(() => {
   let result = [...investors.value]
 
   if (searchDebounced.value) {
     const q = searchDebounced.value.toLowerCase()
-
     result = result.filter(investor => investor.investorName.toLowerCase().includes(q))
   }
 
-  switch (selectedInvestorOrigin.value) {
-    case 'Asing':
-      result = result.filter(investor => investor.localForeign === 'Asing')
-      break
-    case "Lokal":
-      result = result.filter(investor => investor.localForeign === 'Lokal')
-      break
+  if (selectedInvestorOrigin.value !== 'Semua') {
+    result = result.filter(i => i.localForeign === selectedInvestorOrigin.value)
+  }
+
+  if (!selectedInvestorType.value.includes('Semua')) {
+    result = result.filter(i => selectedInvestorType.value.includes(i.investorType))
   }
 
   result.sort((a, b) => {
@@ -48,6 +60,38 @@ const filteredInvestors = computed<InvestorStock[]>(() => {
 
   return result
 })
+
+const investorTypeItems = computed(() => {
+  return investorType.map((type) => ({
+    label: type,
+    type: 'checkbox',
+    checked: selectedInvestorType.value.includes(type),
+    onUpdateChecked(checked: boolean) {
+      if (type === 'Semua') {
+        selectedInvestorType.value = ['Semua']
+        return
+      }
+
+      const set = new Set(selectedInvestorType.value)
+
+      if (checked) {
+        set.add(type)
+        set.delete('Semua')
+      } else {
+        set.delete(type)
+      }
+
+      if (set.size === 0) {
+        set.add('Semua')
+      }
+
+      selectedInvestorType.value = Array.from(set)
+    },
+    onSelect(e: Event) {
+      e.preventDefault()
+    }
+  }))
+}) satisfies ComputedRef<DropdownMenuItem[]>
 
 const toggleSort = (field: InvestorSortField) => {
   sortField.value = field
@@ -83,7 +127,18 @@ onMounted(() => {
         <div class="flex items-center space-x-2">
           <p class="text-sm text-gray-500">ASAL</p>
 
-          <USelect v-model="selectedInvestorOrigin" :items="investorOrigin" />
+          <USelect v-model="selectedInvestorOrigin" :items="investorOrigin" class="focus:ring focus:ring-gray-300" />
+        </div>
+
+        <USeparator class="h-6" orientation="vertical" color="primary" />
+
+        <div class="flex items-center space-x-2">
+          <p class="text-sm text-gray-500">TIPE</p>
+
+          <UDropdownMenu :items="investorTypeItems">
+            <UButton :label="selectedInvestorType.includes('Semua') ? 'Semua' : `${selectedInvestorType.length} dipilih`" color="neutral"
+              variant="outline" trailing-icon="i-lucide-chevron-down" />
+          </UDropdownMenu>
         </div>
 
         <USeparator class="h-6" orientation="vertical" color="primary" />
