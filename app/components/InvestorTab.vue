@@ -2,7 +2,7 @@
 import type { DropdownMenuItem } from "@nuxt/ui"
 import { watchDebounced } from "@vueuse/core"
 import type { InvestorOrigin, InvestorSortField, InvestorStock, InvestorStockResponse, Sort } from "~/types"
-import { investorOrigin, investorType } from "~/types/constants"
+import { investorOrigin, investorType } from "~/utils/constants"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
