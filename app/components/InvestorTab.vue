@@ -2,6 +2,7 @@
 import type { DropdownMenuItem } from "@nuxt/ui"
 import { watchDebounced } from "@vueuse/core"
 import type { InvestorOrigin, InvestorSortField, InvestorStock, InvestorStockResponse, Sort } from "~/types"
+import { investorOrigin, investorType } from "~/types/constants"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
@@ -12,20 +13,7 @@ const search = ref<string>('')
 const searchDebounced = ref<string>('')
 const sortField = ref<InvestorSortField>('nama')
 const sortOrder = ref<Sort>('asc')
-const investorOrigin = ref<InvestorOrigin[]>(['Semua', 'Asing', 'Lokal'])
 const selectedInvestorOrigin = ref<InvestorOrigin>('Semua')
-const investorType = [
-  'Semua',
-  'Individu',
-  'Korporat',
-  'Reksadana',
-  'Bank',
-  'Asuransi',
-  'Sekuritas',
-  'Dana Pensiun',
-  'Yayasan',
-  'Lainnya'
-]
 const selectedInvestorType = ref<string[]>(['Semua'])
 
 const filteredInvestors = computed<InvestorStock[]>(() => {
