@@ -5,6 +5,6 @@ export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
   css: ['~/assets/css/main.css'],
   nitro: {
-    preset: 'bun',
+    preset: 'vercel',
   },
 })
