@@ -154,7 +154,7 @@ onMounted(() => {
         <p class="text-sm text-gray-500">{{ filteredInvestors.length.toLocaleString() }} investor</p>
       </div>
 
-      <p class="text-sm text-gray-600">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
+      <p v-if="lastUpdatedDate" class="text-sm text-gray-600">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
     <div v-if="!showInvestorsAccordion && filteredInvestors.length === 0" class="mt-6 space-y-3">

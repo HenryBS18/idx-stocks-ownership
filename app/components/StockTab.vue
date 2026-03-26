@@ -105,7 +105,7 @@ onMounted(() => {
         <p class="text-sm text-gray-500">{{ filteredStocks.length.toLocaleString() }} emiten</p>
       </div>
 
-      <p class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
+      <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
     <div v-if="!showStockAccordion && filteredStocks.length === 0" class="space-y-3">
