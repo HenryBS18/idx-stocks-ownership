@@ -1,0 +1,8 @@
+services:
+  frontend:
+    container_name: idx-stocks-ownership-frontend
+    build: .
+    ports:
+      - "8000:3000"
+    env_file:
+      - .env

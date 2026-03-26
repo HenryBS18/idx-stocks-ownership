@@ -1,0 +1,15 @@
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+.git
+.gitignore
+.dockerignore
+node_modules
+parser
+Makefile
+README.md
+Dockerfile
+docker-compose.yml
