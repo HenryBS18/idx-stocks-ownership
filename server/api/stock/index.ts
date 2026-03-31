@@ -91,6 +91,8 @@ export default defineCachedEventHandler(async (event) => {
         freeFloat,
         investors: s.stockInvestor.map((investor) => ({
           ...investor,
+          investorType: getInvestorType(investor.investorType),
+          localForeign: getLocalForeign(investor.localForeign),
           totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
           percentage: parseFloat(investor.percentage.toString()),
         })),

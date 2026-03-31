@@ -73,7 +73,9 @@ onMounted(() => {
           <UBadge :label="investor.investorType" color="error" variant="soft" v-if="investor.investorType" />
           <UBadge :label="investor.localForeign" color="primary" variant="soft" v-if="investor.localForeign" />
 
-          <div class="ml-auto">
+          <div class="ml-auto flex items-center space-x-3">
+            <p class="text-xs text-gray-500">{{ investor.domicile }}</p>
+
             <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
           </div>
         </div>

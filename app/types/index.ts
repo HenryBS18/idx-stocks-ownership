@@ -24,6 +24,7 @@ export type InvestorStock = {
   investorName: string
   investorType: string
   localForeign: string
+  domicile: string
   stockCount: number
   stocks: {
     ticker: string

@@ -61,6 +61,7 @@ export default defineCachedEventHandler(async (event) => {
       investorName: true,
       investorType: true,
       localForeign: true,
+      domicile: true,
       ticker: true,
       totalHoldingShare: true,
       percentage: true,
@@ -85,6 +86,7 @@ export default defineCachedEventHandler(async (event) => {
           investorName: row.investorName,
           investorType: row.investorType,
           localForeign: row.localForeign,
+          domicile: row.domicile,
           stockCount: 0,
           stocks: []
         }
@@ -103,6 +105,7 @@ export default defineCachedEventHandler(async (event) => {
     investorName: investor.investorName,
     investorType: getInvestorType(investor.investorType),
     localForeign: getLocalForeign(investor.localForeign),
+    domicile: investor.localForeign === 'F' ? investor.domicile : '',
     stockCount: investor.stocks.length,
     stocks: investor.stocks,
   }))
