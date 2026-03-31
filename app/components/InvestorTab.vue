@@ -6,7 +6,7 @@ const InvestorAccordion = defineAsyncComponent(() => import("~/components/Invest
 
 const store = useInvestorStore()
 const { investorCount, lastUpdatedDate, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder } = storeToRefs(store)
-const { toggleSort, fetchInvestors } = store
+const { fetchInvestors, resetFilter, toggleSort } = store
 
 const investorTypeItems = computed(() => {
   return investorType.map((type) => ({
@@ -94,6 +94,14 @@ onMounted(() => {
               " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'" active-variant="solid"
               @click="toggleSort('stock-count')" />
           </div>
+        </div>
+
+        <USeparator class="h-6" orientation="vertical" color="primary" />
+
+        <div class="flex items-center space-x-2">
+          <p class="text-sm text-gray-500">RESET FILTER</p>
+
+          <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" @click="resetFilter" />
         </div>
 
         <USeparator class="h-6" orientation="vertical" color="primary" />

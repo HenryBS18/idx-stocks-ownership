@@ -62,6 +62,13 @@ export const useStockStore = defineStore('stock', () => {
     showStockAccordion.value = true
   }
 
+  const resetFilter = () => {
+    search.value = ''
+    searchDebounced.value = ''
+    sortField.value = 'ticker'
+    sortOrder.value = 'asc'
+  }
+
   watchDebounced(search, (v) => {
     searchDebounced.value = v
   }, { debounce: 500 })
@@ -76,5 +83,6 @@ export const useStockStore = defineStore('stock', () => {
     stockCount,
     toggleSort,
     fetchStocks,
+    resetFilter,
   }
 })

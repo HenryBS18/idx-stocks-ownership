@@ -59,6 +59,15 @@ export const useInvestorStore = defineStore('investor', () => {
     showInvestorsAccordion.value = true
   }
 
+  const resetFilter = () => {
+    search.value = ''
+    searchDebounced.value = ''
+    sortField.value = 'nama'
+    sortOrder.value = 'asc'
+    selectedInvestorOrigin.value = 'Semua'
+    selectedInvestorType.value = ['Semua']
+  }
+
   watchDebounced(search, (v) => {
     searchDebounced.value = v
   }, { debounce: 500 })
@@ -75,5 +84,6 @@ export const useInvestorStore = defineStore('investor', () => {
     investorCount,
     toggleSort,
     fetchInvestors,
+    resetFilter,
   }
 })
