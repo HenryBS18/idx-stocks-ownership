@@ -102,15 +102,17 @@ onMounted(() => {
 
         <USeparator class="h-6" orientation="vertical" color="primary" />
 
-        <p class="text-sm text-gray-500">{{ filteredStocks.length.toLocaleString() }} emiten</p>
+        <p v-if="filteredStocks.length != 0" class="text-sm text-gray-500">{{ filteredStocks.length.toLocaleString() }} emiten</p>
       </div>
 
       <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
-    <div v-if="!showStockAccordion && filteredStocks.length === 0" class="space-y-3">
-      <USkeleton class="w-full h-16 rounded-lg" v-for="i in 5" :key="i" />
-    </div>
+    <UScrollArea v-if="!showStockAccordion && filteredStocks.length === 0" class="mt-8 h-[calc(100vh-224px)] pr-4">
+      <div class="space-y-4">
+        <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
+      </div>
+    </UScrollArea>
 
     <StockAccordion v-else :stocks="filteredStocks" />
   </div>
