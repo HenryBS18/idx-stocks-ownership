@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui"
 import { useInfiniteScroll } from "@vueuse/core"
-import type { Stock } from "~/types"
 
-const props = defineProps<{
-  stocks: Stock[]
-}>()
+const store = useStockStore()
+const { filteredStocks } = storeToRefs(store)
 
 const open = ref<number[]>([])
 const el = useTemplateRef<HTMLElement>('el')
@@ -14,7 +12,7 @@ const pageSize = 20
 const visibleCount = ref(pageSize)
 
 const visibleStocks = computed(() =>
-  props.stocks.slice(0, visibleCount.value)
+  filteredStocks.value.slice(0, visibleCount.value)
 )
 
 const investorColumns: TableColumn<unknown, unknown>[] = [
@@ -60,7 +58,7 @@ onMounted(() => {
   useInfiniteScroll(
     el,
     () => {
-      if (visibleCount.value < props.stocks.length) {
+      if (visibleCount.value < filteredStocks.value.length) {
         visibleCount.value += pageSize
       }
     },

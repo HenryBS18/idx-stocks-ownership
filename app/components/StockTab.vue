@@ -1,65 +1,16 @@
 <script setup lang="ts">
-import { watchDebounced } from "@vueuse/core"
-import type { Sort, Stock, StockResponse, StockSortField } from "~/types"
+import { useStockStore } from "~/stores/useStockStore"
 
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
 
-const stocks = ref<Stock[]>([])
-const lastUpdatedDate = ref<string>('')
-const showStockAccordion = ref<boolean>(false)
-const search = ref<string>('')
-const searchDebounced = ref<string>('')
-const sortField = ref<StockSortField>('ticker')
-const sortOrder = ref<Sort>('asc')
+const store = useStockStore()
 
-const filteredStocks = computed<Stock[]>(() => {
-  let result = [...stocks.value]
-
-  if (searchDebounced.value) {
-    const q = searchDebounced.value.toLowerCase()
-
-    result = result.filter(stock =>
-      stock.ticker.toLowerCase().includes(q) ||
-      stock.name.toLowerCase().includes(q)
-    )
-  }
-
-  result.sort((a, b) => {
-    let compare = 0
-
-    if (sortField.value === 'ticker') {
-      compare = a.ticker.localeCompare(b.ticker)
-    }
-
-    if (sortField.value === 'freeFloat') {
-      compare = Number(a.freeFloat) - Number(b.freeFloat)
-    }
-
-    if (sortField.value === 'investor-count') {
-      compare = Number(a.investorCount) - Number(b.investorCount)
-    }
-
-    return sortOrder.value === 'asc' ? compare : -compare
-  })
-
-  return result
-})
-
-const toggleSort = (field: StockSortField) => {
-  sortField.value = field
-  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-}
-
-watchDebounced(search, (v) => {
-  searchDebounced.value = v
-}, { debounce: 500 })
+const { lastUpdatedDate, search, showStockAccordion, sortField, sortOrder, stockCount } = storeToRefs(store)
+const { fetchStocks, toggleSort } = store
 
 onMounted(() => {
-  requestAnimationFrame(async () => {
-    const { data, lastUpdated } = await $fetch<StockResponse>('/api/stock')
-    stocks.value = data
-    lastUpdatedDate.value = lastUpdated
-    showStockAccordion.value = true
+  requestAnimationFrame(() => {
+    if (stockCount.value === 0) fetchStocks()
   })
 })
 </script>
@@ -102,18 +53,18 @@ onMounted(() => {
 
         <USeparator class="h-6" orientation="vertical" color="primary" />
 
-        <p v-if="filteredStocks.length != 0" class="text-sm text-gray-500">{{ filteredStocks.length.toLocaleString() }} emiten</p>
+        <p v-if="stockCount != 0" class="text-sm text-gray-500">{{ stockCount.toLocaleString() }} emiten</p>
       </div>
 
       <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
-    <UScrollArea v-if="!showStockAccordion && filteredStocks.length === 0" class="mt-8 h-[calc(100vh-224px)] pr-4">
+    <UScrollArea v-if="!showStockAccordion" class="mt-8 h-[calc(100vh-224px)] pr-4">
       <div class="space-y-4">
         <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
       </div>
     </UScrollArea>
 
-    <StockAccordion v-else :stocks="filteredStocks" />
+    <StockAccordion v-else />
   </div>
 </template>

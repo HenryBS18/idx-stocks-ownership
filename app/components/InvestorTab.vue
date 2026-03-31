@@ -1,53 +1,12 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui"
-import { watchDebounced } from "@vueuse/core"
-import type { InvestorOrigin, InvestorSortField, InvestorStock, InvestorStockResponse, Sort } from "~/types"
 import { investorOrigin, investorType } from "~/utils/constants"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
-const investors = ref<InvestorStock[]>([])
-const lastUpdatedDate = ref<string>('')
-const showInvestorsAccordion = ref<boolean>(false)
-const search = ref<string>('')
-const searchDebounced = ref<string>('')
-const sortField = ref<InvestorSortField>('nama')
-const sortOrder = ref<Sort>('asc')
-const selectedInvestorOrigin = ref<InvestorOrigin>('Semua')
-const selectedInvestorType = ref<string[]>(['Semua'])
-
-const filteredInvestors = computed<InvestorStock[]>(() => {
-  let result = [...investors.value]
-
-  if (searchDebounced.value) {
-    const q = searchDebounced.value.toLowerCase()
-    result = result.filter(investor => investor.investorName.toLowerCase().includes(q))
-  }
-
-  if (selectedInvestorOrigin.value !== 'Semua') {
-    result = result.filter(i => i.localForeign === selectedInvestorOrigin.value)
-  }
-
-  if (!selectedInvestorType.value.includes('Semua')) {
-    result = result.filter(i => selectedInvestorType.value.includes(i.investorType))
-  }
-
-  result.sort((a, b) => {
-    let compare = 0
-
-    if (sortField.value === 'nama') {
-      compare = a.investorName.localeCompare(b.investorName)
-    }
-
-    if (sortField.value === 'stock-count') {
-      compare = Number(a.stockCount) - Number(b.stockCount)
-    }
-
-    return sortOrder.value === 'asc' ? compare : -compare
-  })
-
-  return result
-})
+const store = useInvestorStore()
+const { investorCount, lastUpdatedDate, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder } = storeToRefs(store)
+const { toggleSort, fetchInvestors } = store
 
 const investorTypeItems = computed(() => {
   return investorType.map((type) => ({
@@ -81,21 +40,9 @@ const investorTypeItems = computed(() => {
   }))
 }) satisfies ComputedRef<DropdownMenuItem[]>
 
-const toggleSort = (field: InvestorSortField) => {
-  sortField.value = field
-  sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-}
-
-watchDebounced(search, (v) => {
-  searchDebounced.value = v
-}, { debounce: 500 })
-
 onMounted(() => {
-  requestAnimationFrame(async () => {
-    const { data, lastUpdated } = await $fetch<InvestorStockResponse>('/api/investor')
-    investors.value = data
-    lastUpdatedDate.value = lastUpdated
-    showInvestorsAccordion.value = true
+  requestAnimationFrame(() => {
+    if (investorCount.value === 0) fetchInvestors()
   })
 })
 </script>
@@ -151,18 +98,18 @@ onMounted(() => {
 
         <USeparator class="h-6" orientation="vertical" color="primary" />
 
-        <p v-if="filteredInvestors.length != 0" class="text-sm text-gray-500">{{ filteredInvestors.length.toLocaleString() }} investor</p>
+        <p v-if="investorCount != 0" class="text-sm text-gray-500">{{ investorCount.toLocaleString() }} investor</p>
       </div>
 
-      <p v-if="lastUpdatedDate" class="text-sm text-gray-600">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
+      <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
     </div>
 
-    <UScrollArea v-if="!showInvestorsAccordion && filteredInvestors.length === 0" class="mt-8 h-[calc(100vh-224px)] pr-4">
+    <UScrollArea v-if="!showInvestorsAccordion" class="mt-8 h-[calc(100vh-224px)] pr-4">
       <div class="space-y-4">
         <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
       </div>
     </UScrollArea>
 
-    <InvestorAccordion v-else :investors="filteredInvestors" />
+    <InvestorAccordion v-else />
   </div>
 </template>
