@@ -76,7 +76,7 @@ onMounted(() => {
   <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4" ref="el">
     <div class="space-y-4">
       <div v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
-        <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-200" @click="toggle(i)">
+        <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100" @click="toggle(i)">
           <UBadge :label="stock.ticker" size="lg" />
 
           <span class="text-sm font-semibold text-gray-600">{{ stock.name }}</span>
@@ -91,8 +91,8 @@ onMounted(() => {
 
         <div v-if="open.includes(i)" class="border-t border-gray-200">
           <UTable :data="stock.investors" :columns="investorColumns" :ui="{
-            thead: 'bg-gray-200',
-            tr: 'hover:bg-gray-200'
+            thead: 'bg-gray-100',
+            tr: 'hover:bg-gray-100'
           }" />
         </div>
       </div>
