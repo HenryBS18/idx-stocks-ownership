@@ -33,7 +33,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     accessorKey: 'localForeign',
   },
   {
-    header: 'Domisili',
+    header: 'Asal',
     accessorKey: 'domicile',
   },
   {
