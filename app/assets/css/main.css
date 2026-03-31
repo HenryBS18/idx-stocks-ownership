@@ -2,7 +2,7 @@
 @import "@nuxt/ui";
 
 body {
-  background-color: var(--color-gray-100)
+  background-color: white
 }
 
 /* scrollbar width */
