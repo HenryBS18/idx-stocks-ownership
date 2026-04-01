@@ -18,7 +18,10 @@ export default defineEventHandler(async (event) => {
     const newToken = signToken()
 
     setCookie(event, 'token', newToken, {
-      maxAge: 60 * 60 * 24 * 1
+      maxAge: 60 * 60 * 24 * 1,
+      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
     })
 
     return
