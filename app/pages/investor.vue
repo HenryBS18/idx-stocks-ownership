@@ -45,10 +45,15 @@ onMounted(() => {
     if (investorCount.value === 0) fetchInvestors()
   })
 })
+
+useSeoMeta({
+  title: 'Data Investor Saham Indonesia (IDX) - Kepemilikan & Distribusi Investor | IDX Stocks Ownership',
+  description: 'Eksplorasi data investor saham di Bursa Efek Indonesia (IDX), termasuk asal, tipe (individu, institusi), dan jumlah kepemilikan saham. Filter dan analisis investor dengan mudah.'
+})
 </script>
 
 <template>
-  <div class="py-2">
+  <main>
     <div class="flex items-end justify-between">
       <div class="flex items-center space-x-4">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." :ui="{ trailing: 'pe-1' }">
@@ -119,5 +124,5 @@ onMounted(() => {
     </UScrollArea>
 
     <InvestorAccordion v-else />
-  </div>
+  </main>
 </template>

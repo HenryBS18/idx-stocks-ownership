@@ -1,11 +1,14 @@
 <script setup lang="ts">
-useHead({
-  title: 'IDX 1% Ownership',
+useSeoMeta({
+  title: 'IDX Stocks Ownership',
+  description: 'Lihat data kepemilikan saham, investor, dan free float terbaru di Bursa Efek Indonesia.'
 })
 </script>
 
 <template>
   <UApp>
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </UApp>
 </template>

@@ -1,3 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  return await $fetch('/api/token')
+  await $fetch('/api/token')
+
+  if (to.path === '/') return navigateTo('/saham')
 })

@@ -13,10 +13,15 @@ onMounted(() => {
     if (stockCount.value === 0) fetchStocks()
   })
 })
+
+useSeoMeta({
+  title: 'Daftar Saham Indonesia & Kepemilikan Investor (IDX) | IDX Stocks Ownership',
+  description: 'Jelajahi data saham Indonesia di BEI (IDX), termasuk free float, jumlah investor, dan distribusi kepemilikan. Cari, filter, dan analisis emiten dengan mudah.'
+})
 </script>
 
 <template>
-  <div class="py-2">
+  <main>
     <div class="flex items-end justify-between">
       <div class="flex items-center space-x-4">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1' }">
@@ -74,5 +79,5 @@ onMounted(() => {
     </UScrollArea>
 
     <StockAccordion v-else />
-  </div>
+  </main>
 </template>
