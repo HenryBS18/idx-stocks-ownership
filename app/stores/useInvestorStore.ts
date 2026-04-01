@@ -53,7 +53,10 @@ export const useInvestorStore = defineStore('investor', () => {
   }
 
   const fetchInvestors = async () => {
-    const { data, lastUpdated } = await $fetch<InvestorStockResponse>('/api/investor')
+    const token = useCookie('token').value
+
+    const { data, lastUpdated } = await $fetch<InvestorStockResponse>(`/api/investor?token=${token}`)
+
     investors.value = data
     lastUpdatedDate.value = lastUpdated
     showInvestorsAccordion.value = true

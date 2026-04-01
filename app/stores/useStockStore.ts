@@ -55,7 +55,9 @@ export const useStockStore = defineStore('stock', () => {
   }
 
   const fetchStocks = async () => {
-    const { data, lastUpdated } = await $fetch<StockResponse>('/api/stock')
+    const token = useCookie('token').value
+
+    const { data, lastUpdated } = await $fetch<StockResponse>(`/api/stock?token=${token}`)
 
     stocks.value = data
     lastUpdatedDate.value = lastUpdated
