@@ -6,7 +6,7 @@ export const verifyToken = (token: string | undefined): boolean => {
 
     const secret = process.env.JWT_SECRET!
 
-    const p = jwt.verify(token, secret, { algorithms: ['HS256'] })
+    jwt.verify(token, secret, { algorithms: ['HS256'] })
 
     return true
   } catch (error) {
