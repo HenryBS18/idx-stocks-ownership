@@ -50,6 +50,10 @@ useSeoMeta({
   title: 'Data Investor Saham Indonesia (IDX) - Kepemilikan & Distribusi Investor | IDX Stocks Ownership',
   description: 'Eksplorasi data investor saham di Bursa Efek Indonesia (IDX), termasuk asal, tipe (individu, institusi), dan jumlah kepemilikan saham. Filter dan analisis investor dengan mudah.'
 })
+
+definePageMeta({
+  middleware: ['auth']
+})
 </script>
 
 <template>

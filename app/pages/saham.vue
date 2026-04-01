@@ -18,6 +18,10 @@ useSeoMeta({
   title: 'Daftar Saham Indonesia & Kepemilikan Investor (IDX) | IDX Stocks Ownership',
   description: 'Jelajahi data saham Indonesia di BEI (IDX), termasuk free float, jumlah investor, dan distribusi kepemilikan. Cari, filter, dan analisis emiten dengan mudah.'
 })
+
+definePageMeta({
+  middleware: ['auth']
+})
 </script>
 
 <template>
