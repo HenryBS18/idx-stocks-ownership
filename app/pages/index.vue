@@ -5,6 +5,10 @@ const tabItems: TabsItem[] = [
   { label: 'Saham', slot: 'stock', icon: 'i-lucide-chart-candlestick' },
   { label: 'Investor', slot: 'investor', icon: 'i-lucide-user' },
 ]
+
+definePageMeta({
+  middleware: ['auth']
+})
 </script>
 
 <template>
