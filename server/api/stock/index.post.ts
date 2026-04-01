@@ -1,6 +1,16 @@
 import { Stock, StockInvestor, TickerName } from "~~/server/types"
 
 export default defineEventHandler(async (event) => {
+  const token = getQuery(event).token?.toString()
+
+  const tokenVerified = verifyToken(token)
+
+  if (!tokenVerified) {
+    setResponseStatus(event, 401)
+
+    return { message: 'Unauthorized: Token tidak valid.' }
+  }
+
   const formData = await readMultipartFormData(event)
 
   if (!formData) return {

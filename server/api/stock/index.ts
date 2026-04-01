@@ -1,7 +1,17 @@
-import { getLastDate } from "~~/server/utils/get-last-date"
+import { verifyToken } from "~~/server/utils/verify-token"
 
 export default defineCachedEventHandler(async (event) => {
   try {
+    const token = getQuery(event).token?.toString()
+
+    const tokenVerified = verifyToken(token)
+
+    if (!tokenVerified) {
+      setResponseStatus(event, 401)
+
+      return { message: 'Unauthorized: Token tidak valid.' }
+    }
+
     const { year, month } = getQuery(event)
 
     let yearInt: number
@@ -116,7 +126,7 @@ export default defineCachedEventHandler(async (event) => {
 }, {
   maxAge: 60 * 60 * 24,
   getKey: (event) => {
-    const { year, month } = getQuery(event)
-    return `stock-${year ?? 'latest'}-${month ?? 'latest'}`
+    const { year, month, token } = getQuery(event)
+    return `stock-${token}-${year ?? 'latest'}-${month ?? 'latest'}`
   }
 })
