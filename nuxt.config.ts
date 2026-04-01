@@ -1,15 +1,16 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  ssr: process.env.NODE_ENV !== 'development',
+  ssr: process.env.NODE_ENV === 'production',
   modules: [
     '@nuxt/ui',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
+    '@nuxtjs/sitemap'
   ],
   css: ['~/assets/css/main.css'],
   nitro: {
-    preset: 'vercel',
+    preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'bun',
   },
   colorMode: {
     preference: 'light',
