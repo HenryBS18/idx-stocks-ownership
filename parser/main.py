@@ -1,5 +1,5 @@
 from tabula.io import read_pdf
-from utils import pdf_args_parser, combine_df, df_to_dict, clear_tmp, stopwatch
+from utils import pdf_args_parser, combine_df, df_to_dict, clear_result_dir, stopwatch
 from uuid import uuid4
 import json
 import os
@@ -12,7 +12,7 @@ def main():
 	combined_df = combine_df(tables)
 	data = df_to_dict(combined_df)
 
-	clear_tmp()
+	clear_result_dir()
 	
 	filename = f'{uuid4()}.json'
 	directory = os.path.join(os.getcwd(), 'result')
