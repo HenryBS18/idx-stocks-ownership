@@ -33,10 +33,11 @@ model StockInvestor {
 }
 
 model Info {
-  id             Int    @id @default(autoincrement()) @db.Integer()
-  idxLastUpdated String @db.VarChar(26)
-  month          Int    @db.Integer
-  year           Int    @db.Integer
+  id             Int      @id @default(autoincrement()) @db.Integer()
+  idxLastUpdated String   @db.VarChar(26)
+  month          Int      @db.Integer
+  year           Int      @db.Integer
+  createdAt      DateTime @default(now()) @db.Timestamptz(0)
 
   stockInvestor StockInvestor[]
 
