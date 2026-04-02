@@ -29,3 +29,5 @@ pdf
 /**/venv
 __pycache__
 Makefile
+raw-pdf
+result
