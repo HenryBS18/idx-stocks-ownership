@@ -1,9 +1,10 @@
 from tabula.io import read_pdf
-from utils import pdf_args_parser, combine_df, df_to_dict, clear_tmp
+from utils import pdf_args_parser, combine_df, df_to_dict, clear_tmp, stopwatch
 from uuid import uuid4
 import json
 import os
 
+@stopwatch
 def main():
 	pdf_path = pdf_args_parser()
 
