@@ -14,7 +14,11 @@ def main():
 	clear_tmp()
 	
 	filename = f'{uuid4()}.json'
-	saved_path = os.path.join(os.getcwd(), 'tmp', filename)
+	directory = os.path.join(os.getcwd(), 'result')
+	saved_path = os.path.join(directory, filename)
+
+	if not os.path.exists(directory):
+		os.makedirs(directory, exist_ok=True)
 
 	with open(saved_path, 'w') as file:
 		json.dump(data, file, indent=None, separators=(',', ':'))
