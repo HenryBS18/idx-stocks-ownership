@@ -17,4 +17,6 @@ def df_to_dict(df: pd.DataFrame) -> list[dict]:
         'percentage': float(str(row['PERCENTAGE']).replace(',', '.'))
     })
 
+  print(f"Total Data: {len(dictionary)}")
+
   return dictionary
