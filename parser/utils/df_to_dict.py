@@ -11,8 +11,8 @@ def df_to_dict(df: pd.DataFrame) -> list[dict]:
         'investorType': row['INVESTOR_TYPE'],
         'localForeign': row['LOCAL_FOREIGN'],
         'domicile': row['DOMICILE'],
-        'scripless': int(str(row['HOLDINGS_SCRIPLESS']).replace('.', ''), 10),
-        'scrip': int(str(row['HOLDINGS_SCRIP']).replace('.', ''), 10),
+        'scripless': int(str(row['HOLDINGS_SCRIPLESS']).replace('.', ''), 10) if str(row['HOLDINGS_SCRIPLESS']) != '' else 0,
+        'scrip': int(str(row['HOLDINGS_SCRIP']).replace('.', ''), 10) if str(row['HOLDINGS_SCRIP']) != '' else 0,
         'totalHoldingShare': int(str(row['TOTAL_HOLDING_SHARES']).replace('.', ''), 10),
         'percentage': float(str(row['PERCENTAGE']).replace(',', '.'))
     })
