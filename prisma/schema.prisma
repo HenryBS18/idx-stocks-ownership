@@ -7,6 +7,18 @@ datasource db {
   provider = "postgresql"
 }
 
+model Info {
+  id             Int      @id @default(autoincrement()) @db.Integer()
+  idxLastUpdated String   @db.VarChar(26)
+  month          Int      @db.Integer
+  year           Int      @db.Integer
+  createdAt      DateTime @default(now()) @db.Timestamptz(0)
+
+  stockInvestor StockInvestor[]
+
+  @@index([year, month])
+}
+
 model Stock {
   ticker String @id @db.Char(4)
   name   String @db.VarChar(60)
@@ -26,20 +38,9 @@ model StockInvestor {
   totalHoldingShare BigInt  @db.BigInt()
   percentage        Decimal @db.Decimal(5, 2)
   infoId            Int     @db.Integer
-  stock             Stock   @relation(fields: [ticker], references: [ticker])
-  info              Info    @relation(fields: [infoId], references: [id])
+
+  stock Stock @relation(fields: [ticker], references: [ticker])
+  info  Info  @relation(fields: [infoId], references: [id])
 
   @@index([infoId, ticker])
-}
-
-model Info {
-  id             Int      @id @default(autoincrement()) @db.Integer()
-  idxLastUpdated String   @db.VarChar(26)
-  month          Int      @db.Integer
-  year           Int      @db.Integer
-  createdAt      DateTime @default(now()) @db.Timestamptz(0)
-
-  stockInvestor StockInvestor[]
-
-  @@index([year, month])
 }
