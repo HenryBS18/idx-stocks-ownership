@@ -3,5 +3,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   if (!token) await $fetch('/api/token')
 
+  const { fetchDates } = useDateStore()
+  await fetchDates()
+
   if (to.path === '/') return navigateTo('/saham')
 })

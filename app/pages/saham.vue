@@ -3,10 +3,12 @@ import { useStockStore } from "~/stores/useStockStore"
 
 const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
 
-const store = useStockStore()
+const dateStore = useDateStore()
+const { dates, selectedDate } = storeToRefs(dateStore)
 
-const { lastUpdatedDate, search, showStockAccordion, sortField, sortOrder, stockCount } = storeToRefs(store)
-const { fetchStocks, resetFilter, toggleSort } = store
+const stockStore = useStockStore()
+const { search, showStockAccordion, sortField, sortOrder, stockCount } = storeToRefs(stockStore)
+const { fetchStocks, resetFilter, toggleSort } = stockStore
 
 onMounted(() => {
   requestAnimationFrame(() => {
@@ -73,7 +75,11 @@ definePageMeta({
         <p v-if="stockCount != 0" class="text-sm text-gray-500">{{ stockCount.toLocaleString() }} emiten</p>
       </div>
 
-      <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Data Per: {{ lastUpdatedDate }}</p>
+      <div class="flex items-center space-x-2">
+        <p class="text-sm text-gray-500">DATA PER</p>
+
+        <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
+      </div>
     </div>
 
     <UScrollArea v-if="!showStockAccordion" class="mt-8 h-[calc(100vh-224px)] pr-4">

@@ -2,6 +2,9 @@ import { watchDebounced } from "@vueuse/core"
 import type { Sort, Stock, StockResponse, StockSortField } from "~/types"
 
 export const useStockStore = defineStore('stock', () => {
+  const dateStore = useDateStore()
+  const { selectedDate } = storeToRefs(dateStore)
+
   const stocks = ref<Stock[]>([])
   const lastUpdatedDate = ref<string>('')
   const showStockAccordion = ref<boolean>(false)
@@ -45,7 +48,7 @@ export const useStockStore = defineStore('stock', () => {
 
   const stockCount = computed<number>(() => filteredStocks.value.length)
 
-  const toggleSort = (field: StockSortField) => {
+  const toggleSort = (field: StockSortField): void => {
     if (sortField.value === field) {
       sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
     } else {
@@ -54,17 +57,23 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
 
-  const fetchStocks = async () => {
+  const fetchStocks = async (): Promise<void> => {
     const token = useCookie('token').value
 
-    const { data, lastUpdated } = await $fetch<StockResponse>(`/api/stock?token=${token}`)
+    if (!selectedDate.value) return
+
+    const [year, month] = selectedDate.value.split('-')
+
+    const { data, lastUpdated } = await $fetch<StockResponse>('/api/stock', {
+      query: { token, year, month }
+    })
 
     stocks.value = data
     lastUpdatedDate.value = lastUpdated
     showStockAccordion.value = true
   }
 
-  const resetFilter = () => {
+  const resetFilter = (): void => {
     search.value = ''
     searchDebounced.value = ''
     sortField.value = 'ticker'
@@ -74,6 +83,13 @@ export const useStockStore = defineStore('stock', () => {
   watchDebounced(search, (v) => {
     searchDebounced.value = v
   }, { debounce: 500 })
+
+  watch(selectedDate, async (newDate, oldDate) => {
+    if (!newDate || newDate === oldDate) return
+
+    showStockAccordion.value = false
+    await fetchStocks()
+  })
 
   return {
     lastUpdatedDate,
