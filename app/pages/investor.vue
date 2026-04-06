@@ -4,8 +4,11 @@ import { investorOrigin, investorType } from "~/utils/constants"
 
 const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
 
+const dateStore = useDateStore()
+const { dates, selectedDate } = storeToRefs(dateStore)
+
 const store = useInvestorStore()
-const { investorCount, lastUpdatedDate, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder } = storeToRefs(store)
+const { investorCount, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder } = storeToRefs(store)
 const { fetchInvestors, resetFilter, toggleSort } = store
 
 const investorTypeItems = computed(() => {
@@ -118,7 +121,11 @@ definePageMeta({
         <p v-if="investorCount != 0" class="text-sm text-gray-500">{{ investorCount.toLocaleString() }} investor</p>
       </div>
 
-      <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Data Per: {{ lastUpdatedDate }}</p>
+      <div class="flex items-center space-x-2">
+        <p class="text-sm text-gray-500">DATA PER</p>
+
+        <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
+      </div>
     </div>
 
     <UScrollArea v-if="!showInvestorsAccordion" class="mt-8 h-[calc(100vh-224px)] pr-4">
