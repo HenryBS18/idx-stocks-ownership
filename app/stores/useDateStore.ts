@@ -5,6 +5,8 @@ export const useDateStore = defineStore('date', () => {
   const selectedDate = ref<string>('')
 
   const fetchDates = async (): Promise<void> => {
+    if (dates.value.length > 0) return
+
     const token = useCookie('token').value
 
     const res = await $fetch<InfoResponse>('/api/info', {
