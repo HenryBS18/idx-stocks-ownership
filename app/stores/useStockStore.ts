@@ -12,6 +12,7 @@ export const useStockStore = defineStore('stock', () => {
   const searchDebounced = ref<string>('')
   const sortField = ref<StockSortField>('ticker')
   const sortOrder = ref<Sort>('asc')
+  const fetchedDate = ref<string | null>(null)
 
   const filteredStocks = computed<Stock[]>(() => {
     let result = [...stocks.value]
@@ -71,6 +72,7 @@ export const useStockStore = defineStore('stock', () => {
     stocks.value = data
     lastUpdatedDate.value = lastUpdated
     showStockAccordion.value = true
+    fetchedDate.value = selectedDate.value
   }
 
   const resetFilter = (): void => {
@@ -84,13 +86,6 @@ export const useStockStore = defineStore('stock', () => {
     searchDebounced.value = v
   }, { debounce: 500 })
 
-  watch(selectedDate, async (newDate, oldDate) => {
-    if (!newDate || newDate === oldDate) return
-
-    showStockAccordion.value = false
-    await fetchStocks()
-  })
-
   return {
     lastUpdatedDate,
     showStockAccordion,
@@ -99,6 +94,7 @@ export const useStockStore = defineStore('stock', () => {
     sortOrder,
     filteredStocks,
     stockCount,
+    fetchedDate,
     toggleSort,
     fetchStocks,
     resetFilter,

@@ -7,13 +7,17 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const stockStore = useStockStore()
-const { search, showStockAccordion, sortField, sortOrder, stockCount } = storeToRefs(stockStore)
+const { search, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate } = storeToRefs(stockStore)
 const { fetchStocks, resetFilter, toggleSort } = stockStore
 
-onMounted(() => {
-  requestAnimationFrame(() => {
-    if (stockCount.value === 0) fetchStocks()
-  })
+watch(selectedDate, async (newDate, oldDate) => {
+  if (!newDate || newDate === oldDate) return
+  if (fetchedDate.value === newDate) return
+
+  showStockAccordion.value = false
+  await fetchStocks()
+}, {
+  immediate: true
 })
 
 useSeoMeta({

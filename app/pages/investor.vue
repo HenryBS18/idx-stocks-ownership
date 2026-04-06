@@ -8,7 +8,7 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const store = useInvestorStore()
-const { investorCount, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder } = storeToRefs(store)
+const { investorCount, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder, fetchedDate } = storeToRefs(store)
 const { fetchInvestors, resetFilter, toggleSort } = store
 
 const investorTypeItems = computed(() => {
@@ -43,10 +43,14 @@ const investorTypeItems = computed(() => {
   }))
 }) satisfies ComputedRef<DropdownMenuItem[]>
 
-onMounted(() => {
-  requestAnimationFrame(() => {
-    if (investorCount.value === 0) fetchInvestors()
-  })
+watch(selectedDate, async (newDate, oldDate) => {
+  if (!newDate || newDate === oldDate) return
+  if (fetchedDate.value === newDate) return
+
+  showInvestorsAccordion.value = false
+  await fetchInvestors()
+}, {
+  immediate: true
 })
 
 useSeoMeta({

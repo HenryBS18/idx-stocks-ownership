@@ -14,6 +14,7 @@ export const useInvestorStore = defineStore('investor', () => {
   const sortOrder = ref<Sort>('asc')
   const selectedInvestorOrigin = ref<InvestorOrigin>('Semua')
   const selectedInvestorType = ref<string[]>(['Semua'])
+  const fetchedDate = ref<string | null>(null)
 
   const filteredInvestors = computed<InvestorStock[]>(() => {
     let result = [...investors.value]
@@ -69,6 +70,7 @@ export const useInvestorStore = defineStore('investor', () => {
     investors.value = data
     lastUpdatedDate.value = lastUpdated
     showInvestorsAccordion.value = true
+    fetchedDate.value = selectedDate.value
   }
 
   const resetFilter = () => {
@@ -84,13 +86,6 @@ export const useInvestorStore = defineStore('investor', () => {
     searchDebounced.value = v
   }, { debounce: 500 })
 
-  watch(selectedDate, async (newDate, oldDate) => {
-    if (!newDate || newDate === oldDate) return
-
-    showInvestorsAccordion.value = false
-    await fetchInvestors()
-  })
-
   return {
     lastUpdatedDate,
     showInvestorsAccordion,
@@ -101,6 +96,7 @@ export const useInvestorStore = defineStore('investor', () => {
     selectedInvestorType,
     filteredInvestors,
     investorCount,
+    fetchedDate,
     toggleSort,
     fetchInvestors,
     resetFilter,
