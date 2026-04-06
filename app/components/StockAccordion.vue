@@ -75,7 +75,7 @@ onMounted(() => {
     <div class="space-y-4">
       <div v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100" @click="toggle(i)">
-          <UBadge :label="stock.ticker" size="lg" />
+          <UBadge :label="stock.ticker" />
 
           <span class="text-sm font-semibold text-gray-600">{{ stock.name }}</span>
 
