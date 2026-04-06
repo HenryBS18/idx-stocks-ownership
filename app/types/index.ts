@@ -46,3 +46,10 @@ export type InvestorSortField = 'nama' | 'stock-count'
 export type Sort = 'asc' | 'desc'
 
 export type InvestorOrigin = 'Semua' | 'Asing' | 'Lokal'
+
+export type Info = {
+  label: string
+  value: string
+}
+
+export type InfoResponse = Info[]
