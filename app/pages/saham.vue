@@ -73,7 +73,7 @@ definePageMeta({
         <p v-if="stockCount != 0" class="text-sm text-gray-500">{{ stockCount.toLocaleString() }} emiten</p>
       </div>
 
-      <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Terakhir diperbarui: {{ lastUpdatedDate }}</p>
+      <p v-if="lastUpdatedDate" class="text-sm text-gray-400">Data Per: {{ lastUpdatedDate }}</p>
     </div>
 
     <UScrollArea v-if="!showStockAccordion" class="mt-8 h-[calc(100vh-224px)] pr-4">
