@@ -6,7 +6,7 @@ import os
 
 @stopwatch
 def main():
-	pdf_path = pdf_args_parser()
+	pdf_path, file_date = pdf_args_parser()
 
 	tables = read_pdf(pdf_path, pages='all')
 	combined_df = combine_df(tables)
@@ -14,7 +14,7 @@ def main():
 
 	clear_result_dir()
 	
-	filename = f'{uuid4()}.json'
+	filename = f'{file_date}-{uuid4()}.json'
 	directory = os.path.join(os.getcwd(), 'result')
 	saved_path = os.path.join(directory, filename)
 

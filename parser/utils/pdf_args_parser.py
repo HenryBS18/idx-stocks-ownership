@@ -1,7 +1,7 @@
 import argparse
 import os
 
-def pdf_args_parser() -> str:
+def pdf_args_parser() -> tuple[str, str]:
   parser = argparse.ArgumentParser(description="Process PDF files.")
   parser.add_argument('--pdf', type=str, help='Path to the PDF file')
 
@@ -15,6 +15,8 @@ def pdf_args_parser() -> str:
     if not os.path.exists(pdf_path):
       raise Exception(f'PDF file not exists: {pdf_path}')
     
-    return pdf_path
+    file_date = os.path.basename(pdf_path).split('_')[0]
+    
+    return pdf_path, file_date
   else:
 			raise Exception('No PDF path provided')
