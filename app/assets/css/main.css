@@ -5,6 +5,10 @@ body {
   background-color: white
 }
 
+input::placeholder {
+  color: var(--color-neutral-400)
+}
+
 /* scrollbar width */
 ::-webkit-scrollbar {
   width: 8px;
@@ -19,4 +23,11 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #00c950;
   border-radius: 4px;
+}
+
+@media (width < 40rem) {
+  /* scrollbar width */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
 }
