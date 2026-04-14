@@ -71,18 +71,44 @@ onMounted(() => {
 </script>
 
 <template>
-  <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4" ref="el">
+  <UScrollArea ref="el" :class="cn(
+    'h-[calc(100vh-224px)] pr-2',
+    'sm:pr-3',
+    'md:pr-4'
+  )">
     <div class="space-y-4">
       <div v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
-        <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100" @click="toggle(i)">
-          <UBadge :label="stock.ticker" />
+        <div :class="cn(
+          'flex items-center justify-between gap-x-3 w-full px-2.5 py-3 cursor-pointer hover:bg-gray-100',
+          'sm:justify-normal sm:p-4'
+        )" @click="toggle(i)">
+          <div :class="cn(
+            'flex items-center gap-x-2 w-[50%] flex-1',
+            'sm:gap-x-3 sm:w-auto'
+          )">
+            <UBadge :label="stock.ticker" />
 
-          <span class="text-sm font-semibold text-gray-600">{{ stock.name }}</span>
+            <span :class="cn(
+              'text-[11px] font-semibold text-gray-600',
+              'sm:text-xs text-nowrap truncate',
+              'md:text-sm'
+            )">
+              {{ stock.name }}
+            </span>
+          </div>
 
-          <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" />
-          <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" />
+          <div :class="cn(
+            'flex items-center gap-x-1.5',
+            'sm:gap-x-3 sm:w-full sm:justify-between'
+          )">
+            <div :class="cn(
+              'flex flex-col items-end gap-y-1.5',
+              'sm:flex-row sm:gap-x-3 sm:gap-y-0'
+            )">
+              <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" class="text-[10px] w-fit" />
+              <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" class="text-[10px] w-fit" />
+            </div>
 
-          <div class="ml-auto">
             <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
           </div>
         </div>
