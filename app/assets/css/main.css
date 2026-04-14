@@ -12,6 +12,7 @@ input::placeholder {
 /* scrollbar width */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 /* remove track background */
@@ -29,5 +30,6 @@ input::placeholder {
   /* scrollbar width */
   ::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
   }
 }
