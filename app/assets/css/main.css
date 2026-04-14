@@ -26,7 +26,7 @@ input::placeholder {
   border-radius: 4px;
 }
 
-@media (width < 40rem) {
+@media (width < 48rem) {
   /* scrollbar width */
   ::-webkit-scrollbar {
     width: 4px;
