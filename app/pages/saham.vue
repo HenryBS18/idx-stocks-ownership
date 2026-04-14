@@ -113,7 +113,7 @@ definePageMeta({
         </div>
       </UScrollArea>
 
-      <StockAccordion v-else />
+      <SahamAccordion v-else />
     </div>
   </main>
 </template>
