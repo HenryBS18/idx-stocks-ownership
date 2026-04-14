@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useStockStore } from "~/stores/useStockStore"
 
-const StockAccordion = defineAsyncComponent(() => import("~/components/StockAccordion.vue"))
-
 const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 

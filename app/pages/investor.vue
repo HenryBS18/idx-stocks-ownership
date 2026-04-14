@@ -2,8 +2,6 @@
 import type { DropdownMenuItem } from "@nuxt/ui"
 import { investorOrigin, investorType } from "~/utils/constants"
 
-const InvestorAccordion = defineAsyncComponent(() => import("~/components/InvestorAccordion.vue"))
-
 const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
