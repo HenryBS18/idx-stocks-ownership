@@ -79,38 +79,42 @@ onMounted(() => {
     <div class="space-y-4">
       <div v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div :class="cn(
-          'flex items-center justify-between gap-x-3 w-full px-2.5 py-3 cursor-pointer hover:bg-gray-100',
-          'sm:justify-normal sm:p-4'
+          'w-full flex items-center justify-between gap-x-3 px-2.5 py-3 cursor-pointer hover:bg-gray-100',
+          'sm:p-4'
         )" @click="toggle(i)">
           <div :class="cn(
-            'flex items-center gap-x-2 w-[50%] flex-1',
-            'sm:gap-x-3 sm:w-auto'
+            'flex flex-col gap-x-3 gap-y-2 min-w-0',
+            'sm:flex-row'
           )">
-            <UBadge :label="stock.ticker" />
-
-            <span :class="cn(
-              'text-[11px] font-semibold text-gray-600',
-              'sm:text-xs text-nowrap truncate',
-              'md:text-sm'
-            )">
-              {{ stock.name }}
-            </span>
-          </div>
-
-          <div :class="cn(
-            'flex items-center gap-x-1.5',
-            'sm:gap-x-3 sm:w-full sm:justify-between'
-          )">
+            <!-- ticker name -->
             <div :class="cn(
-              'flex flex-col items-end gap-y-1.5',
-              'sm:flex-row sm:gap-x-3 sm:gap-y-0'
+              'flex items-center gap-x-1.5',
+              'sm:gap-x-3'
             )">
-              <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" class="text-[10px] w-fit" />
-              <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" class="text-[10px] w-fit" />
+              <UBadge :label="stock.ticker" />
+
+              <span :class="cn(
+                'text-[11px] font-semibold text-gray-600 truncate',
+                'sm:text-xs',
+                'xl:text-sm'
+              )">
+                {{ stock.name }}
+              </span>
             </div>
 
-            <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
+            <!-- badges -->
+            <div :class="cn(
+              'flex gap-x-2 gap-y-1.5',
+              'sm:gap-x-3 sm:gap-y-0'
+            )">
+              <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft"
+                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+              <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft"
+                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+            </div>
           </div>
+
+          <UIcon name="i-lucide-chevron-down" class="transition-transform shrink-0" :class="{ 'rotate-180': open.includes(i) }" />
         </div>
 
         <div v-if="open.includes(i)" class="border-t border-gray-200">

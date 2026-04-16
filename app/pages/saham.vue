@@ -39,9 +39,9 @@ definePageMeta({
         'w-full flex flex-col space-y-3',
         'lg:w-auto lg:flex-row lg:space-x-4 lg:space-y-0'
       )">
-        <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1' }" :class="cn(
-          'w-full min-w-51',
-          'md:w-auto'
+        <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1', base: 'pr-8' }" :class="cn(
+          'w-full',
+          'md:w-fit'
         )">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
@@ -58,7 +58,7 @@ definePageMeta({
             'flex flex-col space-y-1',
             'md:flex-row md:items-center md:space-x-2 md:space-y-0'
           )">
-            <p class="text-sm text-gray-500">URUTKAN</p>
+            <p class="text-xs text-gray-500  sm:text-sm">URUTKAN</p>
 
             <div class="flex">
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
@@ -87,7 +87,7 @@ definePageMeta({
             'flex items-center space-x-4',
           )">
             <div class="flex items-center space-x-2">
-              <p class="text-sm text-gray-500 text-nowrap">RESET FILTER</p>
+              <p class="text-xs text-gray-500 text-nowrap sm:text-sm">RESET FILTER</p>
 
               <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
@@ -100,13 +100,13 @@ definePageMeta({
       </div>
 
       <div class="flex items-center space-x-2">
-        <p class="text-sm text-gray-500 text-nowrap">DATA PER</p>
+        <p class="text-xs text-gray-500 text-nowrap sm:text-sm">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
       </div>
     </div>
 
-    <div class="mt-8">
+    <div class="mt-4 md:mt-8">
       <UScrollArea v-if="!showStockAccordion" class="h-[calc(100vh-224px)] pr-4">
         <div class="space-y-4">
           <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
