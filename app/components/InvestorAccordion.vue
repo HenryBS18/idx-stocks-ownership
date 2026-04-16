@@ -62,21 +62,50 @@ onMounted(() => {
 </script>
 
 <template>
-  <UScrollArea class="mt-8 h-[calc(100vh-224px)] pr-4" ref="el">
+  <UScrollArea :class="cn(
+    'h-[calc(100vh-224px)] pr-2',
+    'sm:pr-3',
+    'md:pr-4'
+  )" ref="el">
     <div class="space-y-4">
       <div v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
-        <div class="flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-100" @click="toggle(i)">
+        <div :class="cn(
+          'flex items-center justify-between px-2.5 py-3 cursor-pointer hover:bg-gray-100 w-full gap-x-3',
+          'sm:p-4'
+        )" @click="toggle(i)">
+          <div :class="cn(
+            'flex flex-col gap-y-1 min-w-0',
+            'sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:min-w-fit'
+          )">
+            <span :class="cn(
+              'font-semibold text-[11px] text-gray-600 truncate',
+              'sm:text-xs',
+              'xl:text-sm'
+            )">
+              {{ investor.investorName }}
+            </span>
 
-          <span class="font-semibold text-gray-600">{{ investor.investorName }}</span>
+            <div :class="cn(
+              'flex gap-x-2',
+              'sm:gap-x-3'
+            )">
+              <UBadge :label="`${investor.stockCount} saham`" color="secondary" variant="soft" class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+              <UBadge v-if="investor.investorType" :label="investor.investorType" color="error" variant="soft"
+                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+              <UBadge v-if="investor.localForeign" :label="investor.localForeign" color="primary" variant="soft"
+                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+            </div>
+          </div>
 
-          <UBadge :label="`${investor.stockCount} saham`" color="secondary" variant="soft" />
-          <UBadge :label="investor.investorType" color="error" variant="soft" v-if="investor.investorType" />
-          <UBadge :label="investor.localForeign" color="primary" variant="soft" v-if="investor.localForeign" />
+          <div class="flex items-center space-x-3">
+            <p :class="cn(
+              'text-[10px] text-gray-500 text-end',
+              'sm:text-xs'
+            )">
+              {{ investor.domicile }}
+            </p>
 
-          <div class="ml-auto flex items-center space-x-3">
-            <p class="text-xs text-gray-500">{{ investor.domicile }}</p>
-
-            <UIcon name="i-lucide-chevron-down" class="transition-transform" :class="{ 'rotate-180': open.includes(i) }" />
+            <UIcon name="i-lucide-chevron-down" class="transition-transform shrink-0" :class="{ 'rotate-180': open.includes(i) }" />
           </div>
         </div>
 
