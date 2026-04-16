@@ -97,7 +97,7 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="flex items-center space-x-3">
+          <div class="flex items-center gap-x-3">
             <p :class="cn(
               'text-[10px] text-gray-500 text-end',
               'sm:text-xs'

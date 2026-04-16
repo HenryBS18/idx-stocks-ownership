@@ -86,7 +86,6 @@ onMounted(() => {
             'flex flex-col gap-x-3 gap-y-2 min-w-0',
             'sm:flex-row'
           )">
-            <!-- ticker name -->
             <div :class="cn(
               'flex items-center gap-x-1.5',
               'sm:gap-x-3'
@@ -102,7 +101,6 @@ onMounted(() => {
               </span>
             </div>
 
-            <!-- badges -->
             <div :class="cn(
               'flex gap-x-2 gap-y-1.5',
               'sm:gap-x-3 sm:gap-y-0'

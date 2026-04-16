@@ -65,13 +65,13 @@ definePageMeta({
   <main>
     <div :class="cn(
       'w-full flex flex-col gap-y-3',
-      'xl:flex-row xl:flex-wrap xl:justify-between 2xl:gap-y-0'
+      'xl:flex-row xl:flex-wrap xl:justify-between',
+      '2xl:gap-y-0'
     )">
       <div :class="cn(
         'w-full flex flex-col items-start gap-y-3',
         'xl:w-fit xl:flex-row xl:items-center xl:gap-x-4 xl:gap-y-0'
       )">
-        <!-- search -->
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari investor..." :ui="{ trailing: 'pe-1', base: 'pr-8' }" :class="cn(
           'w-full',
           'xl:w-fit'
@@ -83,14 +83,12 @@ definePageMeta({
 
         <div :class="cn(
           'flex flex-col items-start gap-y-3',
-          'lg:flex-row lg:items-center lg:gap-x-4 xl:gap-y-0'
+          'lg:flex-row lg:items-center lg:gap-x-4',
+          'xl:gap-y-0'
         )">
           <USeparator orientation="vertical" color="primary" class="hidden h-6 xl:inline" />
 
-          <div :class="cn(
-            'flex items-center gap-x-4',
-          )">
-            <!-- from -->
+          <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
               <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">ASAL</p>
 
@@ -99,7 +97,6 @@ definePageMeta({
 
             <USeparator orientation="vertical" color="primary" class="hidden h-6 md:inline" />
 
-            <!-- type -->
             <div class="flex items-center gap-x-2">
               <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">TIPE</p>
 
@@ -112,7 +109,6 @@ definePageMeta({
 
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
-          <!-- sort button -->
           <div class="flex items-center gap-x-2">
             <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">URUTKAN</p>
 
@@ -133,10 +129,7 @@ definePageMeta({
 
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
-          <!-- reset filter -->
-          <div :class="cn(
-            'flex items-center gap-x-4'
-          )">
+          <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
               <p class="text-xs text-xs-500 text-nowrap md:text-[13px] lg:text-sm">RESET FILTER</p>
 

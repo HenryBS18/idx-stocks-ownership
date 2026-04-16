@@ -31,17 +31,17 @@ definePageMeta({
 <template>
   <main>
     <div :class="cn(
-      'w-full flex flex-col space-y-3',
+      'w-full flex flex-col gap-y-3',
       'lg:w-auto lg:justify-between',
-      'xl:flex-row xl:space-y-0'
+      'xl:flex-row xl:gap-y-0'
     )">
       <div :class="cn(
-        'w-full flex flex-col space-y-3',
-        'lg:w-auto lg:flex-row lg:space-x-4 lg:space-y-0'
+        'w-full flex flex-col gap-y-3',
+        'lg:w-auto lg:flex-row lg:gap-x-4 lg:gap-y-0'
       )">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1', base: 'pr-8' }" :class="cn(
           'w-full',
-          'md:w-fit'
+          'lg:w-fit'
         )">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
@@ -49,16 +49,16 @@ definePageMeta({
         </UInput>
 
         <div :class="cn(
-          'flex flex-col items-start space-y-3',
-          'md:flex-row md:items-center md:space-x-4 md:space-y-0'
+          'flex flex-col items-start gap-y-3',
+          'md:flex-row md:items-center md:gap-x-4 md:gap-y-0'
         )">
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
           <div :class="cn(
-            'flex flex-col space-y-1',
-            'md:flex-row md:items-center md:space-x-2 md:space-y-0'
+            'flex flex-col gap-y-1',
+            'md:flex-row md:items-center md:gap-x-2 md:gap-y-0'
           )">
-            <p class="text-xs text-gray-500  sm:text-sm">URUTKAN</p>
+            <p class="text-xs text-gray-500 sm:text-sm">URUTKAN</p>
 
             <div class="flex">
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
@@ -83,10 +83,8 @@ definePageMeta({
 
           <USeparator orientation="vertical" color="primary" class="hidden h-6 md:inline" />
 
-          <div :class="cn(
-            'flex items-center space-x-4',
-          )">
-            <div class="flex items-center space-x-2">
+          <div class="flex items-center gap-x-4">
+            <div class="flex items-center gap-x-2">
               <p class="text-xs text-gray-500 text-nowrap sm:text-sm">RESET FILTER</p>
 
               <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
@@ -99,7 +97,7 @@ definePageMeta({
         </div>
       </div>
 
-      <div class="flex items-center space-x-2">
+      <div class="flex items-center gap-x-2">
         <p class="text-xs text-gray-500 text-nowrap sm:text-sm">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
