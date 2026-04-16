@@ -1,10 +1,10 @@
-export const investorOrigin = [
+export const investorOrigin: string[] = [
   'Semua',
   'Asing',
   'Lokal'
 ]
 
-export const investorType = [
+export const investorType: string[] = [
   'Semua',
   'Individu',
   'Korporat',
