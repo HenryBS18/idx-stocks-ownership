@@ -43,41 +43,6 @@ export default defineNuxtConfig({
         },
       ],
     },
-    workbox: {
-      navigateFallback: '/',
-      runtimeCaching: [
-        {
-          urlPattern: ({ url }) => url.pathname.startsWith('/_nuxt/'),
-          handler: 'CacheFirst',
-          options: {
-            cacheName: 'nuxt-assets',
-            expiration: {
-              maxEntries: 100,
-              maxAgeSeconds: 60 * 60 * 24 * 7
-            }
-          }
-        },
-        {
-          urlPattern: ({ request }) => request.mode === 'navigate',
-          handler: 'NetworkFirst'
-        },
-        {
-          urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'api-cache',
-            networkTimeoutSeconds: 3,
-            expiration: {
-              maxEntries: 50,
-              maxAgeSeconds: 60 * 60 * 24
-            },
-            cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        }
-      ]
-    },
     devOptions: {
       enabled: process.env.NODE_ENV === 'development',
     }
