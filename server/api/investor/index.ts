@@ -59,11 +59,6 @@ export default defineCachedEventHandler(async (event) => {
       return { message: "Data tidak tersedia" }
     }
 
-    if (yearInt < 2026 || (yearInt === 2026 && monthInt < 2)) {
-      setResponseStatus(event, 404)
-      return { message: "Data dibawah februari 2026 tidak tersedia" }
-    }
-
     const investors = await prisma.stockInvestor.findMany({
       select: {
         investorName: true,
@@ -87,7 +82,7 @@ export default defineCachedEventHandler(async (event) => {
       }
     })
 
-    const investorStock = Object.values(
+    const investorStock: InvestorStock[] = Object.values(
       investors.reduce<Record<string, InvestorStock>>((acc, row) => {
         if (!acc[row.investorName]) {
           acc[row.investorName] = {
