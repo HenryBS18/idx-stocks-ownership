@@ -1,5 +1,6 @@
-import { StockInvestors } from "~~/server/types"
-import { getCache, setCache } from "~~/server/utils/cache"
+import { StockService } from "~~/server/services/stock.service"
+
+const stockService = new StockService()
 
 export default defineCachedEventHandler(async (event) => {
   try {
@@ -48,72 +49,10 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
 
-    const cachedStock = await getCache<StockInvestors>(`stock:${yearInt}-${monthInt}`)
-    if (cachedStock) return cachedStock
-
-    const info = await prisma.info.findFirst({
-      where: {
-        year: yearInt,
-        month: monthInt
-      }
+    const stocks = await stockService.getStock({
+      year: yearInt,
+      month: monthInt
     })
-
-    if (!info) {
-      setResponseStatus(event, 404)
-      return { message: 'Data tidak tersedia' }
-    }
-
-    const stocksQuery = await prisma.stock.findMany({
-      select: {
-        ticker: true,
-        name: true,
-        stockInvestor: {
-          select: {
-            investorName: true,
-            investorType: true,
-            localForeign: true,
-            domicile: true,
-            totalHoldingShare: true,
-            percentage: true,
-          },
-          where: {
-            infoId: info.id,
-          }
-        },
-      },
-      orderBy: {
-        ticker: 'asc'
-      },
-    })
-
-    const stocks: StockInvestors = stocksQuery.map((s) => {
-      const investorCount = s.stockInvestor.length
-
-      const float = parseFloat(
-        s.stockInvestor
-          .reduce((acc, curr) => acc + parseFloat(curr.percentage.toString()), 0)
-          .toFixed(2)
-      )
-
-      const freeFloat = parseFloat((100 - float).toFixed(2))
-
-      return {
-        ticker: s.ticker,
-        name: s.name,
-        investorCount,
-        float,
-        freeFloat,
-        investors: s.stockInvestor.map((investor) => ({
-          ...investor,
-          investorType: getInvestorType(investor.investorType),
-          localForeign: getLocalForeign(investor.localForeign),
-          totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
-          percentage: parseFloat(investor.percentage.toString()),
-        })),
-      }
-    })
-
-    await setCache(`stock:${yearInt}-${monthInt}`, stocks)
 
     return stocks
   } catch (error) {

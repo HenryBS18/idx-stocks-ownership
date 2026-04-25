@@ -57,3 +57,20 @@ export type CacheItem<T> = {
   value: T
   expiresOn: number
 }
+
+export type GetStockParam = {
+  year: number
+  month: number
+}
+
+export type InsertStockParam = {
+  fileBuffer: Buffer<ArrayBufferLike>
+  idxLastUpdated: string
+}
+
+export type GetInvestorParam = GetStockParam
+
+export type InfoLabels = {
+  label: string
+  value: string
+}[]
