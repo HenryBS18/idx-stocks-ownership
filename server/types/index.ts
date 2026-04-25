@@ -26,6 +26,22 @@ export type StockInvestor = {
 
 export type Stock = Omit<StockInvestor, 'name'>
 
+export type StockInvestors = {
+  ticker: string
+  name: string
+  investorCount: number
+  float: number
+  freeFloat: number
+  investors: {
+    investorType: string
+    localForeign: string
+    totalHoldingShare: number
+    percentage: number
+    investorName: string
+    domicile: string
+  }[]
+}[]
+
 export type TickerName = Pick<StockInvestor, 'ticker' | 'name'>
 
 export type InvestorStock = {

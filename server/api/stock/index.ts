@@ -1,3 +1,5 @@
+import { StockInvestors } from "~~/server/types"
+
 export default defineCachedEventHandler(async (event) => {
   try {
     const token = getQuery(event).token?.toString()
@@ -80,7 +82,7 @@ export default defineCachedEventHandler(async (event) => {
       },
     })
 
-    const stocks = stocksQuery.map((s) => {
+    const stocks: StockInvestors = stocksQuery.map((s) => {
       const investorCount = s.stockInvestor.length
 
       const float = parseFloat(
