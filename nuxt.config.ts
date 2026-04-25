@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@vite-pwa/nuxt',
   ],
   css: ['~/assets/css/main.css'],
   nitro: {
