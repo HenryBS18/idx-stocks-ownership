@@ -27,5 +27,6 @@ export const investorTypeString: Record<string, string> = {
 
 export const localForeignString: Record<string, string> = {
   D: 'Lokal',
+  L: 'Lokal',
   F: 'Asing'
 }
