@@ -1,7 +1,4 @@
 import { InvestorStock } from "~~/server/types"
-import { getInvestorType } from "~~/server/utils/get-investor-type"
-import { getLastDate } from "~~/server/utils/get-last-date"
-import { getLocalForeign } from "~~/server/utils/get-local-foreign"
 
 export default defineCachedEventHandler(async (event) => {
   try {
@@ -90,7 +87,7 @@ export default defineCachedEventHandler(async (event) => {
       }
     })
 
-    const investorStock: InvestorStock[] = Object.values(
+    const investorStock = Object.values(
       investors.reduce<Record<string, InvestorStock>>((acc, row) => {
         if (!acc[row.investorName]) {
           acc[row.investorName] = {
@@ -121,10 +118,7 @@ export default defineCachedEventHandler(async (event) => {
       stocks: investor.stocks,
     }))
 
-    return {
-      lastUpdated: getLastDate(info.month, info.year),
-      data: investorStock,
-    }
+    return investorStock
   } catch (error) {
     if (error instanceof Error) {
       setResponseStatus(event, 500)

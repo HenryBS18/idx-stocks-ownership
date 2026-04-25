@@ -15,11 +15,6 @@ export type Stock = {
   investors: Investor[]
 }
 
-export type StockResponse = {
-  lastUpdated: string
-  data: Stock[]
-}
-
 export type InvestorStock = {
   investorName: string
   investorType: string
@@ -32,11 +27,6 @@ export type InvestorStock = {
     totalHoldingShare: number
     percentage: number
   }[]
-}
-
-export type InvestorStockResponse = {
-  lastUpdated: string
-  data: InvestorStock[]
 }
 
 export type StockSortField = 'ticker' | 'freeFloat' | 'investor-count'

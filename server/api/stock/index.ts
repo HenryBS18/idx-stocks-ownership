@@ -1,5 +1,3 @@
-import { verifyToken } from "~~/server/utils/verify-token"
-
 export default defineCachedEventHandler(async (event) => {
   try {
     const token = getQuery(event).token?.toString()
@@ -109,11 +107,7 @@ export default defineCachedEventHandler(async (event) => {
       }
     })
 
-    return {
-      lastUpdated: getLastDate(info.month, info.year),
-      data: stocks
-    }
-
+    return stocks
   } catch (error) {
     if (error instanceof Error) {
       setResponseStatus(event, 500)

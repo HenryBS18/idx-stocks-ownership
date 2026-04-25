@@ -1,12 +1,11 @@
 import { watchDebounced } from "@vueuse/core"
-import type { Sort, Stock, StockResponse, StockSortField } from "~/types"
+import type { Sort, Stock, StockSortField } from "~/types"
 
 export const useStockStore = defineStore('stock', () => {
   const dateStore = useDateStore()
   const { selectedDate } = storeToRefs(dateStore)
 
   const stocks = ref<Stock[]>([])
-  const lastUpdatedDate = ref<string>('')
   const showStockAccordion = ref<boolean>(false)
   const search = ref<string>('')
   const searchDebounced = ref<string>('')
@@ -65,12 +64,11 @@ export const useStockStore = defineStore('stock', () => {
 
     const [year, month] = selectedDate.value.split('-')
 
-    const { data, lastUpdated } = await $fetch<StockResponse>('/api/stock', {
+    const data = await $fetch<Stock[]>('/api/stock', {
       query: { token, year, month }
     })
 
     stocks.value = data
-    lastUpdatedDate.value = lastUpdated
     showStockAccordion.value = true
     fetchedDate.value = selectedDate.value
   }
@@ -87,7 +85,6 @@ export const useStockStore = defineStore('stock', () => {
   }, { debounce: 500 })
 
   return {
-    lastUpdatedDate,
     showStockAccordion,
     search,
     sortField,
