@@ -1,4 +1,5 @@
 import { StockInvestors } from "~~/server/types"
+import { getCache, setCache } from "~~/server/utils/cache"
 
 export default defineCachedEventHandler(async (event) => {
   try {
@@ -46,6 +47,9 @@ export default defineCachedEventHandler(async (event) => {
         return { message: "Month harus antara 1 - 12" }
       }
     }
+
+    const cachedStock = await getCache<StockInvestors>(`stock:${yearInt}-${monthInt}`)
+    if (cachedStock) return cachedStock
 
     const info = await prisma.info.findFirst({
       where: {
@@ -108,6 +112,8 @@ export default defineCachedEventHandler(async (event) => {
         })),
       }
     })
+
+    await setCache(`stock:${yearInt}-${monthInt}`, stocks)
 
     return stocks
   } catch (error) {

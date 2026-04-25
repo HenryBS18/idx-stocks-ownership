@@ -52,3 +52,8 @@ export type InvestorStock = {
   stockCount: number
   stocks: Pick<StockInvestor, 'ticker' | 'name' | 'totalHoldingShare' | 'percentage'>[]
 }
+
+export type CacheItem<T> = {
+  value: T
+  expiresOn: number
+}

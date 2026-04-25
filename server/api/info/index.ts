@@ -10,6 +10,9 @@ export default defineEventHandler(async (event) => {
       return { message: 'Unauthorized: Token tidak valid.' }
     }
 
+    const cachedInfos = await getCache('infos')
+    if (cachedInfos) return cachedInfos
+
     const infos = (await prisma.info.findMany({
       orderBy: [
         { year: 'desc' },
@@ -23,6 +26,8 @@ export default defineEventHandler(async (event) => {
 
       return { label, value }
     })
+
+    await setCache('infos', infos)
 
     return infos
   } catch (error) {
