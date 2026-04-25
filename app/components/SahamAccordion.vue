@@ -37,7 +37,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     accessorKey: 'domicile',
   },
   {
-    header: 'Total Lembar Saham',
+    header: 'Lembar Saham',
     accessorKey: 'totalHoldingShare',
     cell: ({ row }: any) =>
       Number(row.original.totalHoldingShare).toLocaleString()
@@ -116,10 +116,7 @@ onMounted(() => {
         </div>
 
         <div v-if="open.includes(i)" class="border-t border-gray-200">
-          <UTable :data="stock.investors" :columns="investorColumns" :ui="{
-            thead: 'bg-gray-100',
-            tr: 'hover:bg-gray-100'
-          }" />
+          <UTable :data="stock.investors" :columns="investorColumns" />
         </div>
       </div>
     </div>
