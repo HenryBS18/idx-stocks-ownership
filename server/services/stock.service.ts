@@ -66,6 +66,18 @@ export class StockService {
     return stocks
   }
 
+  async getStockName(ticker: string | undefined): Promise<string | null> {
+    const stock = await prisma.stock.findFirst({
+      where: {
+        ticker: ticker?.toUpperCase()
+      }
+    })
+
+    if (!stock) return null
+
+    return stock.name
+  }
+
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
     const dataJson = JSON.parse(fileBuffer!.toString()) as StockInvestor[]
 
