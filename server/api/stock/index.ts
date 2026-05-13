@@ -49,7 +49,7 @@ export default defineCachedEventHandler(async (event) => {
       }
     }
 
-    const stocks = await stockService.getStock({
+    const stocks = await stockService.getStocks({
       year: yearInt,
       month: monthInt
     })

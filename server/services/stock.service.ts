@@ -1,7 +1,7 @@
 import { GetStockParam, InsertStockParam, Stock, StockInvestor, StockInvestors, TickerName } from "../types"
 
 export class StockService {
-  async getStock({ year, month }: GetStockParam): Promise<StockInvestors> {
+  async getStocks({ year, month }: GetStockParam): Promise<StockInvestors> {
     const cachedStock = await getCache<StockInvestors>(`stock:${year}-${month}`)
     if (cachedStock) return cachedStock
 
