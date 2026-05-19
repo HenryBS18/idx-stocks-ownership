@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     registerType: 'autoUpdate',
     manifest: {
       name: 'IDX Stocks Ownership',
-      short_name: 'IDXSO',
+      short_name: 'ISO',
       description: 'Lihat data kepemilikan saham, investor, dan free float terbaru di Bursa Efek Indonesia.',
       theme_color: '#ffffff',
       background_color: '#ffffff',
