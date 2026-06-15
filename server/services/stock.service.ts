@@ -78,6 +78,17 @@ export class StockService {
     return stock.name
   }
 
+  async getStockTickerNameList(): Promise<TickerName[]> {
+    const stocks = await prisma.stock.findMany({
+      select: {
+        ticker: true,
+        name: true,
+      },
+    })
+
+    return stocks
+  }
+
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
     const dataJson = JSON.parse(fileBuffer!.toString()) as StockInvestor[]
 
