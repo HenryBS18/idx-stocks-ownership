@@ -1,11 +1,9 @@
-import { InfoLabels } from "../types"
-
 export class InfoService {
-  async getInfoLabels(): Promise<InfoLabels> {
-    const cachedInfoLabels = await getCache<InfoLabels>('infos')
-    if (cachedInfoLabels) return cachedInfoLabels
+  async getInfoLabels(): Promise<InfoResponse> {
+    const cached = await getCache<InfoResponse>('infos')
+    if (cached) return cached
 
-    const infoLabels: InfoLabels = (await prisma.info.findMany({
+    const result: InfoResponse = (await prisma.info.findMany({
       orderBy: [
         { year: 'desc' },
         { month: 'desc' }
@@ -19,8 +17,8 @@ export class InfoService {
       return { label, value }
     })
 
-    await setCache('infos', infoLabels)
+    await setCache('infos', result)
 
-    return infoLabels
+    return result
   }
 }

@@ -1,11 +1,11 @@
 import { watchDebounced } from "@vueuse/core"
-import type { InvestorOrigin, InvestorSortField, InvestorStock, Sort } from "~/types"
+import type { InvestorOrigin, InvestorSortField, Sort } from "~/types"
 
 export const useInvestorStore = defineStore('investor', () => {
   const dateStore = useDateStore()
   const { selectedDate } = storeToRefs(dateStore)
 
-  const investors = ref<InvestorStock[]>([])
+  const portfolios = ref<InvestorPortfolio[]>([])
   const showInvestorsAccordion = ref<boolean>(false)
   const search = ref<string>('')
   const searchDebounced = ref<string>('')
@@ -15,8 +15,8 @@ export const useInvestorStore = defineStore('investor', () => {
   const selectedInvestorType = ref<string[]>(['Semua'])
   const fetchedDate = ref<string | null>(null)
 
-  const filteredInvestors = computed<InvestorStock[]>(() => {
-    let result = [...investors.value]
+  const filteredInvestors = computed<InvestorPortfolio[]>(() => {
+    let result = [...portfolios.value]
 
     if (searchDebounced.value) {
       const q = searchDebounced.value.toLowerCase()
@@ -62,11 +62,11 @@ export const useInvestorStore = defineStore('investor', () => {
 
     const [year, month] = selectedDate.value.split('-')
 
-    const data = await $fetch<InvestorStock[]>('/api/investor', {
+    const data = await $fetch<InvestorPortfolio[]>('/api/investor', {
       query: { token, year, month }
     })
 
-    investors.value = data
+    portfolios.value = data
     showInvestorsAccordion.value = true
     fetchedDate.value = selectedDate.value
   }

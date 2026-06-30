@@ -10,7 +10,7 @@ export type IdxFileData = {
   url: string
 }
 
-export type StockInvestor = {
+export type StockHolding = {
   infoId: number
   ticker: string
   name: string
@@ -24,36 +24,11 @@ export type StockInvestor = {
   percentage: number
 }
 
-export type Stock = Omit<StockInvestor, 'name'>
+export type HoldingRecord = Omit<StockHolding, 'name'>
 
-export type StockInvestors = {
-  ticker: string
-  name: string
-  investorCount: number
-  float: number
-  freeFloat: number
-  investors: {
-    investorType: string
-    localForeign: string
-    totalHoldingShare: number
-    percentage: number
-    investorName: string
-    domicile: string
-  }[]
-}[]
+export type InvestorHolding = Omit<StockHolding, 'infoId'>
 
-export type InvestorHolding = Omit<StockInvestor, 'infoId'>
-
-export type TickerName = Pick<StockInvestor, 'ticker' | 'name'>
-
-export type InvestorStock = {
-  investorName: string
-  investorType?: string
-  localForeign?: string
-  domicile: string
-  stockCount: number
-  stocks: Pick<StockInvestor, 'ticker' | 'name' | 'totalHoldingShare' | 'percentage'>[]
-}
+export type TickerName = Pick<StockHolding, 'ticker' | 'name'>
 
 export type CacheItem<T> = {
   value: T
@@ -71,8 +46,3 @@ export type InsertStockParam = {
 }
 
 export type GetInvestorParam = GetStockParam
-
-export type InfoLabels = {
-  label: string
-  value: string
-}[]

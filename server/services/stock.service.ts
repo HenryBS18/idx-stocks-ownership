@@ -1,12 +1,12 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
-import type { GetStockParam, InsertStockParam, InvestorHolding, Stock, StockInvestor, StockInvestors, TickerName } from "../types"
+import type { GetStockParam, InsertStockParam, HoldingRecord, InvestorHolding, StockHolding, TickerName } from "../types"
 
 export class StockService {
-  async getStocks({ year, month }: GetStockParam): Promise<StockInvestors> {
-    const cachedStock = await getCache<StockInvestors>(`stock:${year}-${month}`)
-    if (cachedStock) return cachedStock
+  async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
+    const cached = await getCache<StockDetail[]>(`stock:${year}-${month}`)
+    if (cached) return cached
 
     const info = await prisma.info.findFirst({
       where: { year, month }
@@ -37,7 +37,7 @@ export class StockService {
       },
     })
 
-    const stocks: StockInvestors = stocksQuery.map((s) => {
+    const stockDetails: StockDetail[] = stocksQuery.map((s) => {
       const investorCount = s.stockInvestor.length
 
       const float = parseFloat(
@@ -64,9 +64,9 @@ export class StockService {
       }
     })
 
-    await setCache(`stock:${year}-${month}`, stocks)
+    await setCache(`stock:${year}-${month}`, stockDetails)
 
-    return stocks
+    return stockDetails
   }
 
   async getStockName(ticker: string | undefined): Promise<string | null> {
@@ -93,7 +93,7 @@ export class StockService {
   }
 
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
-    const dataJson = JSON.parse(fileBuffer!.toString()) as StockInvestor[]
+    const dataJson = JSON.parse(fileBuffer!.toString()) as StockHolding[]
 
     const { month, year } = datetimeParser(idxLastUpdated)
 
@@ -106,36 +106,36 @@ export class StockService {
         }
       })
 
-      const stockRaw: StockInvestor[] = dataJson.map((stock) => ({
+      const holdings: StockHolding[] = dataJson.map((stock) => ({
         ...stock,
         infoId: newInfo.id
       }))
 
       const seenTickers = new Set<string>()
-      const tickerName: TickerName[] = []
+      const tickerNames: TickerName[] = []
 
-      for (const { ticker, name } of stockRaw) {
+      for (const { ticker, name } of holdings) {
         if (!seenTickers.has(ticker)) {
           seenTickers.add(ticker)
-          tickerName.push({ ticker, name })
+          tickerNames.push({ ticker, name })
         }
       }
 
       await tx.stock.createMany({
-        data: tickerName,
+        data: tickerNames,
         skipDuplicates: true,
       })
 
-      const stock: Stock[] = stockRaw.map(({
+      const records: HoldingRecord[] = holdings.map(({
         infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
       }) => ({
         infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
       }))
 
       const chunk = 1000
-      for (let i = 0; i < stock.length; i += chunk) {
+      for (let i = 0; i < records.length; i += chunk) {
         await tx.stockInvestor.createMany({
-          data: stock.slice(i, i + chunk),
+          data: records.slice(i, i + chunk),
           skipDuplicates: true
         })
       }
@@ -167,21 +167,21 @@ export class StockService {
       })
 
       const seenTickers = new Set<string>()
-      const tickerName: TickerName[] = []
+      const tickerNames: TickerName[] = []
 
       for (const { ticker, name } of investorHoldings) {
         if (!seenTickers.has(ticker)) {
           seenTickers.add(ticker)
-          tickerName.push({ ticker, name })
+          tickerNames.push({ ticker, name })
         }
       }
 
       await tx.stock.createMany({
-        data: tickerName,
+        data: tickerNames,
         skipDuplicates: true,
       })
 
-      const stock: Stock[] = investorHoldings.map(({
+      const records: HoldingRecord[] = investorHoldings.map(({
         ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
       }) => ({
         ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage,
@@ -189,9 +189,9 @@ export class StockService {
       }))
 
       const chunk = 1000
-      for (let i = 0; i < stock.length; i += chunk) {
+      for (let i = 0; i < records.length; i += chunk) {
         await tx.stockInvestor.createMany({
-          data: stock.slice(i, i + chunk),
+          data: records.slice(i, i + chunk),
           skipDuplicates: true
         })
       }

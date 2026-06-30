@@ -1,5 +1,3 @@
-import type { Info, InfoResponse } from "~/types"
-
 export const useDateStore = defineStore('date', () => {
   const dates = ref<Info[]>([])
   const selectedDate = ref<string>('')

@@ -1,8 +1,8 @@
-import { GetInvestorParam, InvestorStock } from "../types"
+import { GetInvestorParam } from "../types"
 
 export class InvestorService {
-  async getInvestor({ year, month }: GetInvestorParam): Promise<InvestorStock[]> {
-    const cachedInvestor = await getCache<InvestorStock[]>(`investor:${year}-${month}`)
+  async getInvestor({ year, month }: GetInvestorParam): Promise<InvestorPortfolio[]> {
+    const cachedInvestor = await getCache<InvestorPortfolio[]>(`investor:${year}-${month}`)
     if (cachedInvestor) return cachedInvestor
 
     const info = await prisma.info.findFirst({
@@ -34,8 +34,8 @@ export class InvestorService {
       }
     })
 
-    const investorStock: InvestorStock[] = Object.values(
-      investors.reduce<Record<string, InvestorStock>>((acc, row) => {
+    const portfolios: InvestorPortfolio[] = Object.values(
+      investors.reduce<Record<string, InvestorPortfolio>>((acc, row) => {
         if (!acc[row.investorName]) {
           acc[row.investorName] = {
             investorName: row.investorName,
@@ -65,8 +65,8 @@ export class InvestorService {
       stocks: investor.stocks,
     }))
 
-    await setCache(`investor:${year}-${month}`, investorStock)
+    await setCache(`investor:${year}-${month}`, portfolios)
 
-    return investorStock
+    return portfolios
   }
 }

@@ -1,11 +1,11 @@
 import { watchDebounced } from "@vueuse/core"
-import type { Sort, Stock, StockSortField } from "~/types"
+import type { Sort, StockSortField } from "~/types"
 
 export const useStockStore = defineStore('stock', () => {
   const dateStore = useDateStore()
   const { selectedDate } = storeToRefs(dateStore)
 
-  const stocks = ref<Stock[]>([])
+  const stockDetails = ref<StockDetail[]>([])
   const showStockAccordion = ref<boolean>(false)
   const search = ref<string>('')
   const searchDebounced = ref<string>('')
@@ -13,8 +13,8 @@ export const useStockStore = defineStore('stock', () => {
   const sortOrder = ref<Sort>('asc')
   const fetchedDate = ref<string | null>(null)
 
-  const filteredStocks = computed<Stock[]>(() => {
-    let result = [...stocks.value]
+  const filteredStocks = computed<StockDetail[]>(() => {
+    let result = [...stockDetails.value]
 
     if (searchDebounced.value) {
       const q = searchDebounced.value.toLowerCase()
@@ -64,11 +64,11 @@ export const useStockStore = defineStore('stock', () => {
 
     const [year, month] = selectedDate.value.split('-')
 
-    const data = await $fetch<Stock[]>('/api/stock', {
+    const data = await $fetch<StockDetail[]>('/api/stock', {
       query: { token, year, month }
     })
 
-    stocks.value = data
+    stockDetails.value = data
     showStockAccordion.value = true
     fetchedDate.value = selectedDate.value
   }
