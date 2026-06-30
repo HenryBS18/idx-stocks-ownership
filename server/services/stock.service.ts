@@ -1,4 +1,7 @@
-import { GetStockParam, InsertStockParam, Stock, StockInvestor, StockInvestors, TickerName } from "../types"
+import fs from "fs"
+import os from "os"
+import path from "path"
+import type { GetStockParam, InsertStockParam, InvestorHolding, Stock, StockInvestor, StockInvestors, TickerName } from "../types"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockInvestors> {
@@ -127,6 +130,62 @@ export class StockService {
         infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
       }) => ({
         infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
+      }))
+
+      const chunk = 1000
+      for (let i = 0; i < stock.length; i += chunk) {
+        await tx.stockInvestor.createMany({
+          data: stock.slice(i, i + chunk),
+          skipDuplicates: true
+        })
+      }
+    }, {
+      timeout: 1000 * 60
+    })
+  }
+
+  async insertStockCsv(fileBuffer: Buffer, idxLastUpdated: string): Promise<void> {
+    const tempFilePath = path.join(os.tmpdir(), `csv-${Date.now()}.csv`)
+    fs.writeFileSync(tempFilePath, fileBuffer)
+
+    let investorHoldings: InvestorHolding[]
+    try {
+      investorHoldings = await parseCsv(tempFilePath)
+    } finally {
+      fs.unlinkSync(tempFilePath)
+    }
+
+    const { month, year } = datetimeParser(idxLastUpdated)
+
+    await prisma.$transaction(async (tx) => {
+      const newInfo = await tx.info.create({
+        data: {
+          idxLastUpdated,
+          month: month - 1,
+          year
+        }
+      })
+
+      const seenTickers = new Set<string>()
+      const tickerName: TickerName[] = []
+
+      for (const { ticker, name } of investorHoldings) {
+        if (!seenTickers.has(ticker)) {
+          seenTickers.add(ticker)
+          tickerName.push({ ticker, name })
+        }
+      }
+
+      await tx.stock.createMany({
+        data: tickerName,
+        skipDuplicates: true,
+      })
+
+      const stock: Stock[] = investorHoldings.map(({
+        ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
+      }) => ({
+        ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage,
+        infoId: newInfo.id
       }))
 
       const chunk = 1000
