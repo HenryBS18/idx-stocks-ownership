@@ -1,4 +1,10 @@
 <script setup lang="ts">
+useHead({
+  meta: [
+    { name: 'google-site-verification', content: '8U9sEmx8mBBT9BqOZwHr1k1yc9MW97z6D1KIfJTxPpE' },
+  ],
+})
+
 useSeoMeta({
   title: 'IDX Stocks Ownership',
   description: 'Lihat data lengkap kepemilikan saham, profil investor, dan free float perusahaan tercatat di Bursa Efek Indonesia (BEI).',
