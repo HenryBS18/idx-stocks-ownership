@@ -22,10 +22,6 @@ export default defineEventHandler(async (event) => {
     } catch {}
   }
 
-  if (!isGooglebot && !/(Chrome|Firefox|Safari|Edge|Edg|OPR|Brave)\//i.test(ua)) {
-    throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
-  }
-
   const limits: Record<string, number> = {
     '/api/info': 10,
     '/api/stock': 20,
