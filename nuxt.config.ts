@@ -15,11 +15,6 @@ export default defineNuxtConfig({
     name: 'IDX Stocks Ownership',
     defaultLocale: 'id-ID',
   },
-  routeRules: {
-    '/': { prerender: true },
-    '/saham': { isr: 86400 },
-    '/investor': { isr: 86400 },
-  },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'bun',
     storage: {
