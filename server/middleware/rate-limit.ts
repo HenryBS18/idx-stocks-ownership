@@ -6,6 +6,9 @@ export default defineEventHandler(async (event) => {
   const path = getRequestURL(event).pathname
   if (!path.startsWith('/api/')) return
 
+  const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0]?.trim() ?? ''
+  if (!ip) return
+
   const ua = getHeader(event, 'user-agent')
   if (!ua) {
     throw createError({ statusCode: 403, statusMessage: 'Forbidden' })
@@ -15,7 +18,6 @@ export default defineEventHandler(async (event) => {
 
   const isGooglebot = uaLower.includes('googlebot')
   if (isGooglebot) {
-    const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0] ?? ''
     try {
       const host = await dns.reverse(ip)
       if (host.some((h: string) => h.endsWith('.googlebot.com') || h.endsWith('.google.com'))) return
@@ -29,7 +31,6 @@ export default defineEventHandler(async (event) => {
     '/api/token': 5,
   }
   const limit = Object.entries(limits).find(([p]) => path.startsWith(p))?.[1] ?? 60
-  const ip = getHeader(event, 'x-forwarded-for')?.split(',')[0] ?? 'unknown'
   const storage = useStorage('redis')
   const key = `ratelimit:${path.split('/').slice(0, 3).join('/')}:${ip}`
 
