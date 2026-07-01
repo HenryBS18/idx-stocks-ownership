@@ -17,8 +17,8 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/': { prerender: true },
-    '/saham': { swr: 86400 },
-    '/investor': { swr: 86400 },
+    '/saham': { isr: 86400 },
+    '/investor': { isr: 86400 },
   },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'bun',
