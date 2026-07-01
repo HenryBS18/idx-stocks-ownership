@@ -74,6 +74,7 @@ definePageMeta({
 
 <template>
   <main>
+    <h1 class="sr-only">Data Investor Saham Indonesia (IDX) - Kepemilikan &amp; Distribusi Investor</h1>
     <div :class="cn(
       'w-full flex flex-col gap-y-3',
       'xl:flex-row xl:flex-wrap xl:justify-between',

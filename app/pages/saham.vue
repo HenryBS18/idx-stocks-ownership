@@ -41,6 +41,7 @@ definePageMeta({
 
 <template>
   <main>
+    <h1 class="sr-only">Daftar Saham Indonesia &amp; Kepemilikan Investor (IDX)</h1>
     <div :class="cn(
       'w-full flex flex-col gap-y-3',
       'lg:w-auto lg:justify-between',
