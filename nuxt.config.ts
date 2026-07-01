@@ -12,6 +12,12 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'bun',
+    storage: {
+      redis: {
+        driver: 'redis',
+        url: process.env.REDIS_URL,
+      },
+    },
   },
   colorMode: {
     preference: 'light',

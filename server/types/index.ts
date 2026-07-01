@@ -30,10 +30,6 @@ export type InvestorHolding = Omit<StockHolding, 'infoId'>
 
 export type TickerName = Pick<StockHolding, 'ticker' | 'name'>
 
-export type CacheItem<T> = {
-  value: T
-  expiresOn: number
-}
 
 export type GetStockParam = {
   year: number

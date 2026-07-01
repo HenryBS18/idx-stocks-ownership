@@ -1,4 +1,5 @@
 import { StockService } from "~~/server/services/stock.service"
+import { invalidateCache } from "~~/server/utils/cache"
 
 const stockService = new StockService()
 
@@ -52,6 +53,8 @@ export default defineEventHandler(async (event) => {
       fileBuffer: filePart?.data,
       idxLastUpdated
     })
+
+    await invalidateCache('infos')
 
     return { message: 'Created' }
   } catch (error) {

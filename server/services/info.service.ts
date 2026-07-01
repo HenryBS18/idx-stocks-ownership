@@ -17,7 +17,7 @@ export class InfoService {
       return { label, value }
     })
 
-    await setCache('infos', result)
+    await setCache<InfoResponse>('infos', result)
 
     return result
   }

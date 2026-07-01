@@ -2,7 +2,7 @@ import { StockService } from "~~/server/services/stock.service"
 
 const stockService = new StockService()
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   try {
     const token = getQuery(event).token?.toString()
 
@@ -63,11 +63,5 @@ export default defineCachedEventHandler(async (event) => {
         message: error.message
       }
     }
-  }
-}, {
-  maxAge: 60 * 60 * 24,
-  getKey: (event) => {
-    const { year, month, token } = getQuery(event)
-    return `stock-${token}-${year ?? 'latest'}-${month ?? 'latest'}`
   }
 })
