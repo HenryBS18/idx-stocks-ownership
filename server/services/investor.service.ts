@@ -1,4 +1,4 @@
-import { GetInvestorParam } from "../types"
+import type { GetInvestorParam } from "../types"
 
 export class InvestorService {
   async getInvestor({ year, month }: GetInvestorParam): Promise<InvestorPortfolio[]> {
