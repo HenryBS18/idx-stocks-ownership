@@ -55,9 +55,7 @@ export const useInvestorStore = defineStore('investor', () => {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
   }
 
-  const fetchInvestors = async () => {
-    const token = useCookie('token').value
-
+  const fetchInvestors = async (token: string) => {
     if (!selectedDate.value) return
 
     const [year, month] = selectedDate.value.split('-')

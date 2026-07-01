@@ -8,14 +8,14 @@ const stockStore = useStockStore()
 const { search, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate } = storeToRefs(stockStore)
 const { fetchStocks, resetFilter, toggleSort } = stockStore
 
+const token = useCookie('token')
+
 watch(selectedDate, async (newDate, oldDate) => {
   if (!newDate || newDate === oldDate) return
   if (fetchedDate.value === newDate) return
 
   showStockAccordion.value = false
-  await fetchStocks()
-}, {
-  immediate: true
+  if (token.value) await fetchStocks(token.value)
 })
 
 useSeoMeta({

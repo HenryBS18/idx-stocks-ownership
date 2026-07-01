@@ -57,9 +57,7 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
 
-  const fetchStocks = async (): Promise<void> => {
-    const token = useCookie('token').value
-
+  const fetchStocks = async (token: string): Promise<void> => {
     if (!selectedDate.value) return
 
     const [year, month] = selectedDate.value.split('-')

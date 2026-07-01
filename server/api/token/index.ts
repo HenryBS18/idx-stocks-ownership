@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
       maxAge: 60 * 60 * 24 * 1
     })
 
-    return
+    return { token: newToken }
   }
 
   const tokenVerified = verifyToken(token)
@@ -24,8 +24,8 @@ export default defineEventHandler(async (event) => {
       sameSite: 'strict',
     })
 
-    return
+    return { token: newToken }
   }
 
-  return
+  return { token }
 })

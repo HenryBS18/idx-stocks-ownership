@@ -1,10 +1,25 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const token = useCookie('token').value
+  if (to.path === '/') return navigateTo('/saham')
 
-  if (!token) await $fetch('/api/token')
+  const token = useCookie('token')
+
+  if (!token.value) {
+    const res = await $fetch<{ token: string }>('/api/token')
+    token.value = res.token
+  }
 
   const { fetchDates } = useDateStore()
-  await fetchDates()
+  await fetchDates(token.value)
 
-  if (to.path === '/') return navigateTo('/saham')
+  if (to.path === '/saham') {
+    const { fetchStocks } = useStockStore()
+    const { selectedDate } = storeToRefs(useDateStore())
+    if (selectedDate.value) await fetchStocks(token.value)
+  }
+
+  if (to.path === '/investor') {
+    const { fetchInvestors } = useInvestorStore()
+    const { selectedDate } = storeToRefs(useDateStore())
+    if (selectedDate.value) await fetchInvestors(token.value)
+  }
 })

@@ -41,14 +41,14 @@ const investorTypeItems = computed(() => {
   }))
 }) satisfies ComputedRef<DropdownMenuItem[]>
 
+const token = useCookie('token')
+
 watch(selectedDate, async (newDate, oldDate) => {
   if (!newDate || newDate === oldDate) return
   if (fetchedDate.value === newDate) return
 
   showInvestorsAccordion.value = false
-  await fetchInvestors()
-}, {
-  immediate: true
+  if (token.value) await fetchInvestors(token.value)
 })
 
 useSeoMeta({
