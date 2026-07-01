@@ -77,7 +77,7 @@ onMounted(() => {
     'md:pr-4'
   )">
     <div class="space-y-4">
-      <div v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
+      <article v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div :class="cn(
           'w-full flex items-center justify-between gap-x-3 px-2.5 py-3 cursor-pointer hover:bg-gray-100',
           'sm:p-4'
@@ -92,13 +92,13 @@ onMounted(() => {
             )">
               <UBadge :label="stock.ticker" />
 
-              <span :class="cn(
+              <h2 :class="cn(
                 'text-[11px] font-semibold text-gray-600 truncate',
                 'sm:text-xs',
                 'xl:text-sm'
               )">
                 {{ stock.name }}
-              </span>
+              </h2>
             </div>
 
             <div :class="cn(
@@ -118,7 +118,7 @@ onMounted(() => {
         <div v-if="open.includes(i)" class="border-t border-gray-200">
           <UTable :data="stock.investors" :columns="investorColumns" />
         </div>
-      </div>
+      </article>
     </div>
   </UScrollArea>
 </template>

@@ -68,7 +68,7 @@ onMounted(() => {
     'md:pr-4'
   )" ref="el">
     <div class="space-y-4">
-      <div v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
+      <article v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div :class="cn(
           'flex items-center justify-between px-2.5 py-3 cursor-pointer hover:bg-gray-100 w-full gap-x-3',
           'sm:p-4'
@@ -77,13 +77,13 @@ onMounted(() => {
             'flex flex-col gap-y-1 min-w-0',
             'sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:min-w-fit'
           )">
-            <span :class="cn(
+            <h2 :class="cn(
               'font-semibold text-[11px] text-gray-600 truncate',
               'sm:text-xs',
               'xl:text-sm'
             )">
               {{ investor.investorName }}
-            </span>
+            </h2>
 
             <div :class="cn(
               'flex gap-x-2',
@@ -112,7 +112,7 @@ onMounted(() => {
         <div v-if="open.includes(i)" class="border-t border-gray-200">
           <UTable :data="investor.stocks" :columns="stockColumns" />
         </div>
-      </div>
+      </article>
     </div>
   </UScrollArea>
 </template>
