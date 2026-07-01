@@ -53,7 +53,10 @@ watch(selectedDate, async (newDate, oldDate) => {
 
 useSeoMeta({
   title: 'Data Investor Saham Indonesia (IDX) - Kepemilikan & Distribusi Investor | IDX Stocks Ownership',
-  description: 'Eksplorasi data investor saham di Bursa Efek Indonesia (IDX), termasuk asal, tipe (individu, institusi), dan jumlah kepemilikan saham. Filter dan analisis investor dengan mudah.'
+  description: 'Lihat data lengkap investor saham di Bursa Efek Indonesia (IDX), termasuk asal (lokal/asing), tipe investor, dan portofolio kepemilikan saham. Filter berdasarkan tipe dan asal investor.',
+  ogTitle: 'Data Investor Saham Indonesia (IDX) - Kepemilikan & Distribusi Investor',
+  ogDescription: 'Lihat data investor saham Indonesia di IDX berdasarkan tipe, asal, dan portofolio kepemilikan.',
+  ogUrl: 'https://idx-stocks-ownership.vercel.app/investor',
 })
 
 definePageMeta({

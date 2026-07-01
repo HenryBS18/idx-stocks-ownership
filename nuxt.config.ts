@@ -10,6 +10,16 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
   ],
   css: ['~/assets/css/main.css'],
+  site: {
+    url: 'https://idx-stocks-ownership.vercel.app',
+    name: 'IDX Stocks Ownership',
+    defaultLocale: 'id-ID',
+  },
+  routeRules: {
+    '/': { prerender: true },
+    '/saham': { swr: 86400 },
+    '/investor': { swr: 86400 },
+  },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'bun',
     storage: {
