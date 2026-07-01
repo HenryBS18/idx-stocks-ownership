@@ -10,6 +10,14 @@ const { fetchStocks, resetFilter, toggleSort } = stockStore
 
 const token = useCookie('token')
 
+const route = useRoute()
+
+useHead({
+  link: [
+    { rel: 'canonical', href: `https://idx-stocks-ownership.vercel.app${route.path}` },
+  ],
+})
+
 watch(selectedDate, async (newDate, oldDate) => {
   if (!newDate || newDate === oldDate) return
   if (fetchedDate.value === newDate) return
