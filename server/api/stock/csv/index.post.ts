@@ -1,5 +1,6 @@
 import { StockService } from "~~/server/services/stock.service"
 import { invalidateCache } from "~~/server/utils/cache"
+import { datetimeParser } from "~~/server/utils/datetime-parser"
 
 const stockService = new StockService()
 
@@ -41,8 +42,10 @@ export default defineEventHandler(async (event) => {
       return { message: 'idxLastUpated not valid' }
     }
 
+    const { month, year } = datetimeParser(idxLastUpdated)
+
     const info = await prisma.info.findFirst({
-      where: { idxLastUpdated }
+      where: { month: month - 1, year }
     })
 
     if (info) {
