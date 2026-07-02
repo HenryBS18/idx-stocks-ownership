@@ -1,7 +1,7 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
-import type { GetStockParam, InsertStockParam, HoldingRecord, InvestorHolding, StockHolding, TickerName } from "../types"
+import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName } from "../types"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
@@ -14,7 +14,7 @@ export class StockService {
 
     if (!info) throw new Error('Data tidak tersedia')
 
-    const stocksQuery = await prisma.stock.findMany({
+    const stocks = await prisma.stock.findMany({
       select: {
         ticker: true,
         name: true,
@@ -37,7 +37,7 @@ export class StockService {
       },
     })
 
-    const stockDetails: StockDetail[] = stocksQuery.map((s) => {
+    const stockDetails: StockDetail[] = stocks.map((s) => {
       const investorCount = s.stockInvestor.length
 
       const float = parseFloat(
@@ -93,9 +93,9 @@ export class StockService {
   }
 
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
-    const dataJson = JSON.parse(fileBuffer!.toString()) as StockHolding[]
+    const stockData = JSON.parse(fileBuffer.toString()) as StockHolding[]
 
-    const { month, year } = datetimeParser(idxLastUpdated)
+    const { month, year } = parseDateTime(idxLastUpdated)
 
     await prisma.$transaction(async (tx) => {
       const newInfo = await tx.info.create({
@@ -106,7 +106,7 @@ export class StockService {
         }
       })
 
-      const holdings: StockHolding[] = dataJson.map((stock) => ({
+      const holdings: StockHolding[] = stockData.map((stock) => ({
         ...stock,
         infoId: newInfo.id
       }))
@@ -144,7 +144,7 @@ export class StockService {
     })
   }
 
-  async insertStockCsv(fileBuffer: Buffer, idxLastUpdated: string): Promise<void> {
+  async insertStockCsv({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
     const tempFilePath = path.join(os.tmpdir(), `csv-${Date.now()}.csv`)
     fs.writeFileSync(tempFilePath, fileBuffer)
 
@@ -155,7 +155,7 @@ export class StockService {
       fs.unlinkSync(tempFilePath)
     }
 
-    const { month, year } = datetimeParser(idxLastUpdated)
+    const { month, year } = parseDateTime(idxLastUpdated)
 
     await prisma.$transaction(async (tx) => {
       const newInfo = await tx.info.create({

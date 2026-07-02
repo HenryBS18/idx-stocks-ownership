@@ -1,6 +1,6 @@
-import { localForeignString } from "./constants"
+import { localForeignLabels } from "./constants"
 
-export const getLocalForeign = (type?: string): string => {
-  if (!type) return ''
-  return localForeignString[type] ?? ''
+export const getLocalForeign = (originCode?: string): string => {
+  if (!originCode) return ''
+  return localForeignLabels[originCode] ?? ''
 }

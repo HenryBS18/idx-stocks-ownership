@@ -1,6 +1,6 @@
-export type StockSortField = 'ticker' | 'freeFloat' | 'investor-count'
+export type StockSortField = 'ticker' | 'freeFloat' | 'stockCount'
 
-export type InvestorSortField = 'nama' | 'stock-count'
+export type InvestorSortField = 'name' | 'stockCount'
 
 export type Sort = 'asc' | 'desc'
 

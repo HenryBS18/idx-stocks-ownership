@@ -1,4 +1,4 @@
-export interface StockDetail {
+export type StockDetail = {
   ticker: string
   name: string
   investorCount: number
@@ -14,7 +14,7 @@ export interface StockDetail {
   }[]
 }
 
-export interface InvestorPortfolio {
+export type InvestorPortfolio = {
   investorName: string
   investorType: string
   localForeign: string
@@ -28,7 +28,7 @@ export interface InvestorPortfolio {
   }[]
 }
 
-export interface Info {
+export type Info = {
   label: string
   value: string
 }

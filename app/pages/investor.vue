@@ -6,21 +6,21 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const store = useInvestorStore()
-const { investorCount, search, selectedInvestorOrigin, selectedInvestorType, showInvestorsAccordion, sortField, sortOrder, fetchedDate } = storeToRefs(store)
+const { investorCount, search, selectedInvestorOrigin, selectedInvestorTypes, showInvestorsAccordion, sortField, sortOrder, fetchedDate } = storeToRefs(store)
 const { fetchInvestors, resetFilter, toggleSort } = store
 
 const investorTypeItems = computed(() => {
   return investorType.map((type) => ({
     label: type,
     type: 'checkbox',
-    checked: selectedInvestorType.value.includes(type),
+    checked: selectedInvestorTypes.value.includes(type),
     onUpdateChecked(checked: boolean) {
       if (type === 'Semua') {
-        selectedInvestorType.value = ['Semua']
+        selectedInvestorTypes.value = ['Semua']
         return
       }
 
-      const set = new Set(selectedInvestorType.value)
+      const set = new Set(selectedInvestorTypes.value)
 
       if (checked) {
         set.add(type)
@@ -33,7 +33,7 @@ const investorTypeItems = computed(() => {
         set.add('Semua')
       }
 
-      selectedInvestorType.value = Array.from(set)
+      selectedInvestorTypes.value = Array.from(set)
     },
     onSelect(e: Event) {
       e.preventDefault()
@@ -113,7 +113,7 @@ definePageMeta({
               <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">TIPE</p>
 
               <UDropdownMenu :items="investorTypeItems">
-                <UButton :label="selectedInvestorType.includes('Semua') ? 'Semua' : `${selectedInvestorType.length} dipilih`" variant="outline"
+                <UButton :label="selectedInvestorTypes.includes('Semua') ? 'Semua' : `${selectedInvestorTypes.length} dipilih`" variant="outline"
                   color="neutral" trailing-icon="i-lucide-chevron-down" />
               </UDropdownMenu>
             </div>
@@ -125,17 +125,17 @@ definePageMeta({
             <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">URUTKAN</p>
 
             <div class="flex">
-              <UButton label="Nama" :trailing-icon="sortField === 'nama' && sortOrder === 'asc'
+              <UButton label="Nama" :trailing-icon="sortField === 'name' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-a-z'
                 : 'i-lucide-arrow-down-z-a'
-                " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'nama'" active-variant="solid"
-                @click="toggleSort('nama')" />
+                " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'name'" active-variant="solid"
+                @click="toggleSort('name')" />
 
-              <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stock-count' && sortOrder === 'asc'
+              <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stock-count'"
-                active-variant="solid" @click="toggleSort('stock-count')" />
+                " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stockCount'"
+                active-variant="solid" @click="toggleSort('stockCount')" />
             </div>
           </div>
 

@@ -1,6 +1,6 @@
-import { investorTypeString } from "./constants"
+import { investorTypeLabels } from "./constants"
 
-export const getInvestorType = (type?: string): string => {
-  if (!type) return ''
-  return investorTypeString[type] ?? ''
+export const getInvestorType = (typeCode?: string): string => {
+  if (!typeCode) return ''
+  return investorTypeLabels[typeCode] ?? ''
 }

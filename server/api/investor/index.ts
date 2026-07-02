@@ -49,12 +49,12 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const investor = await investorService.getInvestor({
+    const investors = await investorService.getInvestors({
       year: yearInt,
       month: monthInt
     })
 
-    return investor
+    return investors
   } catch (error) {
     if (error instanceof Error) {
       setResponseStatus(event, 500)

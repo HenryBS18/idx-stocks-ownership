@@ -1,9 +1,9 @@
 import type { GetInvestorParam } from "../types"
 
 export class InvestorService {
-  async getInvestor({ year, month }: GetInvestorParam): Promise<InvestorPortfolio[]> {
-    const cachedInvestor = await getCache<InvestorPortfolio[]>(`investor:${year}-${month}`)
-    if (cachedInvestor) return cachedInvestor
+  async getInvestors({ year, month }: GetInvestorParam): Promise<InvestorPortfolio[]> {
+    const cached = await getCache<InvestorPortfolio[]>(`investor:${year}-${month}`)
+    if (cached) return cached
 
     const info = await prisma.info.findFirst({
       where: { month, year }

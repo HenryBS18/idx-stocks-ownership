@@ -2,7 +2,7 @@
 // // @ts-ignore
 // import extractor from 'pdf-table-extractor'
 // import { IdxFileData, Stock, StockInvestor, TickerName } from "~~/server/types"
-// import { datetimeParser } from "~~/server/utils/datetime-parser"
+// import { parseDateTime } from "~~/server/utils/parse-date-time"
 
 // export default defineEventHandler(async (event) => {
 //   console.time()
@@ -53,7 +53,7 @@
 //       return { message: 'Already Updated to the Latest Data' }
 //     }
 
-//     const { month, year } = datetimeParser(time)
+//     const { month, year } = parseDateTime(time)
 
 //     const newInfo = await prisma.info.create({
 //       data: {

@@ -36,7 +36,7 @@ export const useStockStore = defineStore('stock', () => {
         compare = Number(a.freeFloat) - Number(b.freeFloat)
       }
 
-      if (sortField.value === 'investor-count') {
+      if (sortField.value === 'stockCount') {
         compare = Number(a.investorCount) - Number(b.investorCount)
       }
 

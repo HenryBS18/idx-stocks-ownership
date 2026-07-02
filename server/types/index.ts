@@ -37,7 +37,7 @@ export type GetStockParam = {
 }
 
 export type InsertStockParam = {
-  fileBuffer: Buffer<ArrayBufferLike>
+  fileBuffer: Buffer
   idxLastUpdated: string
 }
 

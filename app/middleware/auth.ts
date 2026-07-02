@@ -4,8 +4,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const token = useCookie('token')
 
   if (!token.value) {
-    const res = await $fetch<{ token: string }>('/api/token')
-    token.value = res.token
+    const tokenResponse = await $fetch<{ token: string }>('/api/token')
+    token.value = tokenResponse.token
   }
 
   const { fetchDates } = useDateStore()

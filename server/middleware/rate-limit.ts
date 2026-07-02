@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     try {
       const host = await dns.reverse(ip)
       if (host.some((h: string) => h.endsWith('.googlebot.com') || h.endsWith('.google.com'))) return
-    } catch {}
+    } catch { }
   }
 
   const limits: Record<string, number> = {

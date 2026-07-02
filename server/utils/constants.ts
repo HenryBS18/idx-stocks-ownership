@@ -13,7 +13,7 @@ export const monthsInNumber: Record<string, number> = {
   Desember: 12
 }
 
-export const investorTypeString: Record<string, string> = {
+export const investorTypeLabels: Record<string, string> = {
   ID: 'Individu',
   CP: 'Korporat',
   MF: 'Reksadana',
@@ -25,7 +25,7 @@ export const investorTypeString: Record<string, string> = {
   OT: 'Lainnya'
 }
 
-export const localForeignString: Record<string, string> = {
+export const localForeignLabels: Record<string, string> = {
   D: 'Lokal',
   L: 'Lokal',
   F: 'Asing'

@@ -1,6 +1,6 @@
 import { monthsInNumber } from "./constants"
 
-export const datetimeParser = (datetime: string) => {
+export const parseDateTime = (datetime: string) => {
   const [_, monthNameString, yearString] = datetime.split(" ")
 
   const month = monthsInNumber[monthNameString!]!

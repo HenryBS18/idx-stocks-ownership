@@ -9,10 +9,10 @@ export const useInvestorStore = defineStore('investor', () => {
   const showInvestorsAccordion = ref<boolean>(false)
   const search = ref<string>('')
   const searchDebounced = ref<string>('')
-  const sortField = ref<InvestorSortField>('nama')
+  const sortField = ref<InvestorSortField>('name')
   const sortOrder = ref<Sort>('asc')
   const selectedInvestorOrigin = ref<InvestorOrigin>('Semua')
-  const selectedInvestorType = ref<string[]>(['Semua'])
+  const selectedInvestorTypes = ref<string[]>(['Semua'])
   const fetchedDate = ref<string | null>(null)
 
   const filteredInvestors = computed<InvestorPortfolio[]>(() => {
@@ -27,18 +27,18 @@ export const useInvestorStore = defineStore('investor', () => {
       result = result.filter(i => i.localForeign === selectedInvestorOrigin.value)
     }
 
-    if (!selectedInvestorType.value.includes('Semua')) {
-      result = result.filter(i => selectedInvestorType.value.includes(i.investorType))
+    if (!selectedInvestorTypes.value.includes('Semua')) {
+      result = result.filter(i => selectedInvestorTypes.value.includes(i.investorType))
     }
 
     result.sort((a, b) => {
       let compare = 0
 
-      if (sortField.value === 'nama') {
+      if (sortField.value === 'name') {
         compare = a.investorName.localeCompare(b.investorName)
       }
 
-      if (sortField.value === 'stock-count') {
+      if (sortField.value === 'stockCount') {
         compare = Number(a.stockCount) - Number(b.stockCount)
       }
 
@@ -72,10 +72,10 @@ export const useInvestorStore = defineStore('investor', () => {
   const resetFilter = () => {
     search.value = ''
     searchDebounced.value = ''
-    sortField.value = 'nama'
+    sortField.value = 'name'
     sortOrder.value = 'asc'
     selectedInvestorOrigin.value = 'Semua'
-    selectedInvestorType.value = ['Semua']
+    selectedInvestorTypes.value = ['Semua']
   }
 
   watchDebounced(search, (v) => {
@@ -88,7 +88,7 @@ export const useInvestorStore = defineStore('investor', () => {
     sortField,
     sortOrder,
     selectedInvestorOrigin,
-    selectedInvestorType,
+    selectedInvestorTypes,
     filteredInvestors,
     investorCount,
     fetchedDate,

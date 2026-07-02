@@ -1,5 +1,5 @@
 export class InfoService {
-  async getInfoLabels(): Promise<InfoResponse> {
+  async getDateOptions(): Promise<InfoResponse> {
     const cached = await getCache<InfoResponse>('infos')
     if (cached) return cached
 

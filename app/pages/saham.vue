@@ -85,11 +85,11 @@ definePageMeta({
                 " variant="outline" class="rounded-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
                 @click="toggleSort('freeFloat')" />
 
-              <UButton label="Jumlah Investor" :trailing-icon="sortField === 'investor-count' && sortOrder === 'asc'
+              <UButton label="Jumlah Investor" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'investor-count'"
-                active-variant="solid" @click="toggleSort('investor-count')" />
+                " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stockCount'"
+                active-variant="solid" @click="toggleSort('stockCount')" />
             </div>
           </div>
 

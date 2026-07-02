@@ -14,9 +14,9 @@ export default defineEventHandler(async (event) => {
       return { message: 'Unauthorized: Token tidak valid.' }
     }
 
-    const infoLabels = await infoService.getInfoLabels()
+    const dateOptions = await infoService.getDateOptions()
 
-    return infoLabels
+    return dateOptions
   } catch (error) {
     if (error instanceof Error) {
       setResponseStatus(event, 500)
