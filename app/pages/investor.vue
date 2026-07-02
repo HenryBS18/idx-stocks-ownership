@@ -89,7 +89,7 @@ definePageMeta({
           'xl:w-fit'
         )">
           <template v-if="search?.length" #trailing>
-            <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="search = ''" />
+            <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="void (search = '')" />
           </template>
         </UInput>
 
