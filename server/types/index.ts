@@ -42,3 +42,5 @@ export type InsertStockParam = {
 }
 
 export type GetInvestorParam = GetStockParam
+
+export type Tx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]

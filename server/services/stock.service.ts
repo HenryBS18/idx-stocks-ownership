@@ -1,7 +1,7 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
-import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName } from "../types"
+import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName, Tx } from "../types"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
@@ -94,54 +94,23 @@ export class StockService {
 
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
     const stockData = JSON.parse(fileBuffer.toString()) as StockHolding[]
-
     const { month, year } = parseDateTime(idxLastUpdated)
 
     await prisma.$transaction(async (tx) => {
       const newInfo = await tx.info.create({
-        data: {
-          idxLastUpdated,
-          month: month - 1,
-          year
-        }
+        data: { idxLastUpdated, month: month - 1, year }
       })
 
-      const holdings: StockHolding[] = stockData.map((stock) => ({
-        ...stock,
-        infoId: newInfo.id
-      }))
+      const holdings = stockData.map((s) => ({ ...s, infoId: newInfo.id }))
+      const tickerNames = this.dedupTickers(holdings)
+      await tx.stock.createMany({ data: tickerNames, skipDuplicates: true })
 
-      const seenTickers = new Set<string>()
-      const tickerNames: TickerName[] = []
+      const records: HoldingRecord[] = holdings.map((
+        { infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }
+      ) => ({ infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }))
 
-      for (const { ticker, name } of holdings) {
-        if (!seenTickers.has(ticker)) {
-          seenTickers.add(ticker)
-          tickerNames.push({ ticker, name })
-        }
-      }
-
-      await tx.stock.createMany({
-        data: tickerNames,
-        skipDuplicates: true,
-      })
-
-      const records: HoldingRecord[] = holdings.map(({
-        infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
-      }) => ({
-        infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
-      }))
-
-      const chunk = 1000
-      for (let i = 0; i < records.length; i += chunk) {
-        await tx.stockInvestor.createMany({
-          data: records.slice(i, i + chunk),
-          skipDuplicates: true
-        })
-      }
-    }, {
-      timeout: 1000 * 60
-    })
+      await this.batchInsertRecords(tx, records)
+    }, { timeout: 1000 * 60 })
   }
 
   async insertStockCsv({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
@@ -159,44 +128,38 @@ export class StockService {
 
     await prisma.$transaction(async (tx) => {
       const newInfo = await tx.info.create({
-        data: {
-          idxLastUpdated,
-          month: month - 1,
-          year
-        }
+        data: { idxLastUpdated, month: month - 1, year }
       })
 
-      const seenTickers = new Set<string>()
-      const tickerNames: TickerName[] = []
+      const tickerNames = this.dedupTickers(investorHoldings)
+      await tx.stock.createMany({ data: tickerNames, skipDuplicates: true })
 
-      for (const { ticker, name } of investorHoldings) {
-        if (!seenTickers.has(ticker)) {
-          seenTickers.add(ticker)
-          tickerNames.push({ ticker, name })
-        }
+      const records: HoldingRecord[] = investorHoldings.map((
+        { ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }
+      ) => ({ ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage, infoId: newInfo.id }))
+
+      await this.batchInsertRecords(tx, records)
+    }, { timeout: 1000 * 60 })
+  }
+
+  private dedupTickers(holdings: Array<{ ticker: string; name: string }>): TickerName[] {
+    const seen = new Set<string>()
+    const names: TickerName[] = []
+    for (const { ticker, name } of holdings) {
+      if (!seen.has(ticker)) {
+        seen.add(ticker)
+        names.push({ ticker, name })
       }
+    }
+    return names
+  }
 
-      await tx.stock.createMany({
-        data: tickerNames,
-        skipDuplicates: true,
+  private async batchInsertRecords(tx: Tx, records: HoldingRecord[]): Promise<void> {
+    for (let i = 0; i < records.length; i += 1000) {
+      await tx.stockInvestor.createMany({
+        data: records.slice(i, i + 1000),
+        skipDuplicates: true
       })
-
-      const records: HoldingRecord[] = investorHoldings.map(({
-        ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage
-      }) => ({
-        ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage,
-        infoId: newInfo.id
-      }))
-
-      const chunk = 1000
-      for (let i = 0; i < records.length; i += chunk) {
-        await tx.stockInvestor.createMany({
-          data: records.slice(i, i + chunk),
-          skipDuplicates: true
-        })
-      }
-    }, {
-      timeout: 1000 * 60
-    })
+    }
   }
 }

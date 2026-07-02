@@ -4,26 +4,11 @@ const infoService = new InfoService()
 
 export default defineEventHandler(async (event) => {
   try {
-    const token = getQuery(event).token?.toString()
+    requireAuth(event)
 
-    const tokenVerified = verifyToken(token)
-
-    if (!tokenVerified) {
-      setResponseStatus(event, 401)
-
-      return { message: 'Unauthorized: Token tidak valid.' }
-    }
-
-    const dateOptions = await infoService.getDateOptions()
-
-    return dateOptions
-  } catch (error) {
-    if (error instanceof Error) {
-      setResponseStatus(event, 500)
-
-      return {
-        message: error.message
-      }
-    }
+    return await infoService.getDateOptions()
+  } catch (error: any) {
+    setResponseStatus(event, error.statusCode)
+    return { message: error.message }
   }
 })
