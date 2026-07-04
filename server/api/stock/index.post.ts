@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
 
     await stockService.insertStock({ fileBuffer, idxLastUpdated })
     await invalidateCache('infos')
+    await invalidateCache('stock:ticker-names')
 
     return { message: 'Created' }
   } catch (error: any) {

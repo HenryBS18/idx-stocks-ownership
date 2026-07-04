@@ -1,6 +1,7 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
+import { getCache, setCache } from "~~/server/utils/cache"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName, Tx } from "../types"
 
 export class StockService {
@@ -82,12 +83,17 @@ export class StockService {
   }
 
   async getStockTickerNameList(): Promise<TickerName[]> {
+    const cached = await getCache<TickerName[]>('stock:ticker-names')
+    if (cached) return cached
+
     const stocks = await prisma.stock.findMany({
       select: {
         ticker: true,
         name: true,
       },
     })
+
+    await setCache('stock:ticker-names', stocks)
 
     return stocks
   }
