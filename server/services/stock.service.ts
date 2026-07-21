@@ -28,6 +28,9 @@ export class StockService {
             totalHoldingShare: true,
             percentage: true,
           },
+          orderBy: {
+            percentage: 'desc'
+          },
           where: {
             infoId: info.id,
           }
