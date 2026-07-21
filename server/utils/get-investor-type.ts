@@ -1,6 +1,6 @@
 import { investorTypeLabels } from "./constants"
 
-export const getInvestorType = (typeCode?: string): string => {
-  if (!typeCode) return ''
-  return investorTypeLabels[typeCode] ?? ''
+export const getInvestorType = (rawType?: string): string => {
+  if (!rawType) return ''
+  return investorTypeLabels[rawType] ?? rawType
 }
