@@ -112,7 +112,7 @@ definePageMeta({
             <div class="flex items-center gap-x-2">
               <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">TIPE</p>
 
-              <UDropdownMenu :items="investorTypeItems">
+              <UDropdownMenu :items="investorTypeItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
                 <UButton :label="selectedInvestorTypes.includes('Semua') ? 'Semua' : `${selectedInvestorTypes.length} dipilih`" variant="outline"
                   color="neutral" trailing-icon="i-lucide-chevron-down" />
               </UDropdownMenu>
