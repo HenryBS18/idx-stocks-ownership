@@ -14,15 +14,15 @@ export const monthsInNumber: Record<string, number> = {
 }
 
 export const investorTypeLabels: Record<string, string> = {
-  ID: 'Individu',
-  CP: 'Korporat',
-  MF: 'Reksadana',
+  ID: 'Individual',
+  CP: 'Corporate',
+  MF: 'Mutual Funds',
   IB: 'Bank',
-  IS: 'Asuransi',
-  SC: 'Sekuritas',
-  PF: 'Dana Pensiun',
-  FD: 'Yayasan',
-  OT: 'Lainnya'
+  IS: 'Insurance',
+  SC: 'Securities Company',
+  PF: 'Pension Funds',
+  FD: 'Foundation',
+  OT: 'Other'
 }
 
 export const localForeignLabels: Record<string, string> = {
