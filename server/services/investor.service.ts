@@ -65,6 +65,8 @@ export class InvestorService {
       stocks: investor.stocks,
     }))
 
+    portfolios.forEach(p => p.stocks.sort((a, b) => a.ticker.localeCompare(b.ticker)))
+
     await setCache(`investor:${year}-${month}`, portfolios)
 
     return portfolios
