@@ -29,12 +29,8 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     accessorKey: 'investorType',
   },
   {
-    header: 'Lokal/Foreign',
-    accessorKey: 'localForeign',
-  },
-  {
     header: 'Asal',
-    accessorKey: 'domicile',
+    accessorKey: 'origin',
   },
   {
     header: 'Lembar Saham',
