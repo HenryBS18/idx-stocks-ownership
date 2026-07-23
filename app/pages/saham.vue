@@ -17,6 +17,10 @@ const handleStockRetry = () => {
   fetchStocks(token.value)
 }
 
+const handleDateRetry = () => {
+  window.location.reload()
+}
+
 const route = useRoute()
 
 useHead({
@@ -130,7 +134,7 @@ definePageMeta({
         </div>
       </UScrollArea>
 
-      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleStockRetry : undefined" />
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleStockRetry : handleDateRetry" />
 
       <SahamAccordion v-else />
     </div>

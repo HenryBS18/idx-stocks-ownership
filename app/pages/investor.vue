@@ -16,6 +16,10 @@ const handleInvestorRetry = () => {
   fetchInvestors(token.value)
 }
 
+const handleDateRetry = () => {
+  window.location.reload()
+}
+
 const investorTypeItems = computed(() => {
   return investorType.map((type) => ({
     label: type,
@@ -176,7 +180,7 @@ definePageMeta({
         </div>
       </UScrollArea>
 
-      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleInvestorRetry : undefined" />
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleInvestorRetry : handleDateRetry" />
 
       <InvestorAccordion v-else />
     </div>
