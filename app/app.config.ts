@@ -34,6 +34,9 @@ export default defineAppConfig({
       }
     },
     dropdownMenu: {
+      slots: {
+        item: 'cursor-pointer',
+      },
       variants: {
         size: {
           md: {

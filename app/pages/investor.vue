@@ -125,7 +125,7 @@ definePageMeta({
 
               <UDropdownMenu :items="investorTypeItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
                 <UButton :label="selectedInvestorTypes.includes('Semua') ? 'Semua' : `${selectedInvestorTypes.length} dipilih`" variant="outline"
-                  color="neutral" trailing-icon="i-lucide-chevron-down" />
+                  color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-normal' }" />
               </UDropdownMenu>
             </div>
           </div>
@@ -145,8 +145,8 @@ definePageMeta({
               <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'"
-                active-variant="solid" @click="toggleSort('stockCount')" />
+                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'" active-variant="solid"
+                @click="toggleSort('stockCount')" />
             </div>
           </div>
 
@@ -180,7 +180,8 @@ definePageMeta({
         </div>
       </UScrollArea>
 
-      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleInvestorRetry : handleDateRetry" />
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'"
+        :on-retry="error ? handleInvestorRetry : handleDateRetry" />
 
       <InvestorAccordion v-else />
     </div>
