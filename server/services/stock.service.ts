@@ -2,6 +2,7 @@ import fs from "fs"
 import os from "os"
 import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
+import { getOrigin } from "../utils/get-local-foreign"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName, Tx } from "../types"
 
 export class StockService {
@@ -62,6 +63,7 @@ export class StockService {
           ...investor,
           investorType: getInvestorType(investor.investorType),
           localForeign: getLocalForeign(investor.localForeign),
+          origin: getOrigin(investor.localForeign, investor.domicile),
           totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
           percentage: parseFloat(investor.percentage.toString()),
         })),
