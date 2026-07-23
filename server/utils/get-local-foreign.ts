@@ -7,5 +7,7 @@ export const getLocalForeign = (originCode?: string): string => {
 
 export const getOrigin = (code: string | null, domicile: string | null): string => {
   const origin = getLocalForeign(code ?? undefined)
-  return domicile ? `${origin} (${domicile})` : origin
+  if (!origin) return domicile ?? ''
+  if (origin === 'Lokal' || !domicile) return origin
+  return `${origin} (${domicile})`
 }
