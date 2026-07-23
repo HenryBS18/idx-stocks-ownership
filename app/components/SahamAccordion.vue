@@ -27,10 +27,12 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
   {
     header: 'Tipe',
     accessorKey: 'investorType',
+    cell: ({ row }: any) => row.original.investorType || '-',
   },
   {
     header: 'Asal',
     accessorKey: 'origin',
+    cell: ({ row }: any) => row.original.origin || '-',
   },
   {
     header: 'Lembar Saham',
