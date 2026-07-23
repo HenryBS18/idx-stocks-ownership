@@ -5,8 +5,9 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const stockStore = useStockStore()
-const { search, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate } = storeToRefs(stockStore)
-const { fetchStocks, resetFilter, toggleSort } = stockStore
+const { search, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
+const { error: dateError } = storeToRefs(dateStore)
+const { fetchStocks, resetFilter, toggleSort, clearError } = stockStore
 
 const token = useCookie('token')
 
@@ -117,11 +118,13 @@ definePageMeta({
     </div>
 
     <div class="mt-4 md:mt-8">
-      <UScrollArea v-if="!showStockAccordion" class="h-[calc(100vh-224px)] pr-4">
+      <UScrollArea v-if="!showStockAccordion && !error && !dateError" class="h-[calc(100vh-224px)] pr-4">
         <div class="space-y-4">
           <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
         </div>
       </UScrollArea>
+
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? () => { clearError(); if (token.value) fetchStocks(token.value) } : undefined" />
 
       <SahamAccordion v-else />
     </div>

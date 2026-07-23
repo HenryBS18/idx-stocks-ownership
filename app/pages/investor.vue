@@ -6,8 +6,9 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const store = useInvestorStore()
-const { investorCount, search, selectedInvestorOrigin, selectedInvestorTypes, showInvestorsAccordion, sortField, sortOrder, fetchedDate } = storeToRefs(store)
-const { fetchInvestors, resetFilter, toggleSort } = store
+const { investorCount, search, selectedInvestorOrigin, selectedInvestorTypes, showInvestorsAccordion, sortField, sortOrder, fetchedDate, error, errorMessage } = storeToRefs(store)
+const { error: dateError } = storeToRefs(dateStore)
+const { fetchInvestors, resetFilter, toggleSort, clearError } = store
 
 const investorTypeItems = computed(() => {
   return investorType.map((type) => ({
@@ -163,11 +164,13 @@ definePageMeta({
     </div>
 
     <div class="mt-4 md:mt-8">
-      <UScrollArea v-if="!showInvestorsAccordion" class="h-[calc(100vh-224px)] pr-4">
+      <UScrollArea v-if="!showInvestorsAccordion && !error && !dateError" class="h-[calc(100vh-224px)] pr-4">
         <div class="space-y-4">
           <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
         </div>
       </UScrollArea>
+
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? () => { clearError(); if (token.value) fetchInvestors(token.value) } : undefined" />
 
       <InvestorAccordion v-else />
     </div>
