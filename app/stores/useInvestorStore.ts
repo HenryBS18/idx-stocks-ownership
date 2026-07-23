@@ -55,18 +55,32 @@ export const useInvestorStore = defineStore('investor', () => {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
   }
 
+  const error = ref<boolean>(false)
+  const errorMessage = ref<string>('')
+
   const fetchInvestors = async (token: string) => {
     if (!selectedDate.value) return
 
+    error.value = false
+    showInvestorsAccordion.value = false
     const [year, month] = selectedDate.value.split('-')
 
-    const data = await $fetch<InvestorPortfolio[]>('/api/investor', {
-      query: { token, year, month }
-    })
+    try {
+      const data = await $fetch<InvestorPortfolio[]>('/api/investor', {
+        query: { token, year, month }
+      })
+      portfolios.value = data
+      showInvestorsAccordion.value = true
+      fetchedDate.value = selectedDate.value
+    } catch (e) {
+      error.value = true
+      errorMessage.value = 'Gagal memuat data investor. Periksa koneksi Anda dan coba lagi.'
+    }
+  }
 
-    portfolios.value = data
-    showInvestorsAccordion.value = true
-    fetchedDate.value = selectedDate.value
+  function clearError() {
+    error.value = false
+    errorMessage.value = ''
   }
 
   const resetFilter = () => {
@@ -85,6 +99,7 @@ export const useInvestorStore = defineStore('investor', () => {
   return {
     showInvestorsAccordion,
     search,
+    searchDebounced,
     sortField,
     sortOrder,
     selectedInvestorOrigin,
@@ -92,8 +107,11 @@ export const useInvestorStore = defineStore('investor', () => {
     filteredInvestors,
     investorCount,
     fetchedDate,
+    error,
+    errorMessage,
     toggleSort,
     fetchInvestors,
     resetFilter,
+    clearError,
   }
 })

@@ -57,18 +57,32 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
 
+  const error = ref<boolean>(false)
+  const errorMessage = ref<string>('')
+
   const fetchStocks = async (token: string): Promise<void> => {
     if (!selectedDate.value) return
 
+    error.value = false
+    showStockAccordion.value = false
     const [year, month] = selectedDate.value.split('-')
 
-    const data = await $fetch<StockDetail[]>('/api/stock', {
-      query: { token, year, month }
-    })
+    try {
+      const data = await $fetch<StockDetail[]>('/api/stock', {
+        query: { token, year, month }
+      })
+      stockDetails.value = data
+      showStockAccordion.value = true
+      fetchedDate.value = selectedDate.value
+    } catch (e) {
+      error.value = true
+      errorMessage.value = 'Gagal memuat data saham. Periksa koneksi Anda dan coba lagi.'
+    }
+  }
 
-    stockDetails.value = data
-    showStockAccordion.value = true
-    fetchedDate.value = selectedDate.value
+  function clearError() {
+    error.value = false
+    errorMessage.value = ''
   }
 
   const resetFilter = (): void => {
@@ -85,13 +99,17 @@ export const useStockStore = defineStore('stock', () => {
   return {
     showStockAccordion,
     search,
+    searchDebounced,
     sortField,
     sortOrder,
     filteredStocks,
     stockCount,
     fetchedDate,
+    error,
+    errorMessage,
     toggleSort,
     fetchStocks,
     resetFilter,
+    clearError,
   }
 })
