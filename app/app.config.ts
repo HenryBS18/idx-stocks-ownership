@@ -19,6 +19,10 @@ export default defineAppConfig({
       }
     },
     select: {
+      slots: {
+        base: 'cursor-pointer',
+        item: 'cursor-pointer',
+      },
       variants: {
         size: {
           md: {
