@@ -159,7 +159,7 @@ definePageMeta({
               <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
-            <USeparator class="h-6" orientation="vertical" color="primary" />
+            <USeparator v-if="investorCount != 0" class="h-6" orientation="vertical" color="primary" />
 
             <p v-if="investorCount != 0" class="text-sm text-gray-500 text-nowrap">{{ investorCount.toLocaleString() }} investor</p>
           </div>

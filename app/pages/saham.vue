@@ -113,7 +113,7 @@ definePageMeta({
               <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
-            <USeparator orientation="vertical" color="primary" class="h-6" />
+            <USeparator v-if="stockCount != 0" orientation="vertical" color="primary" class="h-6" />
 
             <p v-if="stockCount != 0" class="text-sm text-gray-500 text-nowrap">{{ stockCount.toLocaleString() }} emiten</p>
           </div>
