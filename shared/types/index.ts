@@ -11,6 +11,7 @@ export type StockDetail = {
     percentage: number
     investorName: string
     domicile: string
+    origin: string
   }[]
 }
 
