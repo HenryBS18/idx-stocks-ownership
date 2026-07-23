@@ -166,7 +166,7 @@ definePageMeta({
         </div>
       </div>
 
-      <div class="flex items-center gap-x-2">
+      <div v-if="!dateError" class="flex items-center gap-x-2">
         <p class="text-xs text-xs-500 text-nowrap md:text-[13px] lg:text-sm">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
