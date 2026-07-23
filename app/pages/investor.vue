@@ -139,13 +139,13 @@ definePageMeta({
               <UButton label="Nama" :trailing-icon="sortField === 'name' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-a-z'
                 : 'i-lucide-arrow-down-z-a'
-                " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'name'" active-variant="solid"
+                " variant="outline" class="rounded-tr-none rounded-br-none" :active="sortField === 'name'" active-variant="solid"
                 @click="toggleSort('name')" />
 
               <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stockCount'"
+                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'"
                 active-variant="solid" @click="toggleSort('stockCount')" />
             </div>
           </div>
@@ -156,7 +156,7 @@ definePageMeta({
             <div class="flex items-center gap-x-2">
               <p class="text-xs text-xs-500 text-nowrap md:text-[13px] lg:text-sm">RESET FILTER</p>
 
-              <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
+              <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
             <USeparator v-if="investorCount != 0" class="h-6" orientation="vertical" color="primary" />

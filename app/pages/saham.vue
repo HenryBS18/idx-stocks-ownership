@@ -87,19 +87,19 @@ definePageMeta({
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-a-z'
                 : 'i-lucide-arrow-down-z-a'
-                " variant="outline" class="rounded-tr-none rounded-br-none cursor-pointer" :active="sortField === 'ticker'" active-variant="solid"
+                " variant="outline" class="rounded-tr-none rounded-br-none" :active="sortField === 'ticker'" active-variant="solid"
                 @click="toggleSort('ticker')" />
 
               <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-none cursor-pointer" :active="sortField === 'freeFloat'" active-variant="solid"
+                " variant="outline" class="rounded-none" :active="sortField === 'freeFloat'" active-variant="solid"
                 @click="toggleSort('freeFloat')" />
 
               <UButton label="Jumlah Investor" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none cursor-pointer" :active="sortField === 'stockCount'"
+                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'"
                 active-variant="solid" @click="toggleSort('stockCount')" />
             </div>
           </div>
@@ -110,7 +110,7 @@ definePageMeta({
             <div class="flex items-center gap-x-2">
               <p class="text-xs text-gray-500 text-nowrap sm:text-sm">RESET FILTER</p>
 
-              <UButton icon="i-lucide-rotate-ccw" class="cursor-pointer" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
+              <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
             <USeparator v-if="stockCount != 0" orientation="vertical" color="primary" class="h-6" />

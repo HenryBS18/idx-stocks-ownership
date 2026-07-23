@@ -4,6 +4,9 @@ const iconSizeClass = 'size-4 sm:size-5'
 export default defineAppConfig({
   ui: {
     button: {
+      slots: {
+        base: 'cursor-pointer',
+      },
       variants: {
         size: {
           md: {
