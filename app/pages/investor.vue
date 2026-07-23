@@ -10,6 +10,12 @@ const { investorCount, search, selectedInvestorOrigin, selectedInvestorTypes, sh
 const { error: dateError } = storeToRefs(dateStore)
 const { fetchInvestors, resetFilter, toggleSort, clearError } = store
 
+const handleInvestorRetry = () => {
+  if (!token.value) return
+  clearError()
+  fetchInvestors(token.value)
+}
+
 const investorTypeItems = computed(() => {
   return investorType.map((type) => ({
     label: type,
@@ -170,7 +176,7 @@ definePageMeta({
         </div>
       </UScrollArea>
 
-      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? () => { clearError(); if (token.value) fetchInvestors(token.value) } : undefined" />
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleInvestorRetry : undefined" />
 
       <InvestorAccordion v-else />
     </div>
