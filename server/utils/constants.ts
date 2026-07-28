@@ -1,16 +1,16 @@
 export const monthsInNumber: Record<string, number> = {
-  Januari: 1,
-  Februari: 2,
-  Maret: 3,
-  April: 4,
-  Mei: 5,
-  Juni: 6,
-  Juli: 7,
-  Agustus: 8,
-  September: 9,
-  Oktober: 10,
-  November: 11,
-  Desember: 12
+  Jan: 1,
+  Feb: 2,
+  Mar: 3,
+  Apr: 4,
+  May: 5,
+  Jun: 6,
+  Jul: 7,
+  Aug: 8,
+  Sep: 9,
+  Oct: 10,
+  Nov: 11,
+  Dec: 12
 }
 
 export const investorTypeLabels: Record<string, string> = {
