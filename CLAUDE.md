@@ -10,13 +10,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | Command | Purpose |
 |---------|---------|
-| `bun run dev` | Start dev server (port 3000) |
-| `bun run build` | Production build |
-| `bun run generate` | Static site generation |
-| `bun run preview` | Preview production build locally |
-| `bun run clean` | Clean Nuxt cache |
-| `bun run prisma-gen` | Generate Prisma client |
-| `bun run nuxt typecheck` | Type-check the project |
+| `npm run dev` | Start dev server (port 3000) |
+| `npm run build` | Production build |
+| `npm run generate` | Static site generation |
+| `npm run preview` | Preview production build locally |
+| `npm run clean` | Clean Nuxt cache |
+| `npm run prisma-gen` | Generate Prisma client |
+| `npm run nuxt typecheck` | Type-check the project |
 
 ## Architecture
 
@@ -84,6 +84,6 @@ Prisma client singleton at `server/utils/prisma.ts` using `PrismaPg` adapter. Bi
 
 ### Deployment
 
-- Docker multi-stage build with `oven/bun`, exposes port 3000
+- Docker multi-stage build with `oven/npm`, exposes port 3000
 - Production host: Vercel (`preset: 'vercel'` when `NODE_ENV=production`)
 - Redis via `REDIS_URL` env var for caching and rate limiting
