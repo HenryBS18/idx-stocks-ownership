@@ -3,6 +3,7 @@ import os from "os"
 import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
 import { getOrigin } from "../utils/get-local-foreign"
+import { investorKey, round2 } from "../utils/investor-change"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName, Tx } from "../types"
 
 export class StockService {
@@ -42,6 +43,31 @@ export class StockService {
       },
     })
 
+    // greatest Info batch strictly before the current one (DB-coordinate comparison,
+    // safe against the 0/1-based month ambiguity and gaps in the data)
+    const prevInfo = await prisma.info.findFirst({
+      where: {
+        OR: [
+          { year: info.year, month: { lt: info.month } },
+          { year: { lt: info.year } },
+        ],
+      },
+      orderBy: [{ year: 'desc' }, { month: 'desc' }],
+    })
+
+    let prevMap: Map<string, number> | null = null
+    if (prevInfo) {
+      const prevHoldings = await prisma.stockInvestor.findMany({
+        where: { infoId: prevInfo.id },
+        select: { ticker: true, investorName: true, percentage: true },
+      })
+      prevMap = new Map(
+        prevHoldings.map((h) => [investorKey(h.ticker, h.investorName), parseFloat(h.percentage.toString())]),
+      )
+    }
+
+    const hasPrevData = prevMap !== null
+
     const stockDetails: StockDetail[] = stocks.map((s) => {
       const investorCount = s.stockInvestor.length
 
@@ -59,6 +85,7 @@ export class StockService {
         investorCount,
         float,
         freeFloat,
+        hasPrevData,
         investors: s.stockInvestor.map((investor) => ({
           ...investor,
           investorType: getInvestorType(investor.investorType),
@@ -66,6 +93,14 @@ export class StockService {
           origin: getOrigin(investor.localForeign, investor.domicile),
           totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
           percentage: parseFloat(investor.percentage.toString()),
+          change: prevMap
+            ? (prevMap.has(investorKey(s.ticker, investor.investorName))
+                ? round2(
+                    parseFloat(investor.percentage.toString()) -
+                    prevMap.get(investorKey(s.ticker, investor.investorName))!,
+                  )
+                : null)
+            : null,
         })),
       }
     })
