@@ -32,3 +32,12 @@ __pycache__
 Makefile
 raw-pdf
 result
+
+graphify*
+.graphify*
+.impeccable*
+.superpowers*
+AGENTS.md
+.opencode*
+**/superpowers*
+.claude
