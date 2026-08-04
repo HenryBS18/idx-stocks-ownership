@@ -85,7 +85,6 @@ export class StockService {
         investorCount,
         float,
         freeFloat,
-        hasPrevData,
         investors: s.stockInvestor.map((investor) => ({
           ...investor,
           investorType: getInvestorType(investor.investorType),
@@ -93,6 +92,7 @@ export class StockService {
           origin: getOrigin(investor.localForeign, investor.domicile),
           totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
           percentage: parseFloat(investor.percentage.toString()),
+          hasPrevData,
           change: prevMap
             ? (prevMap.has(investorKey(s.ticker, investor.investorName))
                 ? round2(

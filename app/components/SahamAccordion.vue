@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui"
+import { h } from "vue"
+import { UBadge } from "#components"
 import { useInfiniteScroll } from "@vueuse/core"
 
 const store = useStockStore()
@@ -14,6 +16,9 @@ const visibleCount = ref(pageSize)
 const visibleStocks = computed(() =>
   filteredStocks.value.slice(0, visibleCount.value)
 )
+
+const formatChange = (change: number) =>
+  `${change > 0 ? '+' : ''}${Math.round(change * 100) / 100}`
 
 const investorColumns: TableColumn<unknown, unknown>[] = [
   {
@@ -45,6 +50,24 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     accessorKey: 'percentage',
     cell: ({ row }: any) => row.original.percentage + '%',
     footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
+  },
+  {
+    header: 'Δ (%)',
+    cell: ({ row }: any) => {
+      const { change } = row.original
+      const hasPrev = row.original.hasPrevData
+      if (change === null) {
+        return hasPrev
+          ? h(UBadge, { label: 'baru', color: 'success', variant: 'soft' })
+          : ''
+      }
+      if (change === 0) return ''
+      return h(UBadge, {
+        label: formatChange(change),
+        color: change > 0 ? 'success' : 'error',
+        variant: 'soft',
+      })
+    },
   }
 ]
 
