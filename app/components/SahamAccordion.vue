@@ -48,26 +48,24 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
   {
     header: 'Kepemilikan (%)',
     accessorKey: 'percentage',
-    cell: ({ row }: any) => row.original.percentage + '%',
-    footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
-  },
-  {
-    header: 'Δ (%)',
     cell: ({ row }: any) => {
-      const { change } = row.original
-      const hasPrev = row.original.hasPrevData
-      if (change === null) {
-        return hasPrev
-          ? h(UBadge, { label: 'baru', color: 'success', variant: 'soft' })
-          : ''
+      const { change, percentage, hasPrevData } = row.original
+      let badge = null
+      if (change !== null && change !== 0) {
+        badge = h(UBadge, {
+          label: formatChange(change),
+          color: change > 0 ? 'success' : 'error',
+          variant: 'soft',
+        })
+      } else if (change === null && hasPrevData) {
+        badge = h(UBadge, { label: 'baru', color: 'success', variant: 'soft' })
       }
-      if (change === 0) return ''
-      return h(UBadge, {
-        label: formatChange(change),
-        color: change > 0 ? 'success' : 'error',
-        variant: 'soft',
-      })
+      return h('div', { class: 'flex items-center gap-2' }, [
+        percentage + '%',
+        badge,
+      ])
     },
+    footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
   }
 ]
 
