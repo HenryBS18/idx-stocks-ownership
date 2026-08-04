@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     exclude: ['/'],
   },
   nitro: {
-    preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'bun',
+    preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'node',
     storage: {
       redis: {
         driver: 'redis',
