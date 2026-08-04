@@ -12,7 +12,9 @@ export type StockDetail = {
     investorName: string
     domicile: string
     origin: string
+    change: number | null   // delta vs previous month; null = no prev-month holding for this investor
   }[]
+  hasPrevData: boolean      // true when a previous-month batch exists in the DB
 }
 
 export type InvestorPortfolio = {
