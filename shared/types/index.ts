@@ -28,6 +28,8 @@ export type InvestorPortfolio = {
     name: string
     totalHoldingShare: number
     percentage: number
+    change: number | null
+    hasPrevData: boolean
   }[]
 }
 

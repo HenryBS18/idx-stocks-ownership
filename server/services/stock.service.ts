@@ -3,7 +3,7 @@ import os from "os"
 import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
 import { getOrigin } from "../utils/get-local-foreign"
-import { investorKey, round2 } from "../utils/investor-change"
+import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName, Tx } from "../types"
 
 export class StockService {
@@ -43,28 +43,7 @@ export class StockService {
       },
     })
 
-    // greatest Info batch strictly before the current one (DB-coordinate comparison,
-    // safe against the 0/1-based month ambiguity and gaps in the data)
-    const prevInfo = await prisma.info.findFirst({
-      where: {
-        OR: [
-          { year: info.year, month: { lt: info.month } },
-          { year: { lt: info.year } },
-        ],
-      },
-      orderBy: [{ year: 'desc' }, { month: 'desc' }],
-    })
-
-    let prevMap: Map<string, number> | null = null
-    if (prevInfo) {
-      const prevHoldings = await prisma.stockInvestor.findMany({
-        where: { infoId: prevInfo.id },
-        select: { ticker: true, investorName: true, percentage: true },
-      })
-      prevMap = new Map(
-        prevHoldings.map((h) => [investorKey(h.ticker, h.investorName), parseFloat(h.percentage.toString())]),
-      )
-    }
+    const prevMap = await getPrevMap(info)
 
     const hasPrevData = prevMap !== null
 

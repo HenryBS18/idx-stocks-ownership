@@ -1,4 +1,5 @@
 import type { GetInvestorParam } from "../types"
+import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
 
 export class InvestorService {
   async getInvestors({ year, month }: GetInvestorParam): Promise<InvestorPortfolio[]> {
@@ -10,6 +11,9 @@ export class InvestorService {
     })
 
     if (!info) throw new Error('Data tidak tersedia')
+
+    const prevMap = await getPrevMap(info)
+    const hasPrevData = prevMap !== null
 
     const investors = await prisma.stockInvestor.findMany({
       select: {
@@ -47,11 +51,17 @@ export class InvestorService {
           }
         }
 
+        const percentage = parseFloat(row.percentage.toString())
+        const key = investorKey(row.ticker, row.investorName)
+        const prev = prevMap?.get(key)
+
         acc[row.investorName]?.stocks.push({
           ticker: row.ticker,
           name: row.stock.name,
           totalHoldingShare: parseInt(row.totalHoldingShare.toString()),
-          percentage: parseFloat(row.percentage.toString())
+          percentage,
+          change: prev === undefined ? null : round2(percentage - prev),
+          hasPrevData,
         })
 
         return acc
