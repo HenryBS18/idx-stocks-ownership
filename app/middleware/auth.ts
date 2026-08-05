@@ -25,7 +25,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       await investorStore.fetchInvestors(token.value)
     }
   } catch (err) {
-    // Token fetch failed — set date store error so page renders error card
     const dateStore = useDateStore()
     dateStore.error = true
     dateStore.errorMessage = 'Gagal terhubung ke server. Silakan muat ulang halaman.'
