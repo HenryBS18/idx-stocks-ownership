@@ -112,9 +112,9 @@ onMounted(() => {
               <UBadge :label="stock.ticker" />
 
               <h2 :class="cn(
-                'text-[11px] font-semibold text-gray-600 truncate',
-                'sm:text-xs',
-                'xl:text-sm'
+                'text-xs font-semibold text-gray-800 truncate',
+                'sm:text-sm',
+                'xl:text-base'
               )">
                 {{ stock.name }}
               </h2>
@@ -125,9 +125,9 @@ onMounted(() => {
               'sm:gap-x-3 sm:gap-y-0'
             )">
               <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft"
-                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+                class="w-fit text-[11px] sm:text-xs xl:text-sm" />
               <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft"
-                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+                class="w-fit text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
 

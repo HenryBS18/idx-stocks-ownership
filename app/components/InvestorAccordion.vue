@@ -99,9 +99,9 @@ onMounted(() => {
             'sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:min-w-fit'
           )">
             <h2 :class="cn(
-              'font-semibold text-[11px] text-gray-600 truncate',
-              'sm:text-xs',
-              'xl:text-sm'
+              'font-semibold text-xs text-gray-800 truncate',
+              'sm:text-sm',
+              'xl:text-base'
             )">
               {{ investor.investorName }}
             </h2>
@@ -110,18 +110,18 @@ onMounted(() => {
               'flex gap-x-2',
               'sm:gap-x-3'
             )">
-              <UBadge :label="`${investor.stockCount} saham`" color="secondary" variant="soft" class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+              <UBadge :label="`${investor.stockCount} saham`" color="secondary" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
               <UBadge v-if="investor.investorType" :label="investor.investorType" color="error" variant="soft"
-                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+                class="w-fit text-[11px] sm:text-xs xl:text-sm" />
               <UBadge v-if="investor.localForeign" :label="investor.localForeign" color="primary" variant="soft"
-                class="w-fit text-[10px] sm:text-[11px] xl:text-xs" />
+                class="w-fit text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
 
           <div class="flex items-center gap-x-3">
             <p :class="cn(
-              'text-[10px] text-gray-500 text-end',
-              'sm:text-xs'
+              'text-xs text-gray-600 text-end',
+              'sm:text-sm'
             )">
               {{ investor.domicile }}
             </p>

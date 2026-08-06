@@ -49,8 +49,8 @@ export default defineAppConfig({
       slots: {
         thead: 'bg-gray-100',
         tr: 'hover:bg-gray-100',
-        th: 'text-[11px] xl:text-sm max-sm:py-2',
-        td: 'text-[10px] xl:text-sm ',
+        th: 'text-xs md:text-sm font-semibold text-gray-700 max-sm:py-2',
+        td: 'text-xs md:text-sm text-gray-700',
       }
     }
   },
