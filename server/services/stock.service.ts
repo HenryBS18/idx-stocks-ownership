@@ -4,7 +4,7 @@ import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
 import { getOrigin } from "../utils/get-local-foreign"
 import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
-import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, StockHolding, TickerName, Tx } from "../types"
+import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, TickerName, Tx } from "../types"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
@@ -118,27 +118,6 @@ export class StockService {
   }
 
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
-    const stockData = JSON.parse(fileBuffer.toString()) as StockHolding[]
-    const { month, year } = parseDateTime(idxLastUpdated)
-
-    await prisma.$transaction(async (tx) => {
-      const newInfo = await tx.info.create({
-        data: { idxLastUpdated, month: month - 1, year }
-      })
-
-      const holdings = stockData.map((s) => ({ ...s, infoId: newInfo.id }))
-      const tickerNames = this.dedupTickers(holdings)
-      await tx.stock.createMany({ data: tickerNames, skipDuplicates: true })
-
-      const records: HoldingRecord[] = holdings.map((
-        { infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }
-      ) => ({ infoId, ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }))
-
-      await this.batchInsertRecords(tx, records)
-    }, { timeout: 1000 * 60 })
-  }
-
-  async insertStockCsv({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
     const tempFilePath = path.join(os.tmpdir(), `csv-${Date.now()}.csv`)
     fs.writeFileSync(tempFilePath, fileBuffer)
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Rules
 
-- **Commits:** Do NOT add `Co-Authored-By: Claude` or any co-author attribution in commit messages.
+- **Commits:** Do NOT add `Co-Authored-By: Claude`, `Co-authored-by: Copilot`, or any co-author attribution in commit messages.
 
 ## Commands
 
@@ -48,8 +48,7 @@ Nitro file-based routing under `/api/`:
 | GET | `/api/token` | No | Issue JWT cookie |
 | GET | `/api/info` | Yes | Available date periods |
 | GET | `/api/stock` | Yes | All stocks with investors for a date |
-| POST | `/api/stock` | Yes | Upload JSON stock data |
-| POST | `/api/stock/csv` | Yes | Upload CSV stock data |
+| POST | `/api/stock` | Yes | Upload CSV stock data |
 | GET | `/api/stock/list` | No | All ticker-name pairs |
 | GET | `/api/stock/:ticker/name` | No | Single stock name |
 | GET | `/api/investor` | Yes | Investor portfolios for a date |
