@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `npm run preview` | Preview production build locally |
 | `npm run clean` | Clean Nuxt cache |
 | `npm run prisma-gen` | Generate Prisma client |
-| `npm run nuxt typecheck` | Type-check the project |
+| `npx nuxt typecheck` | Type-check the project |
 
 ## Architecture
 
