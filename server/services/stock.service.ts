@@ -132,7 +132,7 @@ export class StockService {
 
     await prisma.$transaction(async (tx) => {
       const newInfo = await tx.info.create({
-        data: { idxLastUpdated, month: month - 1, year }
+        data: { idxLastUpdated, month, year }
       })
 
       const tickerNames = this.dedupTickers(investorHoldings)

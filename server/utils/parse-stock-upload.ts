@@ -13,7 +13,7 @@ export const parseStockUpload = async (event: any): Promise<{ fileBuffer: Buffer
 
   const { month, year } = parseDateTime(idxLastUpdated)
   const info = await prisma.info.findFirst({
-    where: { month: month - 1, year }
+    where: { month, year }
   })
   if (info) throw createError({ statusCode: 409, statusMessage: 'Already Updated to the Latest Data' })
 
