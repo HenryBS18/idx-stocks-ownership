@@ -81,7 +81,7 @@ definePageMeta({
             'flex flex-col gap-y-1',
             'md:flex-row md:items-center md:gap-x-2 md:gap-y-0'
           )">
-            <p class="text-xs text-gray-500 sm:text-sm">URUTKAN</p>
+            <p class="text-[13px] md:text-sm font-medium text-gray-600">URUTKAN</p>
 
             <div class="flex">
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
@@ -108,20 +108,20 @@ definePageMeta({
 
           <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
-              <p class="text-xs text-gray-500 text-nowrap sm:text-sm">RESET FILTER</p>
+              <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">RESET FILTER</p>
 
               <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
             <USeparator v-if="showStockAccordion && stockCount != 0" orientation="vertical" color="primary" class="h-6" />
 
-            <p v-if="showStockAccordion && stockCount != 0" class="text-sm text-gray-500 text-nowrap">{{ stockCount.toLocaleString() }} emiten</p>
+            <p v-if="showStockAccordion && stockCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ stockCount.toLocaleString() }} emiten</p>
           </div>
         </div>
       </div>
 
       <div v-if="!dateError" class="flex items-center gap-x-2">
-        <p class="text-xs text-gray-500 text-nowrap sm:text-sm">DATA PER</p>
+        <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
       </div>

@@ -6,7 +6,7 @@ body {
 }
 
 input::placeholder {
-  color: var(--color-neutral-400)
+  color: var(--color-neutral-500)
 }
 
 /* scrollbar width */

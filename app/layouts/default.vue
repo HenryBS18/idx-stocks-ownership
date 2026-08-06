@@ -20,7 +20,7 @@ const activeIndex = computed(() =>
   )">
     <div class="relative flex w-full mb-4 border-b border-gray-200">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to" class="flex items-center justify-center w-1/2 py-2 gap-x-1.5"
-        :class="route.path === page.to ? 'text-primary' : 'text-gray-500'">
+        :class="route.path === page.to ? 'text-primary' : 'text-gray-600'">
         <UIcon :name="page.icon" class="size-5" />
 
         <span class="text-sm font-semibold transition-colors duration-300">

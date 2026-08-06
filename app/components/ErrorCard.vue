@@ -8,7 +8,7 @@ defineProps<{
 <template>
   <div class="flex flex-col items-center justify-center py-16 gap-y-4">
     <UIcon name="i-lucide-alert-circle" class="size-12 text-red-500" />
-    <p class="text-sm text-gray-600 text-center max-w-xs">{{ message }}</p>
+    <p class="text-sm text-gray-700 text-center leading-relaxed max-w-xs md:max-w-sm">{{ message }}</p>
     <UButton v-if="onRetry" color="primary" @click="onRetry">
       Coba Lagi
     </UButton>

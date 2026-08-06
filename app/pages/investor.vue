@@ -113,7 +113,7 @@ definePageMeta({
 
           <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
-              <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">ASAL</p>
+              <p class="text-[13px] md:text-sm font-medium text-gray-600">ASAL</p>
 
               <USelect v-model="selectedInvestorOrigin" :items="investorOrigin" class="focus:ring focus:ring-gray-300" />
             </div>
@@ -121,11 +121,11 @@ definePageMeta({
             <USeparator orientation="vertical" color="primary" class="hidden h-6 md:inline" />
 
             <div class="flex items-center gap-x-2">
-              <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">TIPE</p>
+              <p class="text-[13px] md:text-sm font-medium text-gray-600">TIPE</p>
 
               <UDropdownMenu :items="investorTypeItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
                 <UButton :label="selectedInvestorTypes.includes('Semua') ? 'Semua' : `${selectedInvestorTypes.length} dipilih`" variant="outline"
-                  color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-normal' }" />
+                  color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-medium' }" />
               </UDropdownMenu>
             </div>
           </div>
@@ -133,7 +133,7 @@ definePageMeta({
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
           <div class="flex items-center gap-x-2">
-            <p class="text-xs text-gray-500 md:text-[13px] lg:text-sm">URUTKAN</p>
+            <p class="text-[13px] md:text-sm font-medium text-gray-600">URUTKAN</p>
 
             <div class="flex">
               <UButton label="Nama" :trailing-icon="sortField === 'name' && sortOrder === 'asc'
@@ -154,20 +154,20 @@ definePageMeta({
 
           <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
-              <p class="text-xs text-xs-500 text-nowrap md:text-[13px] lg:text-sm">RESET FILTER</p>
+              <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">RESET FILTER</p>
 
               <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
             <USeparator v-if="showInvestorsAccordion && investorCount != 0" class="h-6" orientation="vertical" color="primary" />
 
-            <p v-if="showInvestorsAccordion && investorCount != 0" class="text-sm text-gray-500 text-nowrap">{{ investorCount.toLocaleString() }} investor</p>
+            <p v-if="showInvestorsAccordion && investorCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ investorCount.toLocaleString() }} investor</p>
           </div>
         </div>
       </div>
 
       <div v-if="!dateError" class="flex items-center gap-x-2">
-        <p class="text-xs text-xs-500 text-nowrap md:text-[13px] lg:text-sm">DATA PER</p>
+        <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
       </div>
