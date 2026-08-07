@@ -1,7 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Rules
 
 - **Commits:** Do NOT add `Co-Authored-By: Claude`, `Co-authored-by: Copilot`, or any co-author attribution in commit messages. Use simple commit prefixes (e.g. `feat: description`, `fix: description`) without adding scope parens like `feat(scope):`.
