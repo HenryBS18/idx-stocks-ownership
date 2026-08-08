@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { TableColumn } from "@nuxt/ui"
-import { h } from "vue"
 import { UBadge } from "#components"
+import type { TableColumn } from "@nuxt/ui"
 import { useInfiniteScroll } from "@vueuse/core"
+import { h } from "vue"
 
 const store = useStockStore()
 const { filteredStocks } = storeToRefs(store)
@@ -90,12 +90,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <UScrollArea ref="el" :class="cn(
-    'h-[calc(100vh-224px)] pr-2',
-    'sm:pr-3',
-    'md:pr-4'
-  )">
-    <div class="space-y-4">
+  <UScrollArea ref="el" class="h-[calc(100vh-224px)] pb-4 pr-4 lg:pr-6">
+    <div class="space-y-4 ml-4 lg:ml-8">
       <article v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div :class="cn(
           'w-full flex items-center justify-between gap-x-3 px-2.5 py-3 cursor-pointer hover:bg-gray-100',
@@ -124,10 +120,8 @@ onMounted(() => {
               'flex gap-x-2 gap-y-1.5',
               'sm:gap-x-3 sm:gap-y-0'
             )">
-              <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft"
-                class="w-fit text-[11px] sm:text-xs xl:text-sm" />
-              <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft"
-                class="w-fit text-[11px] sm:text-xs xl:text-sm" />
+              <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
+              <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
 

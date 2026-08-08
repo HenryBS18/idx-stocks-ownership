@@ -15,10 +15,10 @@ const activeIndex = computed(() =>
   <UHeader title="IDX Stocks Ownership" :ui="{ container: 'max-w-none', right: 'hidden' }" />
 
   <div :class="cn(
-    'px-4 pt-4 pb-20',
-    'md:px-8 md:py-4 xl:pb-4',
+    'pb-20',
+    'xl:pb-4',
   )">
-    <div class="relative hidden xl:flex w-full mb-4 border-b border-gray-200">
+    <div class="relative hidden xl:flex w-full border-b border-gray-200">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
         class="flex items-center justify-center w-1/2 py-3 gap-x-1.5 transition-colors duration-200"
         :class="route.path === page.to ? 'text-primary' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'">
@@ -35,7 +35,9 @@ const activeIndex = computed(() =>
       }" />
     </div>
 
-    <slot />
+    <div class="mt-4">
+      <slot />
+    </div>
   </div>
 
   <nav

@@ -54,8 +54,8 @@ definePageMeta({
   <main>
     <h1 class="sr-only">Daftar Saham Indonesia &amp; Kepemilikan Investor (IDX)</h1>
     <div :class="cn(
-      'w-full flex flex-col gap-y-3',
-      'lg:w-auto lg:justify-between',
+      'w-full flex flex-col gap-y-3 px-4',
+      'lg:w-auto lg:justify-between lg:pl-8 lg:pr-8',
       'xl:flex-row xl:gap-y-0'
     )">
       <div :class="cn(
@@ -99,8 +99,8 @@ definePageMeta({
               <UButton label="Jumlah Investor" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'"
-                active-variant="solid" @click="toggleSort('stockCount')" />
+                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'" active-variant="solid"
+                @click="toggleSort('stockCount')" />
             </div>
           </div>
 
@@ -115,7 +115,9 @@ definePageMeta({
 
             <USeparator v-if="showStockAccordion && stockCount != 0" orientation="vertical" color="primary" class="h-6" />
 
-            <p v-if="showStockAccordion && stockCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ stockCount.toLocaleString() }} emiten</p>
+            <p v-if="showStockAccordion && stockCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ stockCount.toLocaleString() }}
+              emiten
+            </p>
           </div>
         </div>
       </div>
@@ -134,7 +136,8 @@ definePageMeta({
         </div>
       </UScrollArea>
 
-      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'" :on-retry="error ? handleStockRetry : handleDateRetry" />
+      <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'"
+        :on-retry="error ? handleStockRetry : handleDateRetry" />
 
       <SahamAccordion v-else />
     </div>

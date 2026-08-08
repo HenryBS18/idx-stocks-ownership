@@ -87,8 +87,8 @@ definePageMeta({
   <main>
     <h1 class="sr-only">Data Investor Saham Indonesia (IDX) - Kepemilikan &amp; Distribusi Investor</h1>
     <div :class="cn(
-      'w-full flex flex-col gap-y-3',
-      'xl:flex-row xl:flex-wrap xl:justify-between',
+      'w-full flex flex-col gap-y-3 px-4',
+      'xl:flex-row xl:flex-wrap xl:justify-between lg:pl-8 lg:pr-8',
       '2xl:gap-y-0'
     )">
       <div :class="cn(
@@ -161,7 +161,9 @@ definePageMeta({
 
             <USeparator v-if="showInvestorsAccordion && investorCount != 0" class="h-6" orientation="vertical" color="primary" />
 
-            <p v-if="showInvestorsAccordion && investorCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ investorCount.toLocaleString() }} investor</p>
+            <p v-if="showInvestorsAccordion && investorCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{
+              investorCount.toLocaleString()
+            }} investor</p>
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { TableColumn } from "@nuxt/ui"
-import { h } from "vue"
 import { UBadge } from "#components"
+import type { TableColumn } from "@nuxt/ui"
 import { useInfiniteScroll } from "@vueuse/core"
+import { h } from "vue"
 
 const store = useInvestorStore()
 const { filteredInvestors } = storeToRefs(store)
@@ -83,12 +83,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <UScrollArea :class="cn(
-    'h-[calc(100vh-224px)] pr-2',
-    'sm:pr-3',
-    'md:pr-4'
-  )" ref="el">
-    <div class="space-y-4">
+  <UScrollArea ref="el" class="h-[calc(100vh-224px)] pb-4 pr-4 lg:pr-6">
+    <div class="space-y-4 ml-4 lg:ml-8">
       <article v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
         <div :class="cn(
           'flex items-center justify-between px-2.5 py-3 cursor-pointer hover:bg-gray-100 w-full gap-x-3',
