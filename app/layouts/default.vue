@@ -19,8 +19,9 @@ const activeIndex = computed(() =>
     'md:px-8 md:py-4 xl:pb-4',
   )">
     <div class="relative hidden xl:flex w-full mb-4 border-b border-gray-200">
-      <NuxtLink v-for="page in pages" :key="page.to" :to="page.to" class="flex items-center justify-center w-1/2 py-2 gap-x-1.5"
-        :class="route.path === page.to ? 'text-primary' : 'text-gray-600'">
+      <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
+        class="flex items-center justify-center w-1/2 py-3 gap-x-1.5 transition-colors duration-200"
+        :class="route.path === page.to ? 'text-primary' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'">
         <UIcon :name="page.icon" class="size-5" />
 
         <span class="text-sm font-semibold transition-colors duration-300">
