@@ -69,7 +69,7 @@ export class InvestorService {
     ).map((investor) => ({
       investorName: investor.investorName,
       investorType: getInvestorType(investor.investorType),
-      localForeign: getLocalForeign(investor.localForeign),
+      localForeign: investor.localForeign === 'D' ? 'L' : investor.localForeign,
       domicile: investor.localForeign === 'F' ? investor.domicile : '',
       stockCount: investor.stocks.length,
       stocks: investor.stocks,

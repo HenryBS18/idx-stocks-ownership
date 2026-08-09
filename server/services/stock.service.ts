@@ -2,8 +2,8 @@ import fs from "fs"
 import os from "os"
 import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
-import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, TickerName, Tx } from "../types"
+import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
@@ -66,17 +66,17 @@ export class StockService {
         investors: s.stockInvestor.map((investor) => ({
           ...investor,
           investorType: getInvestorType(investor.investorType),
-          localForeign: getLocalForeign(investor.localForeign),
+          localForeign: investor.localForeign === 'L' ? 'D' : investor.localForeign,
           totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),
           percentage: parseFloat(investor.percentage.toString()),
           hasPrevData,
           change: prevMap
             ? (prevMap.has(investorKey(s.ticker, investor.investorName))
-                ? round2(
-                    parseFloat(investor.percentage.toString()) -
-                    prevMap.get(investorKey(s.ticker, investor.investorName))!,
-                  )
-                : null)
+              ? round2(
+                parseFloat(investor.percentage.toString()) -
+                prevMap.get(investorKey(s.ticker, investor.investorName))!,
+              )
+              : null)
             : null,
         })),
       }
