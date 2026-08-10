@@ -13,54 +13,124 @@ const el = useTemplateRef<HTMLElement>('el')
 const pageSize = 20
 const visibleCount = ref(pageSize)
 
-const visibleStocks = computed(() =>
-  filteredStocks.value.slice(0, visibleCount.value)
-)
-
-const formatChange = (change: number) =>
-  `${change > 0 ? '+' : ''}${Math.round(change * 100) / 100}`
+const visibleStocks = computed(() => filteredStocks.value.slice(0, visibleCount.value))
 
 const investorColumns: TableColumn<unknown, unknown>[] = [
   {
     header: '#',
+    meta: {
+      class: {
+        th: 'text-center px-2 sm:px-3',
+        td: 'text-center px-2 sm:px-3',
+      }
+    },
     cell: ({ row }) => row.index + 1,
   },
   {
     header: 'Nama Investor',
     accessorKey: 'investorName',
+    meta: {
+      class: {
+        th: 'max-sm:max-w-48 max-sm:pl-2 max-sm:pr-0',
+        td: 'max-sm:max-w-48 max-sm:pl-2 max-sm:pr-0',
+      }
+    },
+    cell: ({ row }: any) => {
+      const { investorName, investorType, localForeign } = row.original
+      const normalizedLocalForeign = localForeign?.trim()
+      const badges = []
+
+      if (investorType) {
+        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'text-[9px] h-auto py-1' },
+          h('span', investorType)
+        ))
+      }
+
+      if (normalizedLocalForeign) {
+        badges.push(h(UBadge, { label: normalizedLocalForeign, color: normalizedLocalForeign === 'D' ? 'primary' : 'error', variant: 'soft', class: 'text-[9px] h-fit' }))
+      }
+
+      return h('div', { class: 'flex flex-col gap-0.5' }, [
+        h('span', { class: 'line-clamp-2 whitespace-normal wrap-break-word text-[10px] font-bold sm:text-xs xl:text-sm xl:line-clamp-none', }, investorName),
+        badges.length ? h('div', { class: 'flex gap-1 sm:hidden' }, badges) : null,
+      ])
+    },
   },
   {
     header: 'Tipe',
     accessorKey: 'investorType',
-    cell: ({ row }: any) => row.original.investorType || '-',
+    meta: {
+      class: {
+        th: 'hidden sm:table-cell lg:max-w-64 max-xl:px-0',
+        td: 'hidden sm:table-cell lg:max-w-64 max-xl:px-0',
+      },
+    },
+    cell: ({ row }: any) => {
+      return h('span', { class: 'line-clamp-3 whitespace-normal wrap-break-word sm:text-xs lg:text-sm' }, row.original.investorType || '-')
+    },
   },
   {
     header: 'Asal',
-    accessorKey: 'origin',
-    cell: ({ row }: any) => row.original.origin || '-',
+    accessorKey: 'localForeign',
+    meta: {
+      class: {
+        th: 'hidden sm:table-cell lg:table-cell',
+        td: 'hidden sm:table-cell',
+      },
+    },
+    cell: ({ row }: any) => {
+      const { localForeign, domicile } = row.original
+
+      if (!localForeign) return h('span', { class: 'sm:text-xs lg:text-sm' }, '-')
+
+      if (localForeign === 'D') {
+        return h(UBadge, { label: localForeign, color: 'primary', variant: 'soft', class: 'hidden h-fit sm:inline' }, 'D')
+      }
+
+      return h('div', { class: 'flex items-center gap-1.5' }, [
+        h(UBadge, { label: localForeign, color: 'error', variant: 'soft', class: 'hidden h-fit sm:inline' }, 'F'),
+        domicile ? h('span', { class: 'line-clamp-2 whitespace-normal wrap-break-word sm:text-xs lg:text-sm' }, domicile) : null
+      ])
+    },
   },
   {
-    header: 'Lembar Saham',
+    header: 'Saham',
     accessorKey: 'totalHoldingShare',
-    cell: ({ row }: any) =>
-      Number(row.original.totalHoldingShare).toLocaleString()
+    meta: {
+      class: {
+        th: 'max-sm:text-end max-sm:px-2',
+        td: 'max-sm:text-end max-sm:px-2',
+      }
+    },
+    cell: ({ row }: any) => {
+      const value = Number(row.original.totalHoldingShare)
+
+      return h('span', [
+        h('span', { class: 'hidden lg:inline' }, value.toLocaleString()),
+        h('span', { class: 'lg:hidden' }, formatShareCompact(value)),
+      ])
+    }
   },
   {
-    header: 'Kepemilikan (%)',
+    header: '%',
     accessorKey: 'percentage',
+    meta: {
+      class: {
+        th: 'max-sm:text-end max-sm:pl-1',
+        td: 'max-sm:text-end max-sm:pl-1',
+      }
+    },
     cell: ({ row }: any) => {
       const { change, percentage, hasPrevData } = row.original
       let badge = null
+
       if (change !== null && change !== 0) {
-        badge = h(UBadge, {
-          label: formatChange(change),
-          color: change > 0 ? 'success' : 'error',
-          variant: 'soft',
-        })
+        badge = h('span', { class: change > 0 ? 'text-success' : 'text-error' }, `(${formatChange(change)})`)
       } else if (change === null && hasPrevData) {
-        badge = h(UBadge, { label: 'baru', color: 'success', variant: 'soft' })
+        badge = h('span', { class: 'text-success' }, '(Baru)')
       }
-      return h('div', { class: 'flex items-center gap-2' }, [
+
+      return h('div', { class: 'flex items-center gap-1.5 font-bold max-sm:gap-0 max-sm:flex-col max-sm:items-end' }, [
         percentage + '%',
         badge,
       ])
