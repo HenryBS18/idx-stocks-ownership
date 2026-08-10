@@ -169,16 +169,17 @@ onMounted(() => {
         )" @click="toggle(i)">
           <div :class="cn(
             'flex flex-col gap-x-3 gap-y-2 min-w-0',
-            'sm:flex-row'
+            'sm:flex-1 sm:flex-row sm:min-w-0'
           )">
             <div :class="cn(
-              'flex items-center gap-x-1.5',
+              'flex items-center gap-x-1.5 min-w-0',
+              'sm:flex-1',
               'sm:gap-x-3'
             )">
               <UBadge :label="stock.ticker" />
 
               <h2 :class="cn(
-                'text-xs font-semibold text-gray-800 truncate',
+                'min-w-0 flex-1 text-xs font-semibold text-gray-800 truncate',
                 'sm:text-sm',
                 'xl:text-base'
               )">

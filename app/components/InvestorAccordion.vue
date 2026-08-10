@@ -131,10 +131,10 @@ onMounted(() => {
         )" @click="toggle(i)">
           <div :class="cn(
             'flex flex-col gap-y-1 min-w-0',
-            'sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:min-w-fit'
+            'sm:flex-1 sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:min-w-0'
           )">
             <h2 :class="cn(
-              'font-semibold text-xs text-gray-800 truncate',
+              'min-w-0 flex-1 font-semibold text-xs text-gray-800 truncate',
               'sm:text-sm',
               'xl:text-base'
             )">
