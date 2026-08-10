@@ -173,7 +173,6 @@ onMounted(() => {
           )">
             <div :class="cn(
               'flex items-center gap-x-1.5 min-w-0',
-              'sm:flex-1',
               'sm:gap-x-3'
             )">
               <UBadge :label="stock.ticker" />
