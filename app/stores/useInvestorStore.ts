@@ -24,7 +24,8 @@ export const useInvestorStore = defineStore('investor', () => {
     }
 
     if (selectedInvestorOrigin.value !== 'Semua') {
-      result = result.filter(i => i.localForeign === selectedInvestorOrigin.value)
+      const localForeign = selectedInvestorOrigin.value === 'Lokal' ? 'D' : 'F'
+      result = result.filter(i => i.localForeign === localForeign)
     }
 
     if (!selectedInvestorTypes.value.includes('Semua')) {
