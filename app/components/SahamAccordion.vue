@@ -122,20 +122,24 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     },
     cell: ({ row }: any) => {
       const { change, percentage, hasPrevData } = row.original
-      let badge = null
+      let changesText = null
 
       if (change !== null && change !== 0) {
-        badge = h('span', { class: change > 0 ? 'text-success' : 'text-error' }, `(${formatChange(change)})`)
+        changesText = h('span', { class: change > 0 ? 'font-semibold text-success' : 'font-semibold text-error' }, `(${formatChange(change)})`)
       } else if (change === null && hasPrevData) {
-        badge = h('span', { class: 'text-success' }, '(Baru)')
+        changesText = h('span', { class: 'font-semibold text-success' }, '(Baru)')
       }
 
-      return h('div', { class: 'flex items-center gap-1.5 font-bold max-sm:gap-0 max-sm:flex-col max-sm:items-end' }, [
-        percentage + '%',
-        badge,
+      return h('div', { class: 'flex items-center gap-1.5 max-sm:gap-0 max-sm:flex-col max-sm:items-end' }, [
+        h('span', { class: 'font-bold' }, `${percentage}%`),
+        changesText,
       ])
     },
-    footer: ({ table }) => table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
+    footer: ({ table }) => h(
+      'span',
+      { class: 'font-bold text-black' },
+      table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
+    )
   }
 ]
 
