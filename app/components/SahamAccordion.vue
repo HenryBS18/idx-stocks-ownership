@@ -41,13 +41,13 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
       const badges = []
 
       if (investorType) {
-        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'text-[9px] h-auto py-1' },
+        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'text-[9px] h-auto py-1 font-bold' },
           h('span', investorType)
         ))
       }
 
       if (normalizedLocalForeign) {
-        badges.push(h(UBadge, { label: normalizedLocalForeign, color: normalizedLocalForeign === 'D' ? 'primary' : 'error', variant: 'soft', class: 'text-[9px] h-fit' }))
+        badges.push(h(UBadge, { label: normalizedLocalForeign, color: normalizedLocalForeign === 'D' ? 'primary' : 'error', variant: 'soft', class: 'text-[9px] h-fit font-bold' }))
       }
 
       return h('div', { class: 'flex flex-col gap-0.5' }, [
@@ -84,11 +84,11 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
       if (!localForeign) return h('span', { class: 'sm:text-xs lg:text-sm' }, '-')
 
       if (localForeign === 'D') {
-        return h(UBadge, { label: localForeign, color: 'primary', variant: 'soft', class: 'hidden h-fit sm:inline' }, 'D')
+        return h(UBadge, { label: localForeign, color: 'primary', variant: 'soft', class: 'hidden h-fit sm:inline font-bold' }, 'D')
       }
 
       return h('div', { class: 'flex items-center gap-1.5' }, [
-        h(UBadge, { label: localForeign, color: 'error', variant: 'soft', class: 'hidden h-fit sm:inline' }, 'F'),
+        h(UBadge, { label: localForeign, color: 'error', variant: 'soft', class: 'hidden h-fit sm:inline font-bold' }, 'F'),
         domicile ? h('span', { class: 'line-clamp-2 whitespace-normal wrap-break-word sm:text-xs lg:text-sm' }, domicile) : null
       ])
     },
