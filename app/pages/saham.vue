@@ -143,32 +143,32 @@ definePageMeta({
 
       <section v-if="isFiltersOpen" id="stock-filters" class="w-full rounded-xl border border-accented bg-default p-3 sm:p-4 xl:hidden">
         <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
-          <div class="flex items-center gap-x-2">
+          <div class="flex w-full flex-col items-start gap-2">
             <p class="text-[13px] font-medium text-muted">URUTKAN</p>
 
-            <div class="flex">
+            <div class="flex w-full max-w-full">
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-a-z'
                 : 'i-lucide-arrow-down-z-a'
-                " variant="outline" class="rounded-tr-none rounded-br-none" :active="sortField === 'ticker'" active-variant="solid"
-                @click="toggleSort('ticker')" />
+                " variant="outline" class="shrink-0 rounded-tr-none rounded-br-none" :ui="{ label: 'max-[400px]:text-[11px]' }"
+                :active="sortField === 'ticker'" active-variant="solid" @click="toggleSort('ticker')" />
 
               <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-none" :active="sortField === 'freeFloat'" active-variant="solid"
-                @click="toggleSort('freeFloat')" />
+                " variant="outline" class="shrink-0 rounded-none" :ui="{ label: 'max-[400px]:text-[11px]' }" :active="sortField === 'freeFloat'"
+                active-variant="solid" @click="toggleSort('freeFloat')" />
 
               <UButton label="Jumlah Investor" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
                 ? 'i-lucide-arrow-up-0-1'
                 : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'" active-variant="solid"
-                @click="toggleSort('stockCount')" />
+                " variant="outline" class="shrink-0 rounded-tl-none rounded-bl-none" :ui="{ label: 'max-[400px]:text-[11px]' }"
+                :active="sortField === 'stockCount'" active-variant="solid" @click="toggleSort('stockCount')" />
             </div>
           </div>
         </div>
 
-        <div class="mt-4 flex justify-end border-t border-accented pt-3">
+        <div class="mt-4 flex justify-start border-t border-accented pt-3">
           <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="ghost" @click="resetFilter" />
         </div>
       </section>
