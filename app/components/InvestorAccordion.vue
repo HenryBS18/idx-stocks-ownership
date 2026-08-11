@@ -149,7 +149,7 @@ onMounted(() => {
                 class="w-fit shrink-0 text-[11px] sm:text-xs xl:text-sm" />
               <UBadge v-if="investor.investorType" :label="investor.investorType" color="error" variant="soft"
                 class="min-w-0 max-w-32 shrink truncate text-[11px] sm:max-w-40 sm:text-xs md:max-w-56 xl:max-w-72 xl:text-sm" />
-              <UBadge v-if="investor.localForeign" :label="investor.localForeign" color="primary" variant="soft"
+              <UBadge v-if="investor.localForeign?.trim()" :label="investor.localForeign.trim()" color="primary" variant="soft"
                 class="w-fit shrink-0 text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
