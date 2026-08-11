@@ -126,9 +126,9 @@ definePageMeta({
               <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
-            <USeparator v-if="showStockAccordion && stockCount !== 0" orientation="vertical" color="primary" class="h-6" />
+            <USeparator v-if="showStockAccordion" orientation="vertical" color="primary" class="h-6" />
 
-            <p v-if="showStockAccordion && stockCount !== 0" class="text-[13px] md:text-sm text-muted text-nowrap">{{ stockCount.toLocaleString() }}
+            <p v-if="showStockAccordion" class="text-[13px] md:text-sm text-muted text-nowrap">{{ stockCount.toLocaleString() }}
               emiten
             </p>
           </div>
@@ -173,7 +173,7 @@ definePageMeta({
         </div>
       </section>
 
-      <p v-if="showStockAccordion && stockCount !== 0" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
+      <p v-if="showStockAccordion" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
         {{ stockCount.toLocaleString() }} emiten
       </p>
     </div>
@@ -188,7 +188,9 @@ definePageMeta({
       <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'"
         :on-retry="error ? handleStockRetry : handleDateRetry" />
 
-      <SahamAccordion v-else />
+      <SahamAccordion v-else-if="stockCount > 0" />
+
+      <EmptyCard v-else message="Tidak ada emiten yang cocok dengan pencarian atau filter saat ini." :on-reset="resetFilter" />
     </div>
   </main>
 </template>

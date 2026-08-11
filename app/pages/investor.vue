@@ -182,9 +182,9 @@ definePageMeta({
               <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
-            <USeparator v-if="showInvestorsAccordion && investorCount != 0" class="h-6" orientation="vertical" color="primary" />
+            <USeparator v-if="showInvestorsAccordion" class="h-6" orientation="vertical" color="primary" />
 
-            <p v-if="showInvestorsAccordion && investorCount != 0" class="text-[13px] md:text-sm text-muted text-nowrap">{{
+            <p v-if="showInvestorsAccordion" class="text-[13px] md:text-sm text-muted text-nowrap">{{
               investorCount.toLocaleString()
             }} investor</p>
           </div>
@@ -238,7 +238,7 @@ definePageMeta({
         </div>
       </section>
 
-      <p v-if="showInvestorsAccordion && investorCount !== 0" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
+      <p v-if="showInvestorsAccordion" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
         {{ investorCount.toLocaleString() }} investor
       </p>
     </div>
@@ -253,7 +253,9 @@ definePageMeta({
       <ErrorCard v-else-if="error || dateError" :message="error ? errorMessage : 'Gagal terhubung ke server. Silakan muat ulang halaman.'"
         :on-retry="error ? handleInvestorRetry : handleDateRetry" />
 
-      <InvestorAccordion v-else />
+      <InvestorAccordion v-else-if="investorCount > 0" />
+
+      <EmptyCard v-else message="Tidak ada investor yang cocok dengan pencarian atau filter saat ini." :on-reset="resetFilter" />
     </div>
   </main>
 </template>
