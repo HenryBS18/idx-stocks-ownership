@@ -145,19 +145,21 @@ onMounted(() => {
               'flex min-w-0 flex-nowrap gap-x-2',
               'sm:gap-x-3'
             )">
-              <UBadge :label="`${investor.stockCount} saham`" color="secondary" variant="soft"
-                class="w-fit shrink-0 text-[11px] sm:text-xs xl:text-sm" />
-              <UBadge v-if="investor.investorType" :label="investor.investorType" color="error" variant="soft"
-                class="min-w-0 max-w-32 shrink truncate text-[11px] sm:max-w-40 sm:text-xs md:max-w-56 xl:max-w-72 xl:text-sm" />
-              <UBadge v-if="investor.localForeign?.trim()" :label="investor.localForeign.trim()" color="primary" variant="soft"
-                class="w-fit shrink-0 text-[11px] sm:text-xs xl:text-sm" />
+              <UBadge :label="`${investor.stockCount} saham`" color="neutral" variant="soft"
+                class="w-fit shrink-0 text-[11px]  sm:text-xs xl:text-sm" />
+              <UBadge v-if="investor.investorType" :label="investor.investorType" color="secondary" variant="soft"
+                class="min-w-0 max-w-32 shrink truncate text-[11px]  sm:max-w-40 sm:text-xs md:max-w-56 xl:max-w-72 xl:text-sm" />
+              <UBadge v-if="investor.localForeign?.trim()" :label="investor.localForeign.trim()"
+                :color="investor.localForeign.trim() === 'D' ? 'primary' : 'error'" variant="soft"
+                class="w-fit shrink-0 text-[11px] font-bold sm:text-xs xl:text-sm" />
             </div>
           </div>
 
           <div class="flex items-center gap-x-3">
             <p :class="cn(
-              'text-xs text-muted text-end',
-              'sm:text-sm'
+              'text-[10px] text-muted text-end',
+              'sm:text-xs',
+              'xl:text-sm'
             )">
               {{ investor.domicile }}
             </p>

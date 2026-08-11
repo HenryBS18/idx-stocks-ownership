@@ -41,7 +41,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
       const badges = []
 
       if (investorType) {
-        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'text-[9px] h-auto py-1 font-bold' },
+        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'text-[9px] h-auto py-1' },
           h('span', investorType)
         ))
       }
