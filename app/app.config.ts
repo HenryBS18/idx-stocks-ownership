@@ -47,10 +47,11 @@ export default defineAppConfig({
     },
     table: {
       slots: {
-        thead: 'bg-gray-100',
-        tr: 'hover:bg-gray-100',
-        th: 'text-xs md:text-sm font-semibold text-gray-700 max-sm:py-2',
-        td: 'text-xs md:text-sm text-gray-700',
+        thead: 'bg-muted',
+        tbody: 'divide-y divide-accented',
+        tr: 'hover:bg-elevated',
+        th: 'text-xs md:text-sm font-semibold text-muted max-sm:py-2',
+        td: 'text-xs md:text-sm text-default',
       }
     }
   },

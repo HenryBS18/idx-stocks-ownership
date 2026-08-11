@@ -124,9 +124,9 @@ onMounted(() => {
 <template>
   <UScrollArea ref="el" class="h-[calc(100vh-224px)] pb-4 pr-4 lg:pr-6">
     <div class="space-y-4 ml-4 lg:ml-8">
-      <article v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-white border border-gray-200 shadow-md rounded-xl">
+      <article v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-default border border-accented shadow-md rounded-xl">
         <div :class="cn(
-          'flex items-center justify-between px-2.5 py-3 cursor-pointer hover:bg-gray-100 w-full gap-x-3',
+          'flex items-center justify-between px-2.5 py-3 cursor-pointer hover:bg-elevated w-full gap-x-3',
           'sm:p-4'
         )" @click="toggle(i)">
           <div :class="cn(
@@ -134,7 +134,7 @@ onMounted(() => {
             'sm:flex-1 sm:flex-row sm:items-center sm:gap-x-3 sm:gap-y-0 sm:min-w-0'
           )">
             <h2 :class="cn(
-              'min-w-0 font-semibold text-xs text-gray-800 truncate',
+              'min-w-0 font-semibold text-xs text-highlighted truncate',
               'sm:text-sm',
               'xl:text-base'
             )">
@@ -156,7 +156,7 @@ onMounted(() => {
 
           <div class="flex items-center gap-x-3">
             <p :class="cn(
-              'text-xs text-gray-600 text-end',
+              'text-xs text-muted text-end',
               'sm:text-sm'
             )">
               {{ investor.domicile }}
@@ -166,7 +166,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div v-if="open.includes(i)" class="border-t border-gray-200">
+        <div v-if="open.includes(i)" class="border-t border-accented">
           <UTable :data="investor.stocks" :columns="stockColumns" />
         </div>
       </article>

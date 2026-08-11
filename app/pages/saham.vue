@@ -84,7 +84,7 @@ definePageMeta({
             aria-controls="stock-filters" @click="isFiltersOpen = !isFiltersOpen" />
 
           <div v-if="!dateError" class="flex items-center gap-x-2">
-            <p class="text-[13px] font-medium text-gray-600 text-nowrap">DATA PER</p>
+            <p class="text-[13px] font-medium text-muted text-nowrap">DATA PER</p>
 
             <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
           </div>
@@ -94,7 +94,7 @@ definePageMeta({
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
           <div class="flex items-center gap-x-2">
-            <p class="text-[13px] md:text-sm font-medium text-gray-600">URUTKAN</p>
+            <p class="text-[13px] md:text-sm font-medium text-muted">URUTKAN</p>
 
             <div class="flex">
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
@@ -121,14 +121,14 @@ definePageMeta({
 
           <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
-              <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">RESET FILTER</p>
+              <p class="text-[13px] md:text-sm font-medium text-muted text-nowrap">RESET FILTER</p>
 
               <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
             <USeparator v-if="showStockAccordion && stockCount !== 0" orientation="vertical" color="primary" class="h-6" />
 
-            <p v-if="showStockAccordion && stockCount !== 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ stockCount.toLocaleString() }}
+            <p v-if="showStockAccordion && stockCount !== 0" class="text-[13px] md:text-sm text-muted text-nowrap">{{ stockCount.toLocaleString() }}
               emiten
             </p>
           </div>
@@ -136,15 +136,15 @@ definePageMeta({
       </div>
 
       <div v-if="!dateError" class="hidden items-center gap-x-2 xl:flex">
-        <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">DATA PER</p>
+        <p class="text-[13px] md:text-sm font-medium text-muted text-nowrap">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
       </div>
 
-      <section v-if="isFiltersOpen" id="stock-filters" class="w-full rounded-xl border border-gray-200 bg-white p-3 sm:p-4 xl:hidden">
+      <section v-if="isFiltersOpen" id="stock-filters" class="w-full rounded-xl border border-accented bg-default p-3 sm:p-4 xl:hidden">
         <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
           <div class="flex items-center gap-x-2">
-            <p class="text-[13px] font-medium text-gray-600">URUTKAN</p>
+            <p class="text-[13px] font-medium text-muted">URUTKAN</p>
 
             <div class="flex">
               <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
@@ -168,12 +168,12 @@ definePageMeta({
           </div>
         </div>
 
-        <div class="mt-4 flex justify-end border-t border-gray-200 pt-3">
+        <div class="mt-4 flex justify-end border-t border-accented pt-3">
           <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="ghost" @click="resetFilter" />
         </div>
       </section>
 
-      <p v-if="showStockAccordion && stockCount !== 0" class="self-start text-[13px] text-gray-600 text-nowrap xl:hidden">
+      <p v-if="showStockAccordion && stockCount !== 0" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
         {{ stockCount.toLocaleString() }} emiten
       </p>
     </div>

@@ -162,9 +162,9 @@ onMounted(() => {
 <template>
   <UScrollArea ref="el" class="h-[calc(100vh-224px)] pb-4 pr-4 lg:pr-6">
     <div class="space-y-4 ml-4 lg:ml-8">
-      <article v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-white border border-gray-200 shadow-md rounded-xl">
+      <article v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-default border border-accented shadow-md rounded-xl">
         <div :class="cn(
-          'w-full flex items-center justify-between gap-x-3 px-2.5 py-3 cursor-pointer hover:bg-gray-100',
+          'w-full flex items-center justify-between gap-x-3 px-2.5 py-3 cursor-pointer hover:bg-elevated',
           'sm:p-4'
         )" @click="toggle(i)">
           <div :class="cn(
@@ -178,7 +178,7 @@ onMounted(() => {
               <UBadge :label="stock.ticker" />
 
               <h2 :class="cn(
-                'min-w-0 flex-1 text-xs font-semibold text-gray-800 truncate',
+                'min-w-0 flex-1 text-xs font-semibold text-highlighted truncate',
                 'sm:text-sm',
                 'xl:text-base'
               )">
@@ -198,7 +198,7 @@ onMounted(() => {
           <UIcon name="i-lucide-chevron-down" class="transition-transform shrink-0" :class="{ 'rotate-180': open.includes(i) }" />
         </div>
 
-        <div v-if="open.includes(i)" class="border-t border-gray-200">
+        <div v-if="open.includes(i)" class="border-t border-accented">
           <UTable :data="stock.investors" :columns="investorColumns" />
         </div>
       </article>

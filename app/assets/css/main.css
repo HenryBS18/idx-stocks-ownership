@@ -2,7 +2,8 @@
 @import "@nuxt/ui";
 
 body {
-  background-color: white
+  background-color: var(--ui-bg);
+  color: var(--ui-text);
 }
 
 input::placeholder {
