@@ -176,11 +176,7 @@ definePageMeta({
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
           <div class="flex items-center gap-x-4">
-            <div class="flex items-center gap-x-2">
-              <p class="text-[13px] md:text-sm font-medium text-muted text-nowrap">RESET FILTER</p>
-
-              <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
-            </div>
+            <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="outline" @click="resetFilter" />
 
             <USeparator v-if="showInvestorsAccordion" class="h-6" orientation="vertical" color="primary" />
 
@@ -234,7 +230,7 @@ definePageMeta({
         </div>
 
         <div class="mt-4 flex border-t border-accented pt-3">
-          <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="ghost" @click="resetFilter" />
+          <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="outline" @click="resetFilter" />
         </div>
       </section>
 
