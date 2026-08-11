@@ -190,8 +190,8 @@ onMounted(() => {
               'flex gap-x-2 gap-y-1.5',
               'sm:gap-x-3 sm:gap-y-0'
             )">
+              <UBadge :label="`${stock.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
               <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
-              <UBadge :label="`${stock.investorCount} Investor >1%`" color="error" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
 
