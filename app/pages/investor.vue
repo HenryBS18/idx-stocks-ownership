@@ -118,14 +118,16 @@ definePageMeta({
           </template>
         </UInput>
 
-        <div class="flex items-center justify-between gap-x-3 xl:hidden">
+        <div class="flex items-center justify-between gap-x-3 max-[360px]:gap-x-0 xl:hidden">
           <UButton :label="filterButtonLabel" icon="i-lucide-list-filter" variant="outline" color="neutral" :aria-expanded="isFiltersOpen"
-            aria-controls="investor-filters" @click="isFiltersOpen = !isFiltersOpen" />
+            aria-controls="investor-filters" :ui="{ leadingIcon: 'max-[360px]:size-3', label: 'max-[360px]:text-xs' }"
+            @click="isFiltersOpen = !isFiltersOpen" />
 
           <div v-if="!dateError" class="flex items-center gap-x-2">
-            <p class="text-[13px] font-medium text-muted text-nowrap">DATA PER</p>
+            <p class="text-[13px] font-medium text-muted text-nowrap max-[360px]:text-xs">DATA PER</p>
 
-            <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
+            <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300"
+              :ui="{ content: 'min-w-fit mr-6', value: 'max-[360px]:text-xs' }" />
           </div>
         </div>
 
