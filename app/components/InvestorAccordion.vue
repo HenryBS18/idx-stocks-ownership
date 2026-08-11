@@ -168,9 +168,16 @@ onMounted(() => {
           </div>
         </button>
 
-        <div v-if="open.includes(i)" :id="`investor-accordion-panel-${i}`" class="border-t border-accented">
-          <UTable :data="investor.stocks" :columns="stockColumns" />
-        </div>
+        <Transition enter-active-class="grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none"
+          enter-from-class="grid-rows-[0fr]" enter-to-class="grid-rows-[1fr]"
+          leave-active-class="grid transition-[grid-template-rows] duration-250 ease-in motion-reduce:transition-none"
+          leave-from-class="grid-rows-[1fr]" leave-to-class="grid-rows-[0fr]">
+          <div v-if="open.includes(i)" :id="`investor-accordion-panel-${i}`" class="grid border-t border-accented">
+            <div class="min-h-0 overflow-hidden">
+              <UTable :data="investor.stocks" :columns="stockColumns" />
+            </div>
+          </div>
+        </Transition>
       </article>
     </div>
   </UScrollArea>
