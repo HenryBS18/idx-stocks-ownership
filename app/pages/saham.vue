@@ -9,6 +9,14 @@ const { search, showStockAccordion, sortField, sortOrder, stockCount, fetchedDat
 const { error: dateError } = storeToRefs(dateStore)
 const { fetchStocks, resetFilter, toggleSort, clearError } = stockStore
 
+const isFiltersOpen = ref(false)
+
+const activeFilterCount = computed(() => {
+  return sortField.value !== 'ticker' || sortOrder.value !== 'asc' ? 1 : 0
+})
+
+const filterButtonLabel = computed(() => activeFilterCount.value > 0 ? `Filter (${activeFilterCount.value})` : 'Filter')
+
 const token = useCookie('token')
 
 const handleStockRetry = () => {
@@ -55,32 +63,37 @@ definePageMeta({
     <h1 class="sr-only">Daftar Saham Indonesia &amp; Kepemilikan Investor (IDX)</h1>
     <div :class="cn(
       'w-full flex flex-col gap-y-3 px-4',
-      'lg:w-auto lg:justify-between lg:pl-8 lg:pr-8',
-      'xl:flex-row xl:gap-y-0'
+      'xl:flex-row xl:flex-wrap xl:justify-between lg:pl-8 lg:pr-8',
+      '2xl:gap-y-0'
     )">
       <div :class="cn(
         'w-full flex flex-col gap-y-3',
-        'lg:w-auto lg:flex-row lg:gap-x-4 lg:gap-y-0'
+        'xl:w-fit xl:flex-row xl:gap-x-4 xl:gap-y-0'
       )">
         <UInput v-model="search" icon="i-lucide-search" placeholder="Cari kode saham, emiten..." :ui="{ trailing: 'pe-1', base: 'pr-8' }" :class="cn(
           'w-full',
-          'lg:w-fit'
+          'xl:w-fit'
         )">
           <template v-if="search?.length" #trailing>
             <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" aria-label="Clear input" @click="void (search = '')" />
           </template>
         </UInput>
 
-        <div :class="cn(
-          'flex flex-col items-start gap-y-3',
-          'md:flex-row md:items-center md:gap-x-4 md:gap-y-0'
-        )">
+        <div class="flex items-center justify-between gap-x-3 xl:hidden">
+          <UButton :label="filterButtonLabel" icon="i-lucide-list-filter" variant="outline" color="neutral" :aria-expanded="isFiltersOpen"
+            aria-controls="stock-filters" @click="isFiltersOpen = !isFiltersOpen" />
+
+          <div v-if="!dateError" class="flex items-center gap-x-2">
+            <p class="text-[13px] font-medium text-gray-600 text-nowrap">DATA PER</p>
+
+            <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
+          </div>
+        </div>
+
+        <div class="hidden xl:flex xl:items-center xl:gap-x-4">
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
-          <div :class="cn(
-            'flex flex-col gap-y-1',
-            'md:flex-row md:items-center md:gap-x-2 md:gap-y-0'
-          )">
+          <div class="flex items-center gap-x-2">
             <p class="text-[13px] md:text-sm font-medium text-gray-600">URUTKAN</p>
 
             <div class="flex">
@@ -104,7 +117,7 @@ definePageMeta({
             </div>
           </div>
 
-          <USeparator orientation="vertical" color="primary" class="hidden h-6 md:inline" />
+          <USeparator orientation="vertical" color="primary" class="hidden h-6 xl:inline" />
 
           <div class="flex items-center gap-x-4">
             <div class="flex items-center gap-x-2">
@@ -113,20 +126,56 @@ definePageMeta({
               <UButton icon="i-lucide-rotate-ccw" :ui="{ leadingIcon: 'size-5' }" @click="resetFilter" />
             </div>
 
-            <USeparator v-if="showStockAccordion && stockCount != 0" orientation="vertical" color="primary" class="h-6" />
+            <USeparator v-if="showStockAccordion && stockCount !== 0" orientation="vertical" color="primary" class="h-6" />
 
-            <p v-if="showStockAccordion && stockCount != 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ stockCount.toLocaleString() }}
+            <p v-if="showStockAccordion && stockCount !== 0" class="text-[13px] md:text-sm text-gray-600 text-nowrap">{{ stockCount.toLocaleString() }}
               emiten
             </p>
           </div>
         </div>
       </div>
 
-      <div v-if="!dateError" class="flex items-center gap-x-2">
+      <div v-if="!dateError" class="hidden items-center gap-x-2 xl:flex">
         <p class="text-[13px] md:text-sm font-medium text-gray-600 text-nowrap">DATA PER</p>
 
         <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
       </div>
+
+      <section v-if="isFiltersOpen" id="stock-filters" class="w-full rounded-xl border border-gray-200 bg-white p-3 sm:p-4 xl:hidden">
+        <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
+          <div class="flex items-center gap-x-2">
+            <p class="text-[13px] font-medium text-gray-600">URUTKAN</p>
+
+            <div class="flex">
+              <UButton label="Ticker" :trailing-icon="sortField === 'ticker' && sortOrder === 'asc'
+                ? 'i-lucide-arrow-up-a-z'
+                : 'i-lucide-arrow-down-z-a'
+                " variant="outline" class="rounded-tr-none rounded-br-none" :active="sortField === 'ticker'" active-variant="solid"
+                @click="toggleSort('ticker')" />
+
+              <UButton label="Free Float (%)" :trailing-icon="sortField === 'freeFloat' && sortOrder === 'asc'
+                ? 'i-lucide-arrow-up-0-1'
+                : 'i-lucide-arrow-down-1-0'
+                " variant="outline" class="rounded-none" :active="sortField === 'freeFloat'" active-variant="solid"
+                @click="toggleSort('freeFloat')" />
+
+              <UButton label="Jumlah Investor" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
+                ? 'i-lucide-arrow-up-0-1'
+                : 'i-lucide-arrow-down-1-0'
+                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'" active-variant="solid"
+                @click="toggleSort('stockCount')" />
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex justify-end border-t border-gray-200 pt-3">
+          <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="ghost" @click="resetFilter" />
+        </div>
+      </section>
+
+      <p v-if="showStockAccordion && stockCount !== 0" class="self-start text-[13px] text-gray-600 text-nowrap xl:hidden">
+        {{ stockCount.toLocaleString() }} emiten
+      </p>
     </div>
 
     <div class="mt-4 md:mt-8">
