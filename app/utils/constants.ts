@@ -1,7 +1,7 @@
 export const investorOrigin: string[] = [
   'Semua',
-  'Asing',
-  'Lokal'
+  'Asing (F)',
+  'Lokal (D)'
 ]
 
 export const investorType: string[] = [

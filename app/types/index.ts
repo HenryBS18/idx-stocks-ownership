@@ -4,4 +4,4 @@ export type InvestorSortField = 'name' | 'stockCount'
 
 export type Sort = 'asc' | 'desc'
 
-export type InvestorOrigin = 'Semua' | 'Asing' | 'Lokal'
+export type InvestorOrigin = 'Semua' | 'Asing (F)' | 'Lokal (D)'
