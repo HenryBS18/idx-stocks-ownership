@@ -126,7 +126,7 @@ definePageMeta({
           <div v-if="!dateError" class="flex items-center gap-x-2">
             <p class="text-[13px] font-medium text-muted text-nowrap max-[360px]:text-xs">DATA PER</p>
 
-            <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300"
+            <USelect v-model="selectedDate" :items="dates" aria-label="Data per" class="focus:ring focus:ring-gray-300"
               :ui="{ content: 'min-w-fit mr-6', value: 'max-[360px]:text-xs' }" />
           </div>
         </div>
@@ -190,7 +190,8 @@ definePageMeta({
       <div v-if="!dateError" class="hidden items-center gap-x-2 xl:flex">
         <p class="text-[13px] md:text-sm font-medium text-muted text-nowrap">DATA PER</p>
 
-        <USelect v-model="selectedDate" :items="dates" class="focus:ring focus:ring-gray-300" :ui="{ content: 'min-w-fit mr-6' }" />
+        <USelect v-model="selectedDate" :items="dates" aria-label="Data per" class="focus:ring focus:ring-gray-300"
+          :ui="{ content: 'min-w-fit mr-6' }" />
       </div>
 
       <section v-if="isFiltersOpen" id="investor-filters" class="w-full rounded-xl border border-accented bg-default p-3 sm:p-4 xl:hidden">

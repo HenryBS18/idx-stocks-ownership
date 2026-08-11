@@ -125,8 +125,8 @@ onMounted(() => {
   <UScrollArea ref="el" class="h-[calc(100vh-224px)] pb-4 pr-4 lg:pr-6">
     <div class="space-y-4 ml-4 lg:ml-8">
       <article v-for="(investor, i) in visibleInvestors" :key="investor.investorName" class="bg-default border border-accented shadow-md rounded-xl">
-        <div :class="cn(
-          'flex items-center justify-between px-2.5 py-3 cursor-pointer hover:bg-elevated w-full gap-x-3',
+        <button type="button" :aria-expanded="open.includes(i)" :aria-controls="`investor-accordion-panel-${i}`" :class="cn(
+          'flex items-center justify-between px-2.5 py-3 cursor-pointer text-start hover:bg-elevated w-full gap-x-3',
           'sm:p-4'
         )" @click="toggle(i)">
           <div :class="cn(
@@ -166,9 +166,9 @@ onMounted(() => {
 
             <UIcon name="i-lucide-chevron-down" class="transition-transform shrink-0" :class="{ 'rotate-180': open.includes(i) }" />
           </div>
-        </div>
+        </button>
 
-        <div v-if="open.includes(i)" class="border-t border-accented">
+        <div v-if="open.includes(i)" :id="`investor-accordion-panel-${i}`" class="border-t border-accented">
           <UTable :data="investor.stocks" :columns="stockColumns" />
         </div>
       </article>
