@@ -194,46 +194,53 @@ definePageMeta({
           :ui="{ content: 'min-w-fit mr-6' }" />
       </div>
 
-      <section v-if="isFiltersOpen" id="investor-filters" class="w-full rounded-xl border border-accented bg-default p-3 sm:p-4 xl:hidden">
-        <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
-          <div class="flex items-center gap-x-2">
-            <p class="text-[13px] font-medium text-muted">ASAL</p>
+      <Transition enter-active-class="grid transition-[grid-template-rows] duration-250 ease-out motion-reduce:transition-none"
+        enter-from-class="grid-rows-[0fr]" enter-to-class="grid-rows-[1fr]"
+        leave-active-class="grid transition-[grid-template-rows] duration-200 ease-in motion-reduce:transition-none"
+        leave-from-class="grid-rows-[1fr]" leave-to-class="grid-rows-[0fr]">
+        <div v-if="isFiltersOpen" class="grid">
+          <section id="investor-filters" class="min-h-0 overflow-hidden w-full rounded-xl border border-accented bg-default p-3 sm:p-4 xl:hidden">
+            <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
+              <div class="flex items-center gap-x-2">
+                <p class="text-[13px] font-medium text-muted">ASAL</p>
 
-            <USelect v-model="selectedInvestorOrigin" :items="investorOrigin" class="focus:ring focus:ring-gray-300" />
-          </div>
+                <USelect v-model="selectedInvestorOrigin" :items="investorOrigin" class="focus:ring focus:ring-gray-300" />
+              </div>
 
-          <div class="flex items-center gap-x-2">
-            <p class="text-[13px] font-medium text-muted">TIPE</p>
+              <div class="flex items-center gap-x-2">
+                <p class="text-[13px] font-medium text-muted">TIPE</p>
 
-            <UDropdownMenu :items="investorTypeItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
-              <UButton :label="selectedInvestorTypes.includes('Semua') ? 'Semua' : `${selectedInvestorTypes.length} dipilih`" variant="outline"
-                color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-medium' }" />
-            </UDropdownMenu>
-          </div>
+                <UDropdownMenu :items="investorTypeItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
+                  <UButton :label="selectedInvestorTypes.includes('Semua') ? 'Semua' : `${selectedInvestorTypes.length} dipilih`" variant="outline"
+                    color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-medium' }" />
+                </UDropdownMenu>
+              </div>
 
-          <div class="flex items-center gap-x-2">
-            <p class="text-[13px] font-medium text-muted">URUTKAN</p>
+              <div class="flex items-center gap-x-2">
+                <p class="text-[13px] font-medium text-muted">URUTKAN</p>
 
-            <div class="flex">
-              <UButton label="Nama" :trailing-icon="sortField === 'name' && sortOrder === 'asc'
-                ? 'i-lucide-arrow-up-a-z'
-                : 'i-lucide-arrow-down-z-a'
-                " variant="outline" class="rounded-tr-none rounded-br-none" :active="sortField === 'name'" active-variant="solid"
-                @click="toggleSort('name')" />
+                <div class="flex">
+                  <UButton label="Nama" :trailing-icon="sortField === 'name' && sortOrder === 'asc'
+                    ? 'i-lucide-arrow-up-a-z'
+                    : 'i-lucide-arrow-down-z-a'
+                    " variant="outline" class="rounded-tr-none rounded-br-none" :active="sortField === 'name'" active-variant="solid"
+                    @click="toggleSort('name')" />
 
-              <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
-                ? 'i-lucide-arrow-up-0-1'
-                : 'i-lucide-arrow-down-1-0'
-                " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'" active-variant="solid"
-                @click="toggleSort('stockCount')" />
+                  <UButton label="Jumlah Saham" :trailing-icon="sortField === 'stockCount' && sortOrder === 'asc'
+                    ? 'i-lucide-arrow-up-0-1'
+                    : 'i-lucide-arrow-down-1-0'
+                    " variant="outline" class="rounded-tl-none rounded-bl-none" :active="sortField === 'stockCount'" active-variant="solid"
+                    @click="toggleSort('stockCount')" />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="mt-4 flex border-t border-accented pt-3">
-          <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="outline" @click="resetFilter" />
+            <div class="mt-4 flex border-t border-accented pt-3">
+              <UButton label="Reset filter" icon="i-lucide-rotate-ccw" color="neutral" variant="outline" @click="resetFilter" />
+            </div>
+          </section>
         </div>
-      </section>
+      </Transition>
 
       <p v-if="showInvestorsAccordion" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
         {{ investorCount.toLocaleString() }} investor
