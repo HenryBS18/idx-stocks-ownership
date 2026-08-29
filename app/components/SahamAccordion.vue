@@ -164,7 +164,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <UScrollArea ref="el" class="h-[calc(100vh-224px)] pb-4 pr-4 lg:pr-6">
+  <UScrollArea ref="el" class="h-[calc(100vh-266px)] sm:h-[calc(100vh-252px)] pb-4 pr-4 lg:pr-6">
     <div class="space-y-4 ml-4 lg:ml-8">
       <article v-for="(stock, i) in visibleStocks" :key="stock.ticker" class="bg-default border border-accented shadow-md rounded-xl">
         <button type="button" :aria-expanded="open.includes(i)" :aria-controls="`stock-accordion-panel-${i}`" :class="cn(

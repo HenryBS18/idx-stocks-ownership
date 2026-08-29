@@ -1,3 +1,5 @@
+export const IDX_SOURCE_URL = 'https://www.idx.co.id/id/perusahaan-tercatat/data-kepemilikan-saham'
+
 export const investorOrigin: string[] = [
   'Semua',
   'Asing (F)',
