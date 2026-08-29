@@ -192,7 +192,7 @@ definePageMeta({
       <DataSourceNote v-if="!error && !dateError" class="w-full 2xl:mt-3" />
     </div>
 
-    <div class="mt-4 md:mt-4">
+    <div class="mt-4 md:mt-8">
       <UScrollArea v-if="!showStockAccordion && !error && !dateError" class="h-[calc(100vh-266px)] sm:h-[calc(100vh-252px)] pr-4">
         <div class="space-y-4">
           <USkeleton class="w-full h-16 rounded-lg" v-for="i in 20" :key="i" />
