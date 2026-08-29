@@ -1,3 +1,5 @@
+import { motionDirectives } from './motion.config'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -13,6 +15,11 @@ export default defineNuxtConfig({
   },
   modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxtjs/color-mode', '@nuxtjs/sitemap', '@vite-pwa/nuxt', '@vueuse/motion'],
   css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    public: {
+      motion: { directives: motionDirectives },
+    },
+  },
   site: {
     url: 'https://idx-stocks-ownership.vercel.app',
     name: 'IDX Stocks Ownership',
