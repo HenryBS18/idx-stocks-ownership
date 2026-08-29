@@ -70,9 +70,11 @@ const token = useCookie('token')
 
 const route = useRoute()
 
+const siteConfig = useSiteConfig()
+
 useHead({
   link: [
-    { rel: 'canonical', href: `https://idx-stocks-ownership.vercel.app${route.path}` },
+    { rel: 'canonical', key: 'canonical', href: `${siteConfig.url}${route.path}` },
   ],
 })
 
@@ -89,7 +91,7 @@ useSeoMeta({
   description: 'Lihat data lengkap investor saham di Bursa Efek Indonesia (IDX), termasuk asal (lokal/asing), tipe investor, dan portofolio kepemilikan saham. Filter berdasarkan tipe dan asal investor.',
   ogTitle: 'Data Investor Saham Indonesia (IDX) - Kepemilikan & Distribusi Investor',
   ogDescription: 'Lihat data investor saham Indonesia di IDX berdasarkan tipe, asal, dan portofolio kepemilikan.',
-  ogUrl: 'https://idx-stocks-ownership.vercel.app/investor',
+  ogUrl: `${siteConfig.url}/investor`,
 })
 
 definePageMeta({

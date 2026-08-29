@@ -38,9 +38,11 @@ if (landingQuery) {
   searchDebounced.value = landingQuery
 }
 
+const siteConfig = useSiteConfig()
+
 useHead({
   link: [
-    { rel: 'canonical', href: `https://idx-stocks-ownership.vercel.app${route.path}` },
+    { rel: 'canonical', key: 'canonical', href: `${siteConfig.url}${route.path}` },
   ],
 })
 
@@ -57,7 +59,7 @@ useSeoMeta({
   description: 'Cek daftar saham Indonesia di BEI lengkap dengan data free float, jumlah investor, dan distribusi kepemilikan. Filter dan urutkan emiten berdasarkan ticker, free float, atau jumlah investor.',
   ogTitle: 'Daftar Saham Indonesia & Kepemilikan Investor (IDX)',
   ogDescription: 'Cek daftar saham Indonesia di BEI dengan data free float dan distribusi kepemilikan investor.',
-  ogUrl: 'https://idx-stocks-ownership.vercel.app/saham',
+  ogUrl: `${siteConfig.url}/saham`,
 })
 
 definePageMeta({

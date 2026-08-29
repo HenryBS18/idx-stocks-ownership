@@ -25,6 +25,14 @@ export default defineNuxtConfig({
     name: 'IDX Stocks Ownership',
     defaultLocale: 'id-ID',
   },
+  sitemap: {
+    autoLastmod: true,
+    exclude: ['/api/**'],
+    defaults: {
+      changefreq: 'monthly',
+      priority: 0.8,
+    },
+  },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'node-server',
     storage: {

@@ -3,12 +3,9 @@ import { IDX_SOURCE_URL } from '~/utils/constants'
 
 type TickerName = { ticker: string, name: string }
 
-const dateStore = useDateStore()
-const { dates, error: batchError } = storeToRefs(dateStore)
+const { data: landing, status: landingStatus } = useFetch<LandingTeaser>('/api/landing')
 
-const latestBatch = computed(() => dates.value[0]?.label ?? '')
-
-const { data: landing, status: landingStatus } = useFetch<LandingTeaser>('/api/landing', { lazy: true })
+const latestBatch = computed(() => landing.value?.batchLabel ?? '')
 
 const emitenCount = computed(() => landing.value?.emitenCount || null)
 
@@ -30,24 +27,6 @@ const selectedTicker = ref<TickerName | undefined>()
 watch(selectedTicker, (item) => {
   if (item) navigateTo({ path: '/saham', query: { q: item.ticker } })
 })
-
-const retrying = ref(false)
-
-const retryBatch = async () => {
-  if (retrying.value) return
-  retrying.value = true
-
-  try {
-    const token = useCookie('token')
-    const tokenResponse = await $fetch<{ token: string }>('/api/token')
-    token.value = tokenResponse.token
-
-    await dateStore.fetchDates(tokenResponse.token)
-  } catch {
-  } finally {
-    retrying.value = false
-  }
-}
 
 const FALLBACK = {
   ticker: 'BBCA',
@@ -93,16 +72,61 @@ const hiddenInvestorCount = computed(() =>
 
 const ownershipTotal = computed(() => (sample.value.float + sample.value.freeFloat).toFixed(2))
 
+const siteConfig = useSiteConfig()
+
 useSeoMeta({
-  title: 'Data Kepemilikan Saham Indonesia (IDX/BEI) | IDX Stocks Ownership',
-  description: 'Lihat siapa pemilik setiap saham di Bursa Efek Indonesia — data resmi bulanan IDX: setiap investor, free float, asal lokal/asing, dan perubahan antar bulan. Gratis, tanpa akun.',
+  title: 'Data Kepemilikan Saham & Free Float Emiten BEI (IDX)',
+  description: 'Data kepemilikan saham dan free float seluruh emiten BEI dari pengumuman resmi bulanan IDX — setiap investor, asal lokal/asing, dan perubahan tiap bulan. Gratis.',
   ogTitle: 'Siapa pemilik saham di Bursa? | IDX Stocks Ownership',
   ogDescription: 'Data kepemilikan resmi dari pengumuman bulanan IDX/BEI — setiap investor, setiap free float, lengkap dan terbuka.',
-  ogUrl: 'https://idx-stocks-ownership.vercel.app',
+  ogUrl: siteConfig.url,
 })
 
-definePageMeta({
-  middleware: ['auth']
+useHead({
+  link: [
+    { rel: 'canonical', key: 'canonical', href: siteConfig.url },
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            '@id': `${siteConfig.url}/#website`,
+            name: siteConfig.name,
+            url: siteConfig.url,
+            inLanguage: 'id-ID',
+          },
+          {
+            '@type': 'Dataset',
+            '@id': `${siteConfig.url}/#dataset`,
+            name: 'Data Kepemilikan Saham dan Free Float Emiten Bursa Efek Indonesia',
+            description: 'Catatan kepemilikan saham seluruh emiten tercatat di Bursa Efek Indonesia per investor — nama investor, tipe, asal lokal atau asing, jumlah lembar saham, persentase kepemilikan, dan free float. Disusun ulang dari pengumuman resmi bulanan Bursa Efek Indonesia.',
+            url: siteConfig.url,
+            inLanguage: 'id-ID',
+            isAccessibleForFree: true,
+            isBasedOn: IDX_SOURCE_URL,
+            creator: {
+              '@type': 'Organization',
+              name: siteConfig.name,
+              url: siteConfig.url,
+            },
+            keywords: [
+              'kepemilikan saham',
+              'free float saham',
+              'pemegang saham',
+              'emiten',
+              'Bursa Efek Indonesia',
+              'IDX',
+              'BEI',
+            ],
+          },
+        ],
+      }),
+    },
+  ],
 })
 </script>
 
@@ -112,14 +136,15 @@ definePageMeta({
       <div class="mx-auto w-full max-w-7xl">
         <h1 v-motion-rise
           class="motion-el max-w-4xl text-balance font-bold text-highlighted text-[clamp(2.125rem,5.5vw,3.75rem)] leading-[1.08] tracking-[-0.02em]">
-          Siapa sebenarnya pemilik <span
-            class="pb-[0.06em] bg-[linear-gradient(var(--ui-primary),var(--ui-primary))] bg-no-repeat bg-position-[0_100%] bg-size-[100%_0.12em] motion-safe:animate-hero-draw">saham
-            di Bursa</span>?
+          Data Kepemilikan Saham dan <span
+            class="pb-[0.06em] bg-[linear-gradient(var(--ui-primary),var(--ui-primary))] bg-no-repeat bg-position-[0_100%] bg-size-[100%_0.12em] motion-safe:animate-hero-draw">Free
+            Float</span> Seluruh Emiten BEI
         </h1>
 
         <p v-motion-rise-1 class="motion-el mt-5 sm:mt-6 max-w-[65ch] text-base text-default leading-relaxed">
-          Data kepemilikan resmi dari pengumuman bulanan Bursa Efek Indonesia —
-          setiap investor, setiap free float, lengkap apa adanya. Tanpa akun, tanpa biaya.
+          Siapa sebenarnya pemilik saham di Bursa? Semuanya tercatat di pengumuman resmi bulanan
+          Bursa Efek Indonesia — setiap investor, free float tiap emiten, asal lokal atau asing,
+          dan perubahannya dari bulan ke bulan. Tanpa akun, tanpa biaya.
         </p>
 
         <div v-motion-rise-2 class="motion-el mt-7 sm:mt-8 w-full max-w-xl">
@@ -156,25 +181,11 @@ definePageMeta({
             Bursa — Semua Emiten Saham (IDX)</a>
         </p>
 
-        <Transition enter-active-class="transition duration-200 ease-out motion-reduce:transition-none" enter-from-class="opacity-0 -translate-y-1"
-          leave-active-class="transition-opacity duration-150 ease-in motion-reduce:transition-none" leave-to-class="opacity-0">
-          <div v-if="batchError" role="status"
-            class="mt-4 flex max-w-[65ch] flex-col gap-y-2.5 rounded-md border border-accented bg-muted px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-x-4">
-            <p class="flex items-start gap-x-2 text-[13px] text-default">
-              <UIcon name="i-lucide-alert-circle" class="mt-px size-4 shrink-0 text-muted" aria-hidden="true" />
-              <span>
-                Koneksi ke server data sedang bermasalah, jadi tanggal batch terbaru belum bisa ditampilkan.
-              </span>
-            </p>
-
-            <UButton label="Coba Lagi" color="neutral" variant="outline" size="xs" :loading="retrying" class="w-fit shrink-0" @click="retryBatch" />
-          </div>
-        </Transition>
       </div>
     </section>
 
     <section class="px-4 lg:px-8 pb-16 sm:pb-24" aria-labelledby="contoh-heading">
-      <h2 id="contoh-heading" class="sr-only">Contoh catatan kepemilikan</h2>
+      <h2 id="contoh-heading" class="sr-only">Contoh data kepemilikan saham dan free float satu emiten</h2>
 
       <article v-motion-reveal class="motion-el mx-auto w-full max-w-[1600px] bg-default border border-accented shadow-md rounded-xl overflow-hidden">
         <div class="flex flex-col gap-y-2 px-3 py-3 sm:flex-row sm:items-center sm:gap-x-3 sm:p-4">
@@ -279,7 +290,7 @@ definePageMeta({
               class="group inline-flex w-fit shrink-0 items-center gap-x-1 rounded-sm text-[13px] font-semibold text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverted">
               <span
                 class="underline decoration-accented underline-offset-4 transition-[text-decoration-color] duration-150 ease-in-out group-hover:decoration-current motion-reduce:transition-none">
-                Lihat semua emiten
+                Lihat kepemilikan saham semua emiten
               </span>
               <UIcon name="i-lucide-arrow-right"
                 class="size-3.5 shrink-0 transition-transform duration-150 ease-in-out group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
@@ -308,7 +319,7 @@ definePageMeta({
       <div class="mx-auto w-full max-w-7xl xl:grid xl:grid-cols-[3fr_2fr]">
         <section class="xl:pr-12" aria-labelledby="fitur-heading">
           <h2 id="fitur-heading" v-motion-reveal class="motion-el text-xl sm:text-2xl font-bold text-highlighted text-balance">
-            Yang tercatat di setiap emiten
+            Data kepemilikan saham yang tercatat di setiap emiten
           </h2>
 
           <dl class="mt-6 divide-y divide-accented border-t border-accented">
@@ -323,10 +334,10 @@ definePageMeta({
             </div>
 
             <div v-motion-reveal-1 class="motion-el py-5">
-              <dt class="text-sm sm:text-base font-semibold text-highlighted">Free float yang sebenarnya</dt>
+              <dt class="text-sm sm:text-base font-semibold text-highlighted">Free float saham yang sebenarnya</dt>
               <dd class="mt-1.5 max-w-[65ch] text-sm sm:text-base text-default leading-relaxed">
-                Persentase saham yang beredar di publik — yaitu sisa dari seluruh kepemilikan yang diumumkan —
-                terlihat langsung dari lencana
+                Free float saham adalah porsi saham yang beredar bebas di publik — yaitu sisa dari
+                seluruh kepemilikan yang diumumkan. Angkanya terlihat langsung dari lencana
                 <UBadge label="Free Float (%)" color="secondary" variant="soft" class="mx-0.5 h-fit align-middle" />
                 di tiap emiten, bersama jumlah investor yang tercatat.
               </dd>
@@ -348,7 +359,7 @@ definePageMeta({
 
         <section class="mt-12 border-t border-accented pt-10 xl:mt-0 xl:border-t-0 xl:border-l xl:pl-12 xl:pt-0" aria-labelledby="sumber-heading">
           <h2 id="sumber-heading" v-motion-reveal class="motion-el text-xl sm:text-2xl font-bold text-highlighted text-balance">
-            Resmi, bulanan, terbuka
+            Sumber resmi: pengumuman kepemilikan saham bulanan BEI
           </h2>
 
           <p v-motion-reveal-1 class="motion-el mt-3 max-w-[65ch] text-sm text-default leading-relaxed">
@@ -391,7 +402,7 @@ definePageMeta({
     <section class="border-t border-accented px-4 lg:px-8 py-16 sm:py-24" aria-labelledby="mulai-heading">
       <div v-motion-reveal class="motion-el mx-auto w-full max-w-4xl">
         <h2 id="mulai-heading" class="max-w-2xl text-2xl sm:text-3xl font-bold text-highlighted text-balance leading-[1.15] tracking-[-0.01em]">
-          Mulai dari emiten yang Anda incar — datanya sudah menunggu.
+          Cek kepemilikan saham dan free float emiten yang Anda incar
         </h2>
         <UButton to="/saham" label="Lihat Kepemilikan Saham" trailing-icon="i-lucide-arrow-right" color="neutral" size="xl"
           class="mt-6 w-fit transition-transform duration-100 active:translate-y-px motion-reduce:active:translate-y-0" />

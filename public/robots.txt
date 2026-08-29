@@ -1,2 +1,4 @@
 User-Agent: *
 Disallow:
+
+Sitemap: https://idx-stocks-ownership.vercel.app/sitemap.xml
