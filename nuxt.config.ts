@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       leaveToClass: 'opacity-0',
     },
   },
-  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxtjs/color-mode', '@nuxtjs/sitemap', '@vite-pwa/nuxt', '@vueuse/motion'],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxtjs/color-mode', '@nuxtjs/sitemap', '@vite-pwa/nuxt', '@vueuse/motion', 'nuxt-gtag'],
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     public: {
@@ -32,6 +32,9 @@ export default defineNuxtConfig({
       changefreq: 'monthly',
       priority: 0.8,
     },
+  },
+  gtag: {
+    enabled: process.env.NODE_ENV === 'production',
   },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'node-server',
