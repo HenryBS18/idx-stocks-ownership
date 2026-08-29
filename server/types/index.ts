@@ -43,4 +43,28 @@ export type InsertStockParam = {
 
 export type GetInvestorParam = GetStockParam
 
+export type InfoPeriod = {
+  year: number
+  month: number
+}
+
+export type InfoBatch = InfoPeriod & {
+  id: number
+}
+
+export type TeaserInvestorRow = {
+  investorName: string
+  investorType: string
+  localForeign: string
+  domicile: string
+  totalHoldingShare: bigint
+  percentage: unknown
+}
+
+export type TeaserStock = {
+  ticker: string
+  name: string
+  stockInvestor: TeaserInvestorRow[]
+}
+
 export type Tx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]

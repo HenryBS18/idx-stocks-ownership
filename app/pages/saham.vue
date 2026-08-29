@@ -5,7 +5,7 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const stockStore = useStockStore()
-const { search, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
+const { search, searchDebounced, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
 const { error: dateError } = storeToRefs(dateStore)
 const { fetchStocks, resetFilter, toggleSort, clearError } = stockStore
 
@@ -30,6 +30,13 @@ const handleDateRetry = () => {
 }
 
 const route = useRoute()
+
+const landingQuery = typeof route.query.q === 'string' ? route.query.q.trim() : ''
+
+if (landingQuery) {
+  search.value = landingQuery
+  searchDebounced.value = landingQuery
+}
 
 useHead({
   link: [

@@ -9,25 +9,19 @@ const pages = [
 const activeIndex = computed(() =>
   pages.findIndex(page => page.to === route.path)
 )
+
+const isLanding = computed(() => route.path === '/')
 </script>
 
 <template>
   <UHeader title="IDX Stocks Ownership" :toggle="false" :ui="{ container: 'max-w-none px-4 sm:px-6', right: 'flex items-center' }">
     <template #right>
-      <UColorModeButton
-        color="neutral"
-        variant="outline"
-        size="sm"
-        square
-        class="border border-accented"
-        aria-label="Ubah tema warna"
-      />
+      <UColorModeButton color="neutral" variant="outline" size="sm" square class="border border-accented" aria-label="Ubah tema warna" />
     </template>
   </UHeader>
 
   <div :class="cn(
-    'pb-20',
-    'xl:pb-4',
+    !isLanding && 'pb-[calc(6rem+env(safe-area-inset-bottom,0px))] xl:pb-4',
   )">
     <div class="relative hidden xl:flex w-full border-b border-accented">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
@@ -40,19 +34,21 @@ const activeIndex = computed(() =>
         </span>
       </NuxtLink>
 
-      <div class="absolute bottom-0 h-1 transition-all duration-300 bg-primary" :style="{
+      <div v-show="activeIndex !== -1" class="absolute bottom-0 h-1 transition-all duration-300 bg-primary" :style="{
         width: `${100 / pages.length}%`,
-        transform: `translateX(${activeIndex * 100}%)`
+        transform: `translateX(${Math.max(activeIndex, 0) * 100}%)`
       }" />
     </div>
 
     <div class="mt-4">
       <slot />
     </div>
+
+    <SiteFooter v-if="isLanding" />
   </div>
 
   <nav
-    class="fixed bottom-0 inset-x-0 z-50 flex xl:hidden items-center justify-around h-16 bg-default/90 backdrop-blur-md border-t border-accented pb-[env(safe-area-inset-bottom)] shadow-lg">
+    class="fixed bottom-0 inset-x-0 z-50 flex xl:hidden items-center justify-around h-[calc(4rem+env(safe-area-inset-bottom,0px))] bg-default/90 backdrop-blur-md border-t border-accented pb-[env(safe-area-inset-bottom,0px)] shadow-lg">
     <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
       class="flex flex-col items-center justify-center flex-1 h-full py-1 text-xs font-medium transition-colors duration-200"
       :class="route.path === page.to ? 'text-primary font-semibold' : 'text-muted hover:text-default'">

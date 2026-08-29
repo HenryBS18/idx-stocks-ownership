@@ -10,6 +10,16 @@ const { filteredStocks } = storeToRefs(store)
 const open = ref<number[]>([])
 const el = useTemplateRef<HTMLElement>('el')
 
+const route = useRoute()
+const autoOpened = ref(false)
+
+watch(filteredStocks, (stocks) => {
+  if (autoOpened.value || !route.query.q || stocks.length !== 1) return
+
+  autoOpened.value = true
+  open.value = [0]
+}, { immediate: true })
+
 const pageSize = 20
 const visibleCount = ref(pageSize)
 

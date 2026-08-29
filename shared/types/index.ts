@@ -32,6 +32,12 @@ export type InvestorPortfolio = {
   }[]
 }
 
+export type LandingTeaser = {
+  batchLabel: string
+  emitenCount: number
+  stock: StockDetail | null
+}
+
 export type Info = {
   label: string
   value: string

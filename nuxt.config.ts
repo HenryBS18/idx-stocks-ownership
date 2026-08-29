@@ -15,9 +15,6 @@ export default defineNuxtConfig({
     name: 'IDX Stocks Ownership',
     defaultLocale: 'id-ID',
   },
-  sitemap: {
-    exclude: ['/'],
-  },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'node-server',
     storage: {
