@@ -2,6 +2,15 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   ssr: true,
+  app: {
+    pageTransition: {
+      mode: 'out-in',
+      enterActiveClass: 'transition-opacity duration-200 ease-out motion-reduce:transition-none',
+      enterFromClass: 'opacity-0',
+      leaveActiveClass: 'transition-opacity duration-150 ease-in motion-reduce:transition-none',
+      leaveToClass: 'opacity-0',
+    },
+  },
   modules: [
     '@nuxt/ui',
     '@pinia/nuxt',
