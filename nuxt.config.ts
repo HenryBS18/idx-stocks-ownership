@@ -11,13 +11,7 @@ export default defineNuxtConfig({
       leaveToClass: 'opacity-0',
     },
   },
-  modules: [
-    '@nuxt/ui',
-    '@pinia/nuxt',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/sitemap',
-    '@vite-pwa/nuxt',
-  ],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxtjs/color-mode', '@nuxtjs/sitemap', '@vite-pwa/nuxt', '@vueuse/motion'],
   css: ['~/assets/css/main.css'],
   site: {
     url: 'https://idx-stocks-ownership.vercel.app',
