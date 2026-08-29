@@ -6,29 +6,41 @@ body {
   color: var(--ui-text);
 }
 
-input::placeholder {
-  color: var(--color-neutral-500)
+.text-success {
+  color: var(--color-green-700);
 }
 
-/* scrollbar width */
+.text-error {
+  color: var(--color-red-700);
+}
+
+.dark .text-success {
+  color: var(--color-green-400);
+}
+
+.dark .text-error {
+  color: var(--color-red-400);
+}
+
+input::placeholder {
+  color: var(--ui-text-muted)
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-/* remove track background */
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* scrollbar thumb */
 ::-webkit-scrollbar-thumb {
   background: #00c950;
   border-radius: 4px;
 }
 
 @media (width < 48rem) {
-  /* scrollbar width */
   ::-webkit-scrollbar {
     width: 4px;
     height: 4px;

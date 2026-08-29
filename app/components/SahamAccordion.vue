@@ -137,7 +137,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     },
     footer: ({ table }) => h(
       'span',
-      { class: 'font-bold text-black' },
+      { class: 'font-bold text-highlighted' },
       table.getRowModel().rows.reduce((acc, curr: any) => acc += Number(curr.original.percentage), 0).toFixed(2) + '%'
     )
   }
