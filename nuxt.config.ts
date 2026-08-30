@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     },
   },
   site: {
-    url: 'https://idx-stocks-ownership.vercel.app',
+    url: process.env.NUXT_PUBLIC_SITE_URL!,
     name: 'IDX Stocks Ownership',
     defaultLocale: 'id-ID',
   },
