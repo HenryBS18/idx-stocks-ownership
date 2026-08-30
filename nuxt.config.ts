@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     },
   },
   gtag: {
-    enabled: process.env.NODE_ENV === 'production',
+    enabled: process.env.NODE_ENV === 'production' && !!process.env.NUXT_PUBLIC_GTAG_ID,
   },
   nitro: {
     preset: process.env.NODE_ENV === 'production' ? 'vercel' : 'node-server',
