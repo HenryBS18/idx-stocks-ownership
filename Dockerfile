@@ -1,23 +1,23 @@
 # builder
-FROM oven/bun:1.2.20-slim AS builder
+FROM node:22-slim AS builder
 WORKDIR /app
 
-COPY package.json bun.lock ./
+COPY package.json package-lock.json ./
 COPY prisma prisma/
 
 RUN apt-get update -y && apt-get install -y openssl
 
-RUN bun install --frozen-lockfile
-RUN bun prisma-gen
+RUN npm ci
+RUN npm run prisma-gen
 
 COPY . .
 
-RUN bun run build --preset bun
+RUN npm run build -- --preset node-server
 
 # release
-FROM oven/bun:1.2.20-alpine
+FROM node:22-alpine
 WORKDIR /app
 
 COPY --from=builder /app/.output ./
 
-CMD [ "bun", "server/index.mjs" ]
+CMD [ "node", "server/index.mjs" ]
