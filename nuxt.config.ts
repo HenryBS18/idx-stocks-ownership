@@ -28,6 +28,7 @@ export default defineNuxtConfig({
   sitemap: {
     autoLastmod: true,
     exclude: ['/api/**'],
+    xsl: false,
     defaults: {
       changefreq: 'monthly',
       priority: 0.8,
