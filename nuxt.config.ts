@@ -29,6 +29,9 @@ export default defineNuxtConfig({
     autoLastmod: true,
     exclude: ['/api/**'],
     xsl: false,
+    credits: false,
+    discoverImages: false,
+    discoverVideos: false,
     defaults: {
       changefreq: 'monthly',
       priority: 0.8,
