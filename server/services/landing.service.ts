@@ -5,15 +5,23 @@ import { round2 } from "../utils/investor-change"
 const FALLBACK_TICKER = 'BBCA'
 const TEASER_ROW_LIMIT = 25
 
+const toIsoMonth = (period: InfoPeriod): string =>
+  `${period.year}-${String(period.month).padStart(2, '0')}`
+
 export class LandingService {
   async getTeaser(): Promise<LandingTeaser> {
-    const info = await prisma.info.findFirst({
-      orderBy: [{ year: 'desc' }, { month: 'desc' }],
-    })
+    const [info, earliest] = await Promise.all([
+      prisma.info.findFirst({
+        orderBy: [{ year: 'desc' }, { month: 'desc' }],
+      }),
+      prisma.info.findFirst({
+        orderBy: [{ year: 'asc' }, { month: 'asc' }],
+      }),
+    ])
 
-    if (!info) return { batchLabel: '', emitenCount: 0, stock: null }
+    if (!info) return { batchLabel: '', emitenCount: 0, coverage: null, stock: null }
 
-    const cacheKey = `landing:${info.year}-${info.month}`
+    const cacheKey = `landing:v2:${info.year}-${info.month}`
     const cached = await getCache<LandingTeaser>(cacheKey)
     if (cached) return cached
 
@@ -45,6 +53,7 @@ export class LandingService {
     const teaser: LandingTeaser = {
       batchLabel: getLastDate(info.month, info.year),
       emitenCount,
+      coverage: earliest ? { start: toIsoMonth(earliest), end: toIsoMonth(info) } : null,
       stock: stock && stock.stockInvestor.length > 0
         ? await this.toStockDetail(stock, info)
         : null,

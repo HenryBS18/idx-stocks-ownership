@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IDX_SOURCE_URL } from '~/utils/constants'
+import { DATA_LICENSE_NAME, DATA_LICENSE_PATH, IDX_ORG_URL, IDX_SOURCE_URL } from '~/utils/constants'
 
 type TickerName = { ticker: string, name: string }
 
@@ -8,6 +8,12 @@ const { data: landing, status: landingStatus } = useFetch<LandingTeaser>('/api/l
 const latestBatch = computed(() => landing.value?.batchLabel ?? '')
 
 const emitenCount = computed(() => landing.value?.emitenCount || null)
+
+const temporalCoverage = computed(() => {
+  const coverage = landing.value?.coverage
+
+  return coverage ? `${coverage.start}/${coverage.end}` : null
+})
 
 const { data: tickers, status: tickerStatus, execute: fetchTickers } = useFetch<TickerName[]>(
   '/api/stock/list',
@@ -82,7 +88,7 @@ useSeoMeta({
   ogUrl: siteConfig.url,
 })
 
-useHead({
+useHead(() => ({
   link: [
     { rel: 'canonical', key: 'canonical', href: siteConfig.url },
   ],
@@ -107,11 +113,27 @@ useHead({
             url: siteConfig.url,
             inLanguage: 'id-ID',
             isAccessibleForFree: true,
+            license: {
+              '@type': 'CreativeWork',
+              name: DATA_LICENSE_NAME,
+              url: `${siteConfig.url}${DATA_LICENSE_PATH}`,
+            },
             isBasedOn: IDX_SOURCE_URL,
+            ...(temporalCoverage.value ? { temporalCoverage: temporalCoverage.value } : {}),
             creator: {
               '@type': 'Organization',
               name: siteConfig.name,
               url: siteConfig.url,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: siteConfig.name,
+              url: siteConfig.url,
+            },
+            sourceOrganization: {
+              '@type': 'Organization',
+              name: 'Bursa Efek Indonesia',
+              url: IDX_ORG_URL,
             },
             keywords: [
               'kepemilikan saham',
@@ -127,7 +149,7 @@ useHead({
       }),
     },
   ],
-})
+}))
 </script>
 
 <template>
