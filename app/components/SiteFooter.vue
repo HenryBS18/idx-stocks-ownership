@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DATA_LICENSE_NAME, DATA_LICENSE_PATH, IDX_SOURCE_URL, REPORT_EMAIL } from '~/utils/constants'
+import { DATA_LICENSE_NAME, DATA_LICENSE_PATH, IDX_SOURCE_URL, PRIVACY_PATH, REPORT_EMAIL } from '~/utils/constants'
 
 const route = useRoute()
 
@@ -11,6 +11,7 @@ const pages = [
   { label: 'Saham', to: '/saham' },
   { label: 'Investor', to: '/investor' },
   { label: 'Lisensi', to: DATA_LICENSE_PATH },
+  { label: 'Privasi', to: PRIVACY_PATH },
 ]
 
 const REPORT_URL = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent('Laporan data keliru — IDX Stocks Ownership')}`

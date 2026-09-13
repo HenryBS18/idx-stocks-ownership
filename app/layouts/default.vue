@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DATA_LICENSE_PATH } from '~/utils/constants'
+import { DATA_LICENSE_PATH, PRIVACY_PATH } from '~/utils/constants'
 
 const route = useRoute()
 
@@ -14,7 +14,9 @@ const activeIndex = computed(() =>
 
 const isLanding = computed(() => route.path === '/')
 
-const showFooter = computed(() => isLanding.value || route.path === DATA_LICENSE_PATH)
+const FOOTER_ROUTES = [DATA_LICENSE_PATH, PRIVACY_PATH]
+
+const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(route.path))
 </script>
 
 <template>

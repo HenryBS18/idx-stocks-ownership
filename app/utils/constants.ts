@@ -8,6 +8,12 @@ export const DATA_LICENSE_PATH = '/lisensi'
 
 export const DATA_LICENSE_EFFECTIVE = '13 September 2026'
 
+export const PRIVACY_NAME = 'Kebijakan Privasi'
+
+export const PRIVACY_PATH = '/privasi'
+
+export const PRIVACY_EFFECTIVE = '14 September 2026'
+
 export const REPORT_EMAIL = 'henrybintangsetiawan@gmail.com'
 
 export const investorOrigin: string[] = [
