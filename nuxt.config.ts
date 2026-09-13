@@ -1,4 +1,5 @@
 import { motionDirectives } from './motion.config'
+import { sitemapUrls } from './sitemap.config'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -26,15 +27,14 @@ export default defineNuxtConfig({
     defaultLocale: 'id-ID',
   },
   sitemap: {
-    autoLastmod: true,
     exclude: ['/api/**'],
     xsl: false,
     credits: false,
     discoverImages: false,
     discoverVideos: false,
+    urls: sitemapUrls(),
     defaults: {
       changefreq: 'monthly',
-      priority: 0.8,
     },
   },
   gtag: {
