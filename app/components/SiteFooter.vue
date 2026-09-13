@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IDX_SOURCE_URL } from '~/utils/constants'
+import { DATA_LICENSE_NAME, DATA_LICENSE_PATH, IDX_SOURCE_URL, REPORT_EMAIL } from '~/utils/constants'
 
 const route = useRoute()
 
@@ -10,9 +10,9 @@ const pages = [
   { label: 'Beranda', to: '/' },
   { label: 'Saham', to: '/saham' },
   { label: 'Investor', to: '/investor' },
+  { label: 'Lisensi', to: DATA_LICENSE_PATH },
 ]
 
-const REPORT_EMAIL = 'henrybintangsetiawan@gmail.com'
 const REPORT_URL = `mailto:${REPORT_EMAIL}?subject=${encodeURIComponent('Laporan data keliru — IDX Stocks Ownership')}`
 
 const year = new Date().getFullYear()
@@ -85,6 +85,13 @@ const linkClass = 'inline-flex min-h-11 items-center gap-x-1.5 rounded-sm text-s
         <p class="mt-2 max-w-[80ch] text-[13px] md:text-sm leading-relaxed text-toned">
           Situs ini tidak berafiliasi dengan dan tidak didukung oleh Bursa Efek Indonesia.
           Angka disajikan apa adanya untuk keperluan informasi, bukan saran investasi.
+        </p>
+
+        <p class="mt-2 max-w-[80ch] text-[13px] md:text-sm leading-relaxed text-toned">
+          Kompilasi dan penyajian data di situs ini bebas dipakai ulang dengan mencantumkan atribusi — lihat{{ ' ' }}
+          <NuxtLink :to="DATA_LICENSE_PATH"
+            class="inline-block py-3.5 -my-3.5 rounded-sm font-medium text-highlighted underline decoration-current underline-offset-4 transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">{{ DATA_LICENSE_NAME }}</NuxtLink>.{{ ' ' }}
+          Pengumuman aslinya tetap milik Bursa Efek Indonesia.
         </p>
 
         <div class="mt-4 flex flex-col gap-y-1 sm:flex-row sm:items-center sm:justify-between sm:gap-x-6">

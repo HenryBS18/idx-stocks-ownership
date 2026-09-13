@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DATA_LICENSE_PATH } from '~/utils/constants'
+
 const route = useRoute()
 
 const pages = [
@@ -11,6 +13,8 @@ const activeIndex = computed(() =>
 )
 
 const isLanding = computed(() => route.path === '/')
+
+const showFooter = computed(() => isLanding.value || route.path === DATA_LICENSE_PATH)
 </script>
 
 <template>
@@ -21,7 +25,7 @@ const isLanding = computed(() => route.path === '/')
   </UHeader>
 
   <div :class="cn(
-    !isLanding && 'pb-[calc(6rem+env(safe-area-inset-bottom,0px))] xl:pb-4',
+    !showFooter && 'pb-[calc(6rem+env(safe-area-inset-bottom,0px))] xl:pb-4',
   )">
     <div class="relative hidden xl:flex w-full border-b border-accented">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
@@ -44,7 +48,7 @@ const isLanding = computed(() => route.path === '/')
       <slot />
     </div>
 
-    <SiteFooter v-if="isLanding" />
+    <SiteFooter v-if="showFooter" />
   </div>
 
   <nav

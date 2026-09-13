@@ -7,6 +7,7 @@ const routes: RouteSource[] = [
   { loc: '/', priority: 1, sources: ['app/pages/index.vue'] },
   { loc: '/saham', priority: 0.8, sources: ['app/pages/saham.vue', 'app/components/SahamAccordion.vue'] },
   { loc: '/investor', priority: 0.8, sources: ['app/pages/investor.vue', 'app/components/InvestorAccordion.vue'] },
+  { loc: '/lisensi', priority: 0.3, sources: ['app/pages/lisensi.vue', 'app/utils/constants.ts'] },
 ]
 
 const lastCommitDate = (sources: string[]): string | null => {

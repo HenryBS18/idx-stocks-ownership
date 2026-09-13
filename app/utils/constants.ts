@@ -1,5 +1,15 @@
 export const IDX_SOURCE_URL = 'https://www.idx.co.id/id/perusahaan-tercatat/data-kepemilikan-saham'
 
+export const IDX_ORG_URL = 'https://www.idx.co.id'
+
+export const DATA_LICENSE_NAME = 'Ketentuan Penggunaan Data'
+
+export const DATA_LICENSE_PATH = '/lisensi'
+
+export const DATA_LICENSE_EFFECTIVE = '13 September 2026'
+
+export const REPORT_EMAIL = 'henrybintangsetiawan@gmail.com'
+
 export const investorOrigin: string[] = [
   'Semua',
   'Asing (F)',
