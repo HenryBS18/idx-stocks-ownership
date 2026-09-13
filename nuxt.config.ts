@@ -88,4 +88,9 @@ export default defineNuxtConfig({
       enabled: process.env.NODE_ENV === 'development',
     }
   },
+  vite: {
+    optimizeDeps: {
+      include: ['@vue/devtools-core', '@vue/devtools-kit', 'workbox-window', 'clsx', 'tailwind-merge', 'errx']
+    }
+  }
 })
