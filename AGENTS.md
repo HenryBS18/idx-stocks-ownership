@@ -44,13 +44,14 @@ Nitro file-based routing under `/api/`:
 | GET | `/api/token` | No | Issue JWT cookie |
 | GET | `/api/info` | Yes | Available date periods |
 | GET | `/api/stock` | Yes | All stocks with investors for a date |
-| POST | `/api/stock` | Yes | Upload CSV stock data |
+| POST | `/api/stock` | Secret header | Upload CSV stock data |
 | GET | `/api/stock/list` | No | All ticker-name pairs |
 | GET | `/api/stock/:ticker/name` | No | Single stock name |
 | GET | `/api/investor` | Yes | Investor portfolios for a date |
 
-- **Auth:** Query-param JWT (`?token=...`). Route middleware checks cookie; if missing, calls `/api/token` to auto-issue a JWT (HS256, 1-day expiry).
-- **Rate limiting:** Redis-based, 10-60 req/min per route in production.
+- **Auth (reads):** Query-param JWT (`?token=...`). Route middleware checks cookie; if missing, calls `/api/token` to auto-issue a JWT (HS256, 1-day expiry). This token is handed to every visitor, so it gates reads only.
+- **Auth (writes):** `POST /api/stock` requires the `x-post-secret` header to match the `POST_SECRET` env var (`require-post-secret.ts`, timing-safe). It does NOT accept the visitor JWT. Unset `POST_SECRET` fails closed with 503.
+- **Rate limiting:** Redis-based, 10-60 req/min per route+method in production; `POST /api/stock` is capped at 5/min.
 - **Services:** `stock.service.ts`, `investor.service.ts`, `info.service.ts` — business logic layer between API routes and Prisma.
 - **Error pattern:** Services throw HTTP errors via `createError()`; API handlers wrap in try/catch returning `{ message }` or let Nitro handle via `{ statusCode, statusMessage }`.
 
@@ -73,7 +74,14 @@ Prisma client singleton at `server/utils/prisma.ts` using `PrismaPg` adapter. Bi
 ### Key patterns
 
 - **Cache:** Redis with 5-day TTL in `server/utils/cache.ts`. Invalidated on upload. Uses `getSetCache` (check-then-set).
-- **Upload flow:** POST multipart → `parse-stock-upload.ts` → Prisma transaction (create Info + Stock + StockInvestor in chunks of 1000) → invalidate caches
+- **Upload flow:** `x-post-secret` check → POST multipart → `parse-stock-upload.ts` → Prisma transaction (create Info + Stock + StockInvestor in chunks of 1000) → invalidate caches. The secret check runs first so an unauthorized request never parses a body or touches Postgres:
+
+```bash
+curl -X POST "$SITE/api/stock" \
+  -H "x-post-secret: $POST_SECRET" \
+  -F "file=@data.csv" \
+  -F "idxLastUpdated=12 Jan 2025"
+```
 - **Date parsing:** `parseDateTime("12 Jan 2025")` → `{ month, year }` with English abbreviated month names
 - **Token signing/verify:** `sign-token.ts` (HS256, 1d), `verify-token.ts` (JWT from query param)
 

@@ -32,7 +32,7 @@ Raw IDX ownership depth. Unlike consumer tools that summarize or gate ownership 
 - Investor portfolios: every stock held by an investor across a batch, filterable by origin and type.
 - Data coverage is bounded by what the official announcements contain; only monthly snapshots exist (no intraday/trading data).
 - Share counts are BIGINT and serialized as strings in JSON to avoid precision loss.
-- JWT auth is auto-issued (query-param token, 1-day expiry); Redis-backed cache (5-day TTL) and per-route rate limiting protect the API.
+- JWT auth is auto-issued for reads (query-param token, 1-day expiry); the CSV upload endpoint is gated separately by a `POST_SECRET` header. Redis-backed cache (5-day TTL) and per-route rate limiting protect the API.
 - Undecided: whether additional historical depth, alerting, or comparison views will be built.
 
 ## Brand Commitments

@@ -5,7 +5,7 @@ const stockService = new StockService()
 
 export default defineEventHandler(async (event) => {
   try {
-    requireAuth(event)
+    requirePostSecret(event)
     const { fileBuffer, idxLastUpdated } = await parseStockUpload(event)
 
     await stockService.insertStock({ fileBuffer, idxLastUpdated })
