@@ -209,7 +209,7 @@ useHead(() => ({
     <section class="px-4 lg:px-8 pb-16 sm:pb-24" aria-labelledby="contoh-heading">
       <h2 id="contoh-heading" class="sr-only">Contoh data kepemilikan saham dan free float satu emiten</h2>
 
-      <article v-motion-reveal class="motion-el mx-auto w-full max-w-[1600px] bg-default border border-accented shadow-md rounded-xl overflow-hidden">
+      <article v-motion-reveal class="motion-el mx-auto w-full max-w-7xl bg-default border border-accented shadow-md rounded-xl overflow-hidden">
         <div class="flex flex-col gap-y-2 px-3 py-3 sm:flex-row sm:items-center sm:gap-x-3 sm:p-4">
           <div class="flex items-center gap-x-2 sm:gap-x-3 min-w-0">
             <UBadge :label="sample.ticker" />
