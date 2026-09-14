@@ -22,6 +22,10 @@ const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(rout
 <template>
   <UHeader title="IDX Stocks Ownership" :toggle="false" :ui="{ container: 'max-w-none px-4 sm:px-6', right: 'flex items-center' }">
     <template #right>
+      <nav v-if="isLanding" aria-label="Navigasi utama" class="mr-5 hidden xl:flex items-center gap-1">
+        <UButton v-for="page in pages" :key="page.to" :to="page.to" :label="page.label" color="neutral" variant="ghost" />
+        <UButton to="/#panduan" label="Cara pakai" color="neutral" variant="ghost" />
+      </nav>
       <UColorModeButton color="neutral" variant="outline" size="sm" square class="border border-accented" aria-label="Ubah tema warna" />
     </template>
   </UHeader>
@@ -29,7 +33,7 @@ const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(rout
   <div :class="cn(
     !showFooter && 'pb-[calc(6rem+env(safe-area-inset-bottom,0px))] xl:pb-4',
   )">
-    <div class="relative hidden xl:flex w-full border-b border-accented">
+    <div v-if="!isLanding" class="relative hidden xl:flex w-full border-b border-accented">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
         class="flex items-center justify-center w-1/2 py-3 gap-x-1.5 transition-colors duration-200"
         :class="route.path === page.to ? 'text-primary' : 'text-muted hover:text-highlighted hover:bg-elevated'">
@@ -46,7 +50,7 @@ const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(rout
       }" />
     </div>
 
-    <div class="mt-4">
+    <div :class="!isLanding && 'mt-4'">
       <slot />
     </div>
 
