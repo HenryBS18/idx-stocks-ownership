@@ -31,8 +31,7 @@ const linkClass = 'inline-flex min-h-11 items-center gap-x-1.5 rounded-sm text-s
         <div class="max-w-[50ch]">
           <p class="text-base font-semibold text-highlighted">IDX Stocks Ownership</p>
           <p class="mt-2 text-[13px] md:text-sm leading-relaxed text-toned">
-            Data kepemilikan saham Bursa Efek Indonesia, disajikan apa adanya dari pengumuman
-            resmi bulanan. Tanpa akun, tanpa biaya.
+            Telusuri data kepemilikan saham emiten BEI dari pengumuman bulanan Bursa Efek Indonesia. Gratis tanpa akun.
           </p>
         </div>
 
@@ -83,15 +82,14 @@ const linkClass = 'inline-flex min-h-11 items-center gap-x-1.5 rounded-sm text-s
           </p>
 
           <p class="text-[13px] md:text-sm leading-relaxed text-toned">
-            Sumber data: Pengumuman Bursa — "Semua Emiten Saham" yang diterbitkan Bursa Efek
-            Indonesia (IDX/BEI), diperbarui bulanan mengikuti pengumuman resmi.
+            Sumber data: Pengumuman Bursa ‘Semua Emiten Saham’ dari Bursa Efek Indonesia (IDX/BEI). Ketersediaan periode mengikuti data yang telah dimasukkan ke aplikasi.
           </p>
         </div>
 
         <div class="space-y-2">
           <p class="text-[13px] md:text-sm leading-relaxed text-toned">
             Situs ini tidak berafiliasi dengan dan tidak didukung oleh Bursa Efek Indonesia.
-            Angka disajikan apa adanya untuk keperluan informasi, bukan saran investasi.
+            Data dan perhitungan aplikasi disajikan untuk informasi, bukan saran investasi.
           </p>
 
           <p class="text-[13px] md:text-sm leading-relaxed text-toned">

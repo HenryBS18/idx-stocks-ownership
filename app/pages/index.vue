@@ -89,23 +89,23 @@ const dataStatus = computed(() => {
 })
 
 const features = [
-  { icon: 'i-lucide-users', title: 'Telusuri pemegang saham', text: 'Kenali investor di balik emiten pilihanmu, lengkap dengan porsi kepemilikan dan asal lokal atau asing.', to: '/saham', link: 'Cari saham', kind: 'owners' },
-  { icon: 'i-lucide-folders', title: 'Jelajahi portofolio investor', text: 'Lihat saham yang dimiliki satu investor dalam satu tempat. Temukan hubungan antar kepemilikannya.', to: '/investor', link: 'Cari investor', kind: 'portfolio' },
-  { icon: 'i-lucide-chart-no-axes-combined', title: 'Lihat perubahan kepemilikan', text: 'Baca selisih persentase terhadap periode sebelumnya yang tersedia, termasuk investor yang baru tercatat.', to: '/saham', link: 'Lihat perubahan', kind: 'change' },
+  { icon: 'i-lucide-users', title: 'Pemegang saham emiten', text: 'Lihat investor yang tercatat pada suatu emiten, beserta persentase kepemilikan dan asal lokal atau asing.', to: '/saham', link: 'Lihat Pemegang Saham', kind: 'owners' },
+  { icon: 'i-lucide-folders', title: 'Portofolio saham investor', text: 'Cari nama investor untuk melihat saham yang dimilikinya berdasarkan catatan pada periode pilihanmu.', to: '/investor', link: 'Cari Investor', kind: 'portfolio' },
+  { icon: 'i-lucide-chart-no-axes-combined', title: 'Perubahan kepemilikan saham', text: 'Bandingkan persentase kepemilikan dengan periode sebelumnya yang tersedia. Lihat kenaikan, penurunan, dan investor yang baru tercatat.', to: '/saham', link: 'Lihat Perubahan Kepemilikan', kind: 'change' },
 ]
 const steps = [
-  { title: 'Cari emiten atau investor', text: 'Mulai dengan kode saham, nama perusahaan, atau nama investor.' },
-  { title: 'Pilih periode', text: 'Gunakan pilihan bulan untuk melihat pengumuman yang ingin kamu baca.' },
-  { title: 'Baca rincian kepemilikan', text: 'Lihat porsi saham, asal investor, dan perubahan dari periode sebelumnya.' },
+  { title: 'Cari emiten atau investor', text: 'Buka halaman Saham untuk mencari kode atau nama perusahaan. Gunakan halaman Investor untuk mencari nama pemegang saham.' },
+  { title: 'Pilih periode data', text: 'Pilih bulan dan tahun yang tersedia untuk melihat catatan kepemilikan pada periode tersebut.' },
+  { title: 'Baca rincian kepemilikan', text: 'Periksa jumlah saham dan persentase kepemilikan. Jika data pembanding tersedia, kamu juga bisa melihat perubahan dari periode sebelumnya.' },
 ]
 
 const siteConfig = useSiteConfig()
 
 useSeoMeta({
   title: 'Data Kepemilikan Saham & Free Float Emiten BEI (IDX)',
-  description: 'Data kepemilikan saham dan free float seluruh emiten BEI dari pengumuman resmi bulanan IDX — setiap investor, asal lokal/asing, dan perubahan tiap bulan. Gratis.',
-  ogTitle: 'Siapa pemilik saham di Bursa? | IDX Stocks Ownership',
-  ogDescription: 'Data kepemilikan resmi dari pengumuman bulanan IDX/BEI — setiap investor, setiap free float, lengkap dan terbuka.',
+  description: 'Cek kepemilikan saham emiten BEI, portofolio investor, dan perubahan antarperiode. Lihat free float hasil perhitungan aplikasi. Gratis tanpa akun.',
+  ogTitle: 'Data Kepemilikan Saham & Free Float Emiten BEI (IDX)',
+  ogDescription: 'Cek kepemilikan saham emiten BEI, portofolio investor, dan perubahan antarperiode. Lihat free float hasil perhitungan aplikasi. Gratis tanpa akun.',
   ogUrl: siteConfig.url,
 })
 
@@ -130,7 +130,7 @@ useHead(() => ({
             '@type': 'Dataset',
             '@id': `${siteConfig.url}/#dataset`,
             name: 'Data Kepemilikan Saham dan Free Float Emiten Bursa Efek Indonesia',
-            description: 'Catatan kepemilikan saham seluruh emiten tercatat di Bursa Efek Indonesia per investor — nama investor, tipe, asal lokal atau asing, jumlah lembar saham, persentase kepemilikan, dan free float. Disusun ulang dari pengumuman resmi bulanan Bursa Efek Indonesia.',
+            description: 'Data kepemilikan saham emiten BEI berdasarkan pengumuman bulanan Bursa Efek Indonesia, mencakup nama investor, tipe, asal, jumlah saham, dan persentase kepemilikan. Free float dihitung oleh aplikasi dari kepemilikan yang tercatat.',
             url: siteConfig.url,
             inLanguage: 'id-ID',
             isAccessibleForFree: true,
@@ -181,17 +181,21 @@ useHead(() => ({
       <div class="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
         <div class="min-w-0">
           <p v-motion-rise class="motion-el mb-5 flex items-center gap-2 text-xs font-semibold tracking-widest text-primary uppercase"><span
-              class="size-2 rounded-full bg-primary" />Data publik. Lebih mudah dibaca.</p>
+              class="size-2 rounded-full bg-primary" />Data publik BEI, mudah ditelusuri</p>
           <h1 v-motion-rise-1
-            class="motion-el max-w-2xl text-[clamp(2.5rem,4.6vw,4.5rem)] leading-[1.08] font-bold tracking-[-0.045em] text-highlighted">Kenali siapa
-            di balik <span class="text-primary">saham pilihanmu</span></h1>
-          <p v-motion-rise-2 class="motion-el mt-6 max-w-lg text-base leading-relaxed text-toned sm:text-lg">Telusuri pemegang saham, portofolio
-            investor, dan perubahan kepemilikan emiten BEI. Data dari pengumuman resmi, terbuka untuk kamu jelajahi.</p>
+            class="motion-el max-w-2xl text-[clamp(2rem,4.6vw,4.5rem)] leading-[1.08] font-bold tracking-[-0.045em] text-highlighted">Data Kepemilikan
+            Saham dan <span class="text-primary">Free Float Emiten BEI</span></h1>
+          <p v-motion-rise-2 class="motion-el mt-6 max-w-lg text-base leading-relaxed text-toned sm:text-lg">Kenali pemegang saham emiten di Bursa
+            Efek Indonesia (BEI) dan telusuri portofolio investornya. Lihat porsi kepemilikan serta perubahan antarperiode dari pengumuman bulanan
+            BEI.</p>
+          <p class="mt-3 max-w-lg text-sm leading-relaxed text-muted">Free float dihitung oleh aplikasi dari kepemilikan yang tercatat. Gratis tanpa
+            akun.</p>
           <div v-motion-rise-3 class="motion-el mt-8 max-w-xl">
-            <label for="landing-search" class="mb-2 block text-sm font-medium text-highlighted">Mulai dari emiten pilihanmu</label>
+            <label for="landing-search" class="mb-2 block text-sm font-medium text-highlighted">Cari saham berdasarkan kode atau nama emiten</label>
             <UInputMenu id="landing-search" v-model="selectedTicker" :items="tickers ?? []" :loading="tickerStatus === 'pending'"
               :filter-fields="['ticker', 'name']" label-key="name" :virtualize="{ estimateSize: 40 }" leading-icon="i-lucide-search" size="xl"
-              class="w-full" aria-label="Cari emiten" placeholder="Ketik kode atau nama emiten" :ui="{ trailingIcon: 'hidden' }" @focus="loadTickers">
+              class="w-full" aria-label="Cari saham berdasarkan kode atau nama emiten" placeholder="Contoh: BBCA atau Bank Central Asia"
+              :ui="{ trailingIcon: 'hidden' }" @focus="loadTickers">
               <template #item-leading="{ item }">
                 <UBadge :label="item.ticker" size="sm" />
               </template>
@@ -200,7 +204,7 @@ useHead(() => ({
             </UInputMenu>
             <UButton v-if="tickerStatus === 'error'" label="Coba muat pencarian lagi" variant="link" class="mt-2" @click="loadTickers" />
             <div class="mt-4 flex flex-wrap gap-3">
-              <UButton to="/saham" label="Jelajahi Saham" trailing-icon="i-lucide-arrow-right" size="lg" />
+              <UButton to="/saham" label="Lihat Kepemilikan Saham" trailing-icon="i-lucide-arrow-right" size="lg" />
               <UButton to="/investor" label="Telusuri Investor" color="neutral" variant="outline" size="lg" />
             </div>
           </div>
@@ -233,11 +237,10 @@ useHead(() => ({
 
     <section class="px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="contoh-heading">
       <div class="mx-auto mb-8 max-w-7xl">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Dari angka, kenali pemiliknya</p>
-        <h2 id="contoh-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Satu emiten. Siapa saja di baliknya?</h2>
-        <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat nama investor dan porsi sahamnya. Grafik di atas merangkum kepemilikan tercatat
-          serta
-          sisa persentase yang dihitung aplikasi sebagai free float.</p>
+        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Cuplikan data</p>
+        <h2 id="contoh-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Contoh Data Pemegang Saham Emiten BEI</h2>
+        <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat nama investor, jumlah lembar saham, dan persentase kepemilikannya pada periode yang
+          ditampilkan.</p>
         <p role="status" class="mt-3 text-xs font-medium text-muted">{{ dataStatus }}<span v-if="!isLive"> Per {{ sample.batchLabel }}.</span></p>
       </div>
       <article v-motion-reveal class="motion-el mx-auto w-full max-w-7xl bg-default border border-accented shadow-sm rounded-2xl overflow-hidden">
@@ -251,7 +254,7 @@ useHead(() => ({
 
           <div class="flex gap-x-2 sm:gap-x-3">
             <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-xs xl:text-sm" />
-            <UBadge :label="`Free Float (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
+            <UBadge :label="`Free float aplikasi (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
           </div>
         </div>
 
@@ -328,13 +331,16 @@ useHead(() => ({
 
         <div class="flex flex-col gap-y-2 border-t border-accented px-3 py-3 sm:px-4">
           <div class="flex flex-col gap-y-1.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-6">
-            <p class="text-sm text-toned">Grafik memakai total seluruh investor yang tercatat, termasuk yang tidak tampil dalam cuplikan ini.</p>
+            <p class="text-sm text-toned">Free float dihitung dari 100% dikurangi total persentase kepemilikan investor yang tercatat. Angka ini bukan
+              penetapan free float resmi BEI. Grafik menggunakan seluruh catatan investor emiten pada periode tersebut, termasuk yang tidak tampil
+              dalam
+              cuplikan.</p>
 
             <NuxtLink :to="{ path: '/saham', query: { q: sample.ticker } }"
               class="group inline-flex w-fit shrink-0 items-center gap-x-1 rounded-sm text-[13px] font-semibold text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverted">
               <span
                 class="underline decoration-accented underline-offset-4 transition-[text-decoration-color] duration-150 ease-in-out group-hover:decoration-current motion-reduce:transition-none">
-                Lihat rincian {{ sample.ticker }}
+                Lihat kepemilikan saham {{ sample.ticker }}
               </span>
               <UIcon name="i-lucide-arrow-right"
                 class="size-3.5 shrink-0 transition-transform duration-150 ease-in-out group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
@@ -344,15 +350,14 @@ useHead(() => ({
 
           <p class="text-[13px] text-muted">
             <template v-if="!isLive">
-              Contoh tetap dari Pengumuman Bursa {{ sample.batchLabel }} — tanpa diubah.
+              Contoh tetap dari data periode {{ sample.batchLabel }}.
             </template>
             <template v-else-if="hiddenInvestorCount">
-              {{ visibleInvestors.length }} dari {{ sample.investorCount }} investor yang diumumkan untuk emiten ini —
-              cuplikan asli Pengumuman Bursa {{ sample.batchLabel }}, tanpa diubah.
+              Menampilkan {{ visibleInvestors.length }} dari {{ sample.investorCount }} investor yang tercatat untuk emiten ini pada periode {{
+                sample.batchLabel }}.
             </template>
             <template v-else>
-              Seluruh {{ sample.investorCount }} investor yang diumumkan untuk emiten ini —
-              cuplikan asli Pengumuman Bursa {{ sample.batchLabel }}, tanpa diubah.
+              Menampilkan {{ sample.investorCount }} investor yang tercatat untuk emiten ini pada periode {{ sample.batchLabel }}.
             </template>
           </p>
         </div>
@@ -362,7 +367,8 @@ useHead(() => ({
     <section class="border-y border-accented bg-elevated/50 px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="fitur-heading">
       <div class="mx-auto max-w-7xl">
         <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Jelajahi lebih jauh</p>
-        <h2 id="fitur-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Baca kepemilikan dari berbagai sisi</h2>
+        <h2 id="fitur-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Telusuri Pemegang Saham dan Portofolio Investor
+        </h2>
         <div class="mt-10 grid gap-5 lg:grid-cols-3">
           <article v-for="feature in features" :key="feature.kind" v-motion-reveal
             class="motion-el flex min-w-0 flex-col rounded-2xl border border-accented bg-default p-6 motion-safe:transition-transform motion-safe:hover:-translate-y-1">
@@ -379,7 +385,7 @@ useHead(() => ({
                   </div>
                   <div class="flex flex-wrap gap-1.5">
                     <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" size="sm" />
-                    <UBadge :label="`Free Float (${sample.freeFloat}%)`" color="secondary" variant="soft" size="sm" />
+                    <UBadge :label="`Free float aplikasi (${sample.freeFloat}%)`" color="secondary" variant="soft" size="sm" />
                   </div>
                 </div>
                 <table class="w-full table-fixed border-t border-accented text-[11px]" aria-label="Cuplikan pemegang saham">
@@ -401,7 +407,7 @@ useHead(() => ({
                 <div class="space-y-2 p-3">
                   <div class="flex min-w-0 items-center gap-2">
                     <span class="truncate font-semibold text-highlighted" :title="portfolioPreview.investorName">{{ portfolioPreview.investorName
-                      }}</span>
+                    }}</span>
                     <UIcon name="i-lucide-chevron-up" class="ml-auto size-3 shrink-0 text-muted" aria-hidden="true" />
                   </div>
                   <div class="flex flex-wrap gap-1.5">
@@ -439,7 +445,7 @@ useHead(() => ({
                   <span v-else class="font-semibold text-success">(Baru)</span>
                 </div>
                 <p v-else class="mt-4 text-muted">Belum ada perubahan persentase untuk ditampilkan.</p>
-                <p class="mt-2 text-muted">Dibandingkan periode sebelumnya</p>
+                <p class="mt-2 text-muted">Dibandingkan periode sebelumnya yang tersedia</p>
               </div>
               <p class="border-t border-accented px-3 py-2 text-[10px] text-muted">{{ isLive ? 'Cuplikan' : 'Data arsip' }} · {{ sample.batchLabel }}
               </p>
@@ -454,7 +460,7 @@ useHead(() => ({
     <section id="panduan" class="scroll-mt-24 px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="panduan-heading">
       <div class="mx-auto max-w-7xl">
         <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Mulai di sini</p>
-        <h2 id="panduan-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Tiga langkah untuk mengenal kepemilikan</h2>
+        <h2 id="panduan-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Cara Cek Kepemilikan Saham di BEI</h2>
         <ol class="mt-10 grid gap-8 md:grid-cols-3">
           <li v-for="(step, i) in steps" :key="step.title" v-motion-reveal class="motion-el border-t border-accented pt-6">
             <span class="text-sm font-semibold text-primary">0{{ i + 1 }}</span>
@@ -469,10 +475,10 @@ useHead(() => ({
       <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
         <div>
           <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Sumber & pertanyaan umum</p>
-          <h2 id="faq-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Kenali data yang kamu baca</h2>
-          <p class="mt-4 text-toned leading-relaxed">Bersumber dari pengumuman bulanan Bursa Efek Indonesia. Kamu bisa membuka sumber aslinya untuk
-            memeriksa data.</p>
-          <UButton :to="IDX_SOURCE_URL" target="_blank" rel="noopener noreferrer" label="Lihat pengumuman BEI" trailing-icon="i-lucide-external-link"
+          <h2 id="faq-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Sumber Data dan Perhitungan Free Float</h2>
+          <p class="mt-4 text-toned leading-relaxed">Data kepemilikan bersumber dari Pengumuman Bursa ‘Semua Emiten Saham’ yang diterbitkan BEI. Buka
+            pengumuman sumber untuk memeriksa catatan kepemilikannya.</p>
+          <UButton :to="IDX_SOURCE_URL" target="_blank" rel="noopener noreferrer" label="Lihat Pengumuman BEI" trailing-icon="i-lucide-external-link"
             variant="outline" class="mt-6" />
         </div>
         <LandingFaq />
@@ -484,11 +490,13 @@ useHead(() => ({
         <div aria-hidden="true" class="pointer-events-none absolute -right-16 -top-32 size-96 rounded-full border-50 border-green-800/60" />
         <div class="relative">
           <p class="text-xs font-semibold tracking-widest text-green-200 uppercase">Terbuka untuk semua</p>
-          <h2 id="mulai-heading" class="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">Mulai dari saham yang kamu kenal.
+          <h2 id="mulai-heading" class="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">Cek Pemegang Saham Emiten Pilihanmu
           </h2>
-          <p class="mt-4 max-w-xl text-green-100">Temukan pemiliknya, baca porsinya, ikuti perubahan kepemilikannya.</p>
+          <p class="mt-4 max-w-xl text-green-100">Cari emiten untuk melihat porsi kepemilikan investornya, atau mulai dari nama investor untuk
+            menelusuri
+            saham yang tercatat dalam portofolionya.</p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <UButton to="/saham" label="Jelajahi Saham" trailing-icon="i-lucide-arrow-right" size="xl"
+            <UButton to="/saham" label="Lihat Kepemilikan Saham" trailing-icon="i-lucide-arrow-right" size="xl"
               class="bg-white text-green-950 hover:bg-green-50" />
             <UButton to="/investor" label="Telusuri Investor" size="xl" variant="outline" class="text-white ring-white/40 hover:bg-white/10" />
           </div>

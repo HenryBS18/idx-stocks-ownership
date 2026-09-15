@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const questions = [
-  { title: 'Dari mana data kepemilikan ini berasal?', answer: 'Data bersumber dari Pengumuman Bursa “Semua Emiten Saham” yang diterbitkan Bursa Efek Indonesia (BEI). Aplikasi menyajikan nama investor, jumlah saham, dan persentase kepemilikan dari pengumuman tersebut.' },
-  { title: 'Kapan data diperbarui?', answer: 'Data mengikuti pengumuman bulanan BEI dan tersedia setelah dimasukkan ke aplikasi. Periode terbaru ditampilkan di beranda. Pilih periode di halaman Saham atau Investor untuk membaca data bulan lain.' },
-  { title: 'Bagaimana aplikasi menghitung free float?', answer: 'Aplikasi menjumlahkan persentase seluruh investor yang tercatat untuk satu emiten pada periode terpilih, lalu menguranginya dari 100%. Hasil dibulatkan menjadi dua desimal. Angka ini merupakan perhitungan aplikasi dari data yang diumumkan, bukan penetapan free float resmi BEI. Grafik memakai total seluruh investor, meskipun tabel cuplikan hanya menampilkan sebagian.' },
-  { title: 'Apakah saya perlu membuat akun?', answer: 'Tidak. Kamu bisa mencari emiten, menelusuri investor, dan melihat periode data yang tersedia secara gratis tanpa membuat akun.' },
+  { title: 'Dari mana data kepemilikan saham berasal?', answer: 'Data bersumber dari Pengumuman Bursa ‘Semua Emiten Saham’ yang diterbitkan Bursa Efek Indonesia (BEI). Aplikasi menyajikan nama investor, jumlah saham, dan persentase kepemilikan yang tercatat dalam data tersebut.' },
+  { title: 'Kapan data kepemilikan saham diperbarui?', answer: 'Data mengikuti pengumuman bulanan BEI dan tersedia setelah dimasukkan ke aplikasi. Periode terbaru yang tersedia ditampilkan di beranda. Pilih periode di halaman Saham atau Investor untuk membaca data bulan lain.' },
+  { title: 'Bagaimana aplikasi menghitung free float saham?', answer: 'Aplikasi menjumlahkan persentase kepemilikan investor yang tercatat untuk satu emiten pada periode pilihanmu, lalu menguranginya dari 100%. Hasil ditampilkan dengan pembulatan dua desimal. Angka ini merupakan perhitungan aplikasi, bukan penetapan free float resmi BEI.' },
+  { title: 'Apakah cek kepemilikan saham di sini gratis?', answer: 'Ya. Kamu bisa mencari emiten, menelusuri investor, dan melihat periode data yang tersedia secara gratis tanpa membuat akun.' },
 ]
 
 const open = ref<number[]>([])
@@ -28,7 +28,7 @@ const toggle = (i: number) => {
         enter-from-class="grid-rows-[0fr]" enter-to-class="grid-rows-[1fr]"
         leave-active-class="grid transition-[grid-template-rows] duration-250 ease-in motion-reduce:transition-none"
         leave-from-class="grid-rows-[1fr]" leave-to-class="grid-rows-[0fr]">
-        <div v-if="open.includes(i)" :id="`faq-accordion-panel-${i}`" class="grid">
+        <div v-show="open.includes(i)" :id="`faq-accordion-panel-${i}`" class="grid">
           <div class="min-h-0 overflow-hidden">
             <p class="pb-5 pr-5 text-sm leading-relaxed text-toned">{{ question.answer }}</p>
           </div>

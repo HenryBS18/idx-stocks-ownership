@@ -15,7 +15,7 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
 <template>
   <article class="relative rounded-3xl border border-accented bg-default p-5 shadow-xl shadow-green-950/5 sm:p-7">
     <div class="flex items-center justify-between gap-3 text-xs">
-      <span class="font-semibold tracking-widest text-muted uppercase">Peta kepemilikan</span>
+      <span class="font-semibold tracking-widest text-muted uppercase">Ringkasan kepemilikan saham</span>
       <UBadge :label="isLive ? 'Cuplikan data' : 'Contoh tetap'" variant="soft" />
     </div>
     <div class="mt-6 flex items-center gap-3">
@@ -28,7 +28,7 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
       </div>
     </div>
     <div class="relative mx-auto my-6 size-56">
-      <svg viewBox="0 0 200 200" role="img" :aria-label="`${ticker}: kepemilikan tercatat ${float}%, free float aplikasi ${freeFloat}%`"
+      <svg viewBox="0 0 200 200" role="img" :aria-label="`${ticker}: kepemilikan tercatat ${float}%, Free float aplikasi ${freeFloat}%`"
         class="size-full -rotate-90">
         <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="22" class="text-green-100 dark:text-green-950" />
         <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="22" pathLength="100"
