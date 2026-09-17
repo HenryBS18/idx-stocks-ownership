@@ -80,9 +80,9 @@ Prisma client singleton at `server/utils/prisma.ts` using `PrismaPg` adapter. Bi
 curl -X POST "$SITE/api/stock" \
   -H "x-post-secret: $POST_SECRET" \
   -F "file=@data.csv" \
-  -F "idxLastUpdated=12 Jan 2025"
+  -F "idxLastUpdated=31 Agt 2026"
 ```
-- **Date parsing:** `parseDateTime("12 Jan 2025")` → `{ month, year }` with English abbreviated month names
+- **Date parsing:** `parseDateTime("31 Agt 2026")` → `{ month, year }` with Indonesian abbreviated month names (Jan, Feb, Mar, Apr, Mei, Jun, Jul, Agt, Sep, Okt, Nov, Des)
 - **Token signing/verify:** `sign-token.ts` (HS256, 1d), `verify-token.ts` (JWT from query param)
 
 ### Deployment

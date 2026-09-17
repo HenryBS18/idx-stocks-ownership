@@ -1,9 +1,9 @@
 import { monthsInNumber } from "./constants"
 
-const FORMAT_RE = /^\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}$/
+const FORMAT_RE = new RegExp(`^\\d{1,2} (${Object.keys(monthsInNumber).join("|")}) \\d{4}$`)
 
 export const parseDateTime = (datetime: string) => {
-  if (!FORMAT_RE.test(datetime)) throw createError({ statusCode: 400, statusMessage: 'Invalid date format, expected "DD Mon YYYY"' })
+  if (!FORMAT_RE.test(datetime)) throw createError({ statusCode: 400, statusMessage: 'Invalid date format, expected "DD Mon YYYY" (example: "31 Agt 2026")' })
 
   const [_, monthNameString, yearString] = datetime.split(" ")
 

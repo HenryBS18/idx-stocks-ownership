@@ -3,14 +3,16 @@ export const monthsInNumber: Record<string, number> = {
   Feb: 2,
   Mar: 3,
   Apr: 4,
-  May: 5,
+  Mei: 5,
   Jun: 6,
   Jul: 7,
-  Aug: 8,
+  Agt: 8,
+  Agu: 8,
   Sep: 9,
-  Oct: 10,
+  Okt: 10,
   Nov: 11,
-  Dec: 12
+  Nop: 11,
+  Des: 12
 }
 
 export const investorTypeLabels: Record<string, string> = {
