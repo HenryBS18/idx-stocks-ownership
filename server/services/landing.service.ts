@@ -21,7 +21,7 @@ export class LandingService {
 
     if (!info) return { batchLabel: '', emitenCount: 0, coverage: null, stock: null }
 
-    const cacheKey = `landing:v2:${info.year}-${info.month}`
+    const cacheKey = `landing:${info.year}-${info.month}`
     const cached = await getCache<LandingTeaser>(cacheKey)
     if (cached) return cached
 

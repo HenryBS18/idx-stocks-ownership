@@ -77,7 +77,7 @@ Prisma client singleton at `server/utils/prisma.ts` using `PrismaPg` adapter. Bi
 
 ### Key patterns
 
-- **Cache:** Redis with 5-day TTL in `server/utils/cache.ts`. Invalidated on upload. Uses `getSetCache` (check-then-set).
+- **Cache:** Redis with 5-day TTL in `server/utils/cache.ts` — `getCache`/`setCache` (check-then-set), `invalidateCache` (single key), `invalidateCacheByPrefix` (all keys under a prefix). Upload clears `infos`, `stock:ticker-names`, and every `landing:` key. Period-scoped `stock:<y-m>` / `investor:<y-m>` entries are left alone; they only expire via TTL.
 - **Upload flow:** `x-post-secret` check → POST multipart → `parse-stock-upload.ts` → Prisma transaction (create Info + Stock + StockInvestor in chunks of 1000) → invalidate caches. The secret check runs first so an unauthorized request never parses a body or touches Postgres:
 
 ```bash

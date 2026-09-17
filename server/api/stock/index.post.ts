@@ -1,5 +1,5 @@
 import { StockService } from "~~/server/services/stock.service"
-import { invalidateCache } from "~~/server/utils/cache"
+import { invalidateCache, invalidateCacheByPrefix } from "~~/server/utils/cache"
 
 const stockService = new StockService()
 
@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
     await stockService.insertStock({ fileBuffer, idxLastUpdated })
     await invalidateCache('infos')
     await invalidateCache('stock:ticker-names')
+    await invalidateCacheByPrefix('landing')
 
     return { message: 'Created' }
   } catch (error: any) {
