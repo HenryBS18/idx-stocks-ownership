@@ -1,21 +1,58 @@
 <script setup lang="ts">
+import type { DropdownMenuItem } from "@nuxt/ui"
 import { useStockStore } from "~/stores/useStockStore"
+import { stockSector } from "~/utils/constants"
 
 const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const stockStore = useStockStore()
-const { search, searchDebounced, showStockAccordion, sortField, sortOrder, stockCount, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
+const { search, searchDebounced, showStockAccordion, sortField, sortOrder, selectedSectors, stockCount, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
 const { error: dateError } = storeToRefs(dateStore)
 const { fetchStocks, resetFilter, toggleSort, clearError } = stockStore
 
 const isFiltersOpen = ref(false)
 
 const activeFilterCount = computed(() => {
-  return sortField.value !== 'ticker' || sortOrder.value !== 'asc' ? 1 : 0
+  let count = 0
+  if (sortField.value !== 'ticker' || sortOrder.value !== 'asc') count++
+  if (!selectedSectors.value.includes('Semua')) count++
+  return count
 })
 
 const filterButtonLabel = computed(() => activeFilterCount.value > 0 ? `Filter (${activeFilterCount.value})` : 'Filter')
+
+const sectorItems = computed(() => {
+  return stockSector.map((sector) => ({
+    label: sector,
+    type: 'checkbox',
+    checked: selectedSectors.value.includes(sector),
+    onUpdateChecked(checked: boolean) {
+      if (sector === 'Semua') {
+        selectedSectors.value = ['Semua']
+        return
+      }
+
+      const set = new Set(selectedSectors.value)
+
+      if (checked) {
+        set.add(sector)
+        set.delete('Semua')
+      } else {
+        set.delete(sector)
+      }
+
+      if (set.size === 0) {
+        set.add('Semua')
+      }
+
+      selectedSectors.value = Array.from(set)
+    },
+    onSelect(e: Event) {
+      e.preventDefault()
+    }
+  }))
+}) satisfies ComputedRef<DropdownMenuItem[]>
 
 const token = useCookie('token')
 
@@ -104,6 +141,17 @@ definePageMeta({
           <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
 
           <div class="flex items-center gap-x-2">
+            <p class="text-[13px] md:text-sm font-medium text-muted">SEKTOR</p>
+
+            <UDropdownMenu :items="sectorItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
+              <UButton :label="selectedSectors.includes('Semua') ? 'Semua' : `${selectedSectors.length} dipilih`" variant="outline"
+                color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-medium' }" />
+            </UDropdownMenu>
+          </div>
+
+          <USeparator orientation="vertical" color="primary" class="hidden h-6 lg:inline" />
+
+          <div class="flex items-center gap-x-2">
             <p class="text-[13px] md:text-sm font-medium text-muted">URUTKAN</p>
 
             <div class="flex">
@@ -155,6 +203,15 @@ definePageMeta({
         <div v-if="isFiltersOpen" class="grid">
           <section id="stock-filters" class="min-h-0 overflow-hidden w-full rounded-xl border border-accented bg-default p-3 sm:p-4 xl:hidden">
             <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
+              <div class="flex w-full flex-col items-start gap-2">
+                <p class="text-[13px] font-medium text-muted">SEKTOR</p>
+
+                <UDropdownMenu :items="sectorItems" :ui="{ viewport: 'max-h-64 overflow-y-auto' }">
+                  <UButton :label="selectedSectors.includes('Semua') ? 'Semua' : `${selectedSectors.length} dipilih`" variant="outline"
+                    color="neutral" trailing-icon="i-lucide-chevron-down" :ui="{ label: 'font-medium' }" />
+                </UDropdownMenu>
+              </div>
+
               <div class="flex w-full flex-col items-start gap-2">
                 <p class="text-[13px] font-medium text-muted">URUTKAN</p>
 

@@ -16,6 +16,21 @@ export const PRIVACY_EFFECTIVE = '14 September 2026'
 
 export const REPORT_EMAIL = 'henrybintangsetiawan@gmail.com'
 
+export const stockSector: string[] = [
+  'Semua',
+  'Basic Mat',
+  'Cyclical',
+  'Energy',
+  'Finance',
+  'Health',
+  'Industrial',
+  'Infrastrucures',
+  'Non-Cyclical',
+  'Property',
+  'Technology',
+  'Transport'
+]
+
 export const investorOrigin: string[] = [
   'Semua',
   'Asing (F)',

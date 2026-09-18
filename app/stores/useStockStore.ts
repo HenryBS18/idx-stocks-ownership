@@ -11,6 +11,7 @@ export const useStockStore = defineStore('stock', () => {
   const searchDebounced = ref<string>('')
   const sortField = ref<StockSortField>('ticker')
   const sortOrder = ref<Sort>('asc')
+  const selectedSectors = ref<string[]>(['Semua'])
   const fetchedDate = ref<string | null>(null)
 
   const filteredStocks = computed<StockDetail[]>(() => {
@@ -23,6 +24,10 @@ export const useStockStore = defineStore('stock', () => {
         stock.ticker.toLowerCase().includes(q) ||
         stock.name.toLowerCase().includes(q)
       )
+    }
+
+    if (!selectedSectors.value.includes('Semua')) {
+      result = result.filter(stock => stock.sector !== null && selectedSectors.value.includes(stock.sector))
     }
 
     result.sort((a, b) => {
@@ -90,6 +95,7 @@ export const useStockStore = defineStore('stock', () => {
     searchDebounced.value = ''
     sortField.value = 'ticker'
     sortOrder.value = 'asc'
+    selectedSectors.value = ['Semua']
   }
 
   watchDebounced(search, (v) => {
@@ -102,6 +108,7 @@ export const useStockStore = defineStore('stock', () => {
     searchDebounced,
     sortField,
     sortOrder,
+    selectedSectors,
     filteredStocks,
     stockCount,
     fetchedDate,
