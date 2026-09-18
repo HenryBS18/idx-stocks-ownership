@@ -206,6 +206,7 @@ onMounted(() => {
             )">
               <UBadge :label="`${stock.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
               <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
+              <UBadge v-if="stock.sector" :label="stock.sector" color="sector" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
 

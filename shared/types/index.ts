@@ -1,6 +1,7 @@
 export type StockDetail = {
   ticker: string
   name: string
+  sector: string | null
   investorCount: number
   float: number
   freeFloat: number
@@ -25,6 +26,7 @@ export type InvestorPortfolio = {
   stocks: {
     ticker: string
     name: string
+    sector: string | null
     totalHoldingShare: number
     percentage: number
     change: number | null

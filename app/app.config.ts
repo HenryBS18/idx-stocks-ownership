@@ -3,6 +3,11 @@ const iconSizeClass = 'size-4 sm:size-5'
 
 export default defineAppConfig({
   ui: {
+    colors: {
+      primary: 'green',
+      neutral: 'slate',
+      sector: 'sector',
+    },
     button: {
       slots: {
         base: 'cursor-pointer',

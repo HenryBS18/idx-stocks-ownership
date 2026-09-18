@@ -58,6 +58,7 @@ export class InvestorService {
         acc[row.investorName]?.stocks.push({
           ticker: row.ticker,
           name: row.stock.name,
+          sector: getSectorByTicker(row.ticker),
           totalHoldingShare: parseInt(row.totalHoldingShare.toString()),
           percentage,
           change: prev === undefined ? null : round2(percentage - prev),
