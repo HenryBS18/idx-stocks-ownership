@@ -188,9 +188,9 @@ useHead(() => ({
           <p v-motion-rise-2 class="motion-el mt-6 max-w-lg text-base leading-relaxed text-toned sm:text-lg">Kenali pemegang saham emiten di Bursa
             Efek Indonesia (BEI) dan telusuri portofolio investornya. Lihat porsi kepemilikan serta perubahan antarperiode dari pengumuman bulanan
             BEI.</p>
-          <p class="mt-3 max-w-lg text-sm leading-relaxed text-muted">Free float dihitung oleh aplikasi dari kepemilikan yang tercatat. Gratis tanpa
+          <p v-motion-rise-3 class="motion-el mt-3 max-w-lg text-sm leading-relaxed text-muted">Free float dihitung oleh aplikasi dari kepemilikan yang tercatat. Gratis tanpa
             akun.</p>
-          <div v-motion-rise-3 class="motion-el mt-8 max-w-xl">
+          <div v-motion-rise-4 class="motion-el mt-8 max-w-xl">
             <label for="landing-search" class="mb-2 block text-sm font-medium text-highlighted">Cari saham berdasarkan kode atau nama emiten</label>
             <UInputMenu id="landing-search" v-model="selectedTicker" :items="tickers ?? []" :loading="tickerStatus === 'pending'"
               :filter-fields="['ticker', 'name']" label-key="name" :virtualize="{ estimateSize: 40 }" leading-icon="i-lucide-search" size="xl"
