@@ -56,7 +56,7 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
         ))
       }
 
-      if (normalizedLocalForeign) {
+      if (normalizedLocalForeign === 'D' || normalizedLocalForeign === 'F') {
         badges.push(h(UBadge, { label: normalizedLocalForeign, color: normalizedLocalForeign === 'D' ? 'primary' : 'error', variant: 'soft', class: 'text-[9px] h-fit font-bold' }))
       }
 
@@ -90,15 +90,18 @@ const investorColumns: TableColumn<unknown, unknown>[] = [
     },
     cell: ({ row }: any) => {
       const { localForeign, domicile } = row.original
+      const trimmed = localForeign?.trim()
 
-      if (!localForeign) return h('span', { class: 'sm:text-xs lg:text-sm' }, '-')
+      if (!trimmed || (trimmed !== 'D' && trimmed !== 'F')) {
+        return h('span', { class: 'sm:text-xs lg:text-sm' }, '-')
+      }
 
-      if (localForeign === 'D') {
-        return h(UBadge, { label: localForeign, color: 'primary', variant: 'soft', class: 'hidden h-fit sm:inline font-bold' }, 'D')
+      if (trimmed === 'D') {
+        return h(UBadge, { label: 'D', color: 'primary', variant: 'soft', class: 'hidden h-fit sm:inline font-bold' }, 'D')
       }
 
       return h('div', { class: 'flex items-center gap-1.5' }, [
-        h(UBadge, { label: localForeign, color: 'error', variant: 'soft', class: 'hidden h-fit sm:inline font-bold' }, 'F'),
+        h(UBadge, { label: 'F', color: 'error', variant: 'soft', class: 'hidden h-fit sm:inline font-bold' }, 'F'),
         domicile ? h('span', { class: 'line-clamp-2 whitespace-normal wrap-break-word sm:text-xs lg:text-sm' }, domicile) : null
       ])
     },
@@ -206,6 +209,7 @@ onMounted(() => {
             )">
               <UBadge :label="`${stock.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
               <UBadge :label="`Free Float (${stock.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
+              <UBadge v-if="stock.sector" :label="stock.sector" color="sector" variant="soft" class="w-fit text-[11px] sm:text-xs xl:text-sm" />
             </div>
           </div>
 

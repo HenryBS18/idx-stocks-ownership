@@ -15,6 +15,20 @@ export default defineNuxtConfig({
     },
   },
   modules: ['@nuxt/ui', '@pinia/nuxt', '@nuxtjs/color-mode', '@nuxtjs/sitemap', '@vite-pwa/nuxt', '@vueuse/motion', 'nuxt-gtag'],
+  ui: {
+    theme: {
+      colors: [
+        'primary',
+        'secondary',
+        'success',
+        'info',
+        'warning',
+        'error',
+        'neutral',
+        'sector',
+      ],
+    },
+  },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     public: {

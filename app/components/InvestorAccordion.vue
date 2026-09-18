@@ -52,6 +52,21 @@ const stockColumns: TableColumn<unknown, unknown>[] = [
     cell: ({ row }: any) => h('span', { class: 'whitespace-normal wrap-break-word line-clamp-2 font-bold text-[10px] sm:text-xs xl:text-sm xl:line-clamp-none' }, row.original.name)
   },
   {
+    header: 'Sektor',
+    accessorKey: 'sector',
+    meta: {
+      class: {
+        th: 'hidden sm:table-cell w-32',
+        td: 'hidden sm:table-cell w-32',
+      }
+    },
+    cell: ({ row }: any) => {
+      const sector = row.original.sector
+      if (!sector) return h('span', { class: 'sm:text-xs lg:text-sm' }, '-')
+      return h(UBadge, { label: sector, color: 'sector', variant: 'soft', class: 'w-fit text-[11px] sm:text-xs' })
+    }
+  },
+  {
     header: () => h('div', [
       h('span', { class: 'hidden lg:inline' }, 'Lembar Saham'),
       h('span', { class: 'inline lg:hidden' }, 'Saham'),
@@ -149,7 +164,7 @@ onMounted(() => {
                 class="w-fit shrink-0 text-[11px]  sm:text-xs xl:text-sm" />
               <UBadge v-if="investor.investorType" :label="investor.investorType" color="secondary" variant="soft"
                 class="min-w-0 max-w-32 shrink truncate text-[11px]  sm:max-w-40 sm:text-xs md:max-w-56 xl:max-w-72 xl:text-sm" />
-              <UBadge v-if="investor.localForeign?.trim()" :label="investor.localForeign.trim()"
+              <UBadge v-if="['D','F'].includes(investor.localForeign?.trim() ?? '')" :label="investor.localForeign.trim()"
                 :color="investor.localForeign.trim() === 'D' ? 'primary' : 'error'" variant="soft"
                 class="w-fit shrink-0 text-[11px] font-bold sm:text-xs xl:text-sm" />
             </div>

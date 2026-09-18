@@ -28,7 +28,7 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
       </div>
     </div>
     <div class="relative mx-auto my-6 size-56">
-      <svg viewBox="0 0 200 200" role="img" :aria-label="`${ticker}: kepemilikan tercatat ${float}%, Free float aplikasi ${freeFloat}%`"
+      <svg viewBox="0 0 200 200" role="img" :aria-label="`${ticker}: kepemilikan tercatat ${float}%, Free float ${freeFloat}%`"
         class="size-full -rotate-90">
         <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="22" class="text-green-100 dark:text-green-950" />
         <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="22" pathLength="100"
@@ -36,7 +36,7 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
       </svg>
       <div class="absolute inset-0 flex flex-col items-center justify-center" aria-hidden="true">
         <span class="text-3xl font-bold tracking-tight text-highlighted tabular-nums">{{ freeFloat }}<span class="text-lg">%</span></span>
-        <span class="mt-1 text-xs text-muted">Free float aplikasi</span>
+        <span class="mt-1 text-xs text-muted">Free float</span>
       </div>
     </div>
     <dl class="space-y-3 text-sm">
@@ -46,7 +46,7 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
       </div>
       <div class="flex items-center justify-between gap-3">
         <dt class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-green-100 ring-1 ring-green-600/30 dark:bg-green-950" />Free float
-          aplikasi</dt>
+        </dt>
         <dd class="font-semibold text-highlighted tabular-nums">{{ freeFloat }}%</dd>
       </div>
     </dl>

@@ -54,8 +54,21 @@ input::placeholder {
   }
 }
 
-@theme {
+@theme static {
   --animate-hero-draw: hero-draw 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+
+  /* Custom warm brown palette untuk badge Sektor */
+  --color-sector-50:  #FAF5F0;
+  --color-sector-100: #EFE7DC;
+  --color-sector-200: #DFCCB9;
+  --color-sector-300: #C9A98A;
+  --color-sector-400: #B0875F;
+  --color-sector-500: #8B5A2B;
+  --color-sector-600: #744A22;
+  --color-sector-700: #5C3D1F;
+  --color-sector-800: #4A3020;
+  --color-sector-900: #3C2820;
+  --color-sector-950: #211410;
 
   @keyframes hero-draw {
     from {

@@ -60,6 +60,7 @@ export class StockService {
       return {
         ticker: s.ticker,
         name: s.name,
+        sector: getSectorByTicker(s.ticker),
         investorCount,
         float,
         freeFloat,

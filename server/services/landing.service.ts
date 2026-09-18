@@ -89,6 +89,7 @@ export class LandingService {
     return {
       ticker: stock.ticker,
       name: stock.name,
+      sector: getSectorByTicker(stock.ticker),
       investorCount: stock.stockInvestor.length,
       float,
       freeFloat: parseFloat((100 - float).toFixed(2)),

@@ -37,6 +37,7 @@ watch(selectedTicker, (item) => {
 const FALLBACK = {
   ticker: 'BBCA',
   name: 'BANK CENTRAL ASIA Tbk',
+  sector: 'Finance' as string | null,
   investorCount: 5,
   float: 59.21,
   freeFloat: 40.79,
@@ -60,6 +61,7 @@ const sample = computed(() => {
   return {
     ticker: live.ticker,
     name: live.name,
+    sector: live.sector,
     investorCount: live.investorCount,
     float: live.float,
     freeFloat: live.freeFloat,
@@ -254,7 +256,8 @@ useHead(() => ({
 
           <div class="flex gap-x-2 sm:gap-x-3">
             <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-xs xl:text-sm" />
-            <UBadge :label="`Free float aplikasi (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
+            <UBadge :label="`Free float (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
+            <UBadge v-if="sample.sector" :label="sample.sector" color="sector" variant="soft" class="w-fit text-xs xl:text-sm" />
           </div>
         </div>
 
@@ -288,8 +291,10 @@ useHead(() => ({
                     <span class="flex gap-x-1 sm:hidden">
                       <UBadge v-if="investor.investorType" :label="investor.investorType" color="secondary" variant="soft"
                         class="text-xs h-auto py-0.5" />
-                      <UBadge :label="investor.localForeign" :color="investor.localForeign === 'D' ? 'primary' : 'error'" variant="soft"
+                      <UBadge v-if="['D','F'].includes(investor.localForeign?.trim() ?? '')" :label="investor.localForeign.trim()"
+                        :color="investor.localForeign.trim() === 'D' ? 'primary' : 'error'" variant="soft"
                         class="text-xs h-fit font-bold" />
+                      <span v-else class="text-xs text-muted">-</span>
                     </span>
                   </div>
                 </td>
@@ -298,9 +303,11 @@ useHead(() => ({
 
                 <td class="hidden px-3 py-2.5 sm:table-cell">
                   <span class="flex items-center gap-x-1.5">
-                    <UBadge :label="investor.localForeign" :color="investor.localForeign === 'D' ? 'primary' : 'error'" variant="soft"
+                    <UBadge v-if="['D','F'].includes(investor.localForeign?.trim() ?? '')" :label="investor.localForeign.trim()"
+                      :color="investor.localForeign.trim() === 'D' ? 'primary' : 'error'" variant="soft"
                       class="h-fit font-bold" />
-                    <span v-if="investor.domicile" class="text-default">{{ investor.domicile }}</span>
+                    <span v-else class="text-muted">-</span>
+                    <span v-if="investor.localForeign?.trim() === 'F' && investor.domicile" class="text-default">{{ investor.domicile }}</span>
                   </span>
                 </td>
 
@@ -385,7 +392,8 @@ useHead(() => ({
                   </div>
                   <div class="flex flex-wrap gap-1.5">
                     <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" size="sm" />
-                    <UBadge :label="`Free float aplikasi (${sample.freeFloat}%)`" color="secondary" variant="soft" size="sm" />
+                    <UBadge :label="`Free float (${sample.freeFloat}%)`" color="secondary" variant="soft" size="sm" />
+                    <UBadge v-if="sample.sector" :label="sample.sector" color="sector" variant="soft" size="sm" />
                   </div>
                 </div>
                 <table class="w-full table-fixed border-t border-accented text-[11px]" aria-label="Cuplikan pemegang saham">
@@ -412,7 +420,8 @@ useHead(() => ({
                   </div>
                   <div class="flex flex-wrap gap-1.5">
                     <UBadge v-if="portfolioPreview.investorType" :label="portfolioPreview.investorType" color="secondary" variant="soft" size="sm" />
-                    <UBadge :label="portfolioPreview.localForeign" :color="portfolioPreview.localForeign === 'D' ? 'primary' : 'error'" variant="soft"
+                    <UBadge v-if="['D','F'].includes(portfolioPreview.localForeign?.trim() ?? '')" :label="portfolioPreview.localForeign.trim()"
+                      :color="portfolioPreview.localForeign.trim() === 'D' ? 'primary' : 'error'" variant="soft"
                       size="sm" />
                   </div>
                 </div>
