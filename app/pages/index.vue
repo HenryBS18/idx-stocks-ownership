@@ -256,7 +256,7 @@ useHead(() => ({
 
           <div class="flex gap-x-2 sm:gap-x-3">
             <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-xs xl:text-sm" />
-            <UBadge :label="`Free float aplikasi (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
+            <UBadge :label="`Free float (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
             <UBadge v-if="sample.sector" :label="sample.sector" color="sector" variant="soft" class="w-fit text-xs xl:text-sm" />
           </div>
         </div>
@@ -392,7 +392,7 @@ useHead(() => ({
                   </div>
                   <div class="flex flex-wrap gap-1.5">
                     <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" size="sm" />
-                    <UBadge :label="`Free float aplikasi (${sample.freeFloat}%)`" color="secondary" variant="soft" size="sm" />
+                    <UBadge :label="`Free float (${sample.freeFloat}%)`" color="secondary" variant="soft" size="sm" />
                     <UBadge v-if="sample.sector" :label="sample.sector" color="sector" variant="soft" size="sm" />
                   </div>
                 </div>
