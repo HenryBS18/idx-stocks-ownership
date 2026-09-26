@@ -1,0 +1,21 @@
+# IDX Stocks Ownership
+
+> Data kepemilikan saham seluruh emiten Bursa Efek Indonesia (BEI/IDX), per investor, dari pengumuman bulanan resmi BEI. Gratis, tanpa akun.
+
+IDX Stocks Ownership menampilkan catatan kepemilikan saham lengkap untuk setiap emiten: nama investor, tipe investor, asal (D = lokal, F = asing, beserta domisili), jumlah saham, persentase kepemilikan, dan perubahan dibanding periode sebelumnya (termasuk investor baru). Free float dihitung oleh aplikasi dari kepemilikan yang tercatat.
+
+- Sumber data: pengumuman resmi Bursa Efek Indonesia, https://www.idx.co.id/id/perusahaan-tercatat/data-kepemilikan-saham
+- Periode: snapshot bulanan ("DATA PER"); tidak ada data perdagangan harian.
+- Lisensi: data bebas disalin, diolah, dan diterbitkan ulang, termasuk untuk keperluan komersial, selama mencantumkan atribusi ke IDX Stocks Ownership. Data ini hasil penyusunan ulang pihak ketiga, bukan data resmi Bursa Efek Indonesia.
+- Bahasa situs: Bahasa Indonesia.
+
+## Halaman utama
+
+- [Beranda](https://idx-stocks-ownership.vercel.app/): ringkasan dan panduan cara pakai
+- [Saham](https://idx-stocks-ownership.vercel.app/saham): daftar semua emiten dengan free float, jumlah investor >1%, dan tabel pemegang saham per emiten
+- [Investor](https://idx-stocks-ownership.vercel.app/investor): daftar investor beserta portofolio saham, dapat difilter menurut asal dan tipe investor
+
+## Ketentuan
+
+- [Ketentuan Penggunaan Data](https://idx-stocks-ownership.vercel.app/lisensi): lisensi lengkap, cara atribusi, dan batasan penggunaan data
+- [Kebijakan Privasi](https://idx-stocks-ownership.vercel.app/privasi)
