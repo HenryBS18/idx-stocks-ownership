@@ -179,25 +179,25 @@ useHead(() => ({
   <main class="landing [--ui-primary:var(--color-green-700)] dark:[--ui-primary:var(--color-green-400)]">
     <div class="landing-intro">
       <section
-        class="landing-hero relative overflow-hidden border-b border-accented bg-linear-to-br from-green-50/80 via-default to-default px-4 py-12 sm:py-20 lg:px-8 dark:from-green-950/30">
-        <div class="landing-hero-grid relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
+        class="landing-hero relative overflow-hidden border-b border-accented bg-linear-to-br from-green-50/80 via-default to-default px-4 py-12 max-sm:py-8 sm:py-20 lg:px-8 dark:from-green-950/30">
+        <div class="landing-hero-grid relative mx-auto grid max-w-7xl items-center gap-12 max-sm:gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
           <div class="min-w-0">
-            <p v-motion-rise class="landing-eyebrow motion-el mb-5 flex items-center gap-2 text-xs font-semibold tracking-widest text-primary uppercase"><span
+            <p v-motion-rise class="landing-eyebrow motion-el mb-5 flex items-center gap-2 text-xs font-semibold tracking-widest text-primary uppercase max-sm:mb-4"><span
                 class="size-2 rounded-full bg-primary" />Data publik BEI, mudah ditelusuri</p>
             <h1 v-motion-rise-1
               class="landing-title motion-el max-w-2xl text-[clamp(2rem,4.6vw,4.5rem)] leading-[1.08] font-bold tracking-[-0.045em] text-highlighted">Data Kepemilikan
               Saham dan <span class="text-primary">Free Float Emiten BEI</span></h1>
-            <p v-motion-rise-2 class="landing-description motion-el mt-6 max-w-lg text-base leading-relaxed text-toned sm:text-lg">Kenali pemegang saham emiten di Bursa
+            <p v-motion-rise-2 class="landing-description motion-el mt-6 max-w-lg text-base leading-relaxed text-toned max-sm:mt-4 sm:text-lg">Kenali pemegang saham emiten di Bursa
               Efek Indonesia (BEI) dan telusuri portofolio investornya. Lihat porsi kepemilikan serta perubahan antarperiode dari pengumuman bulanan
               BEI.</p>
-            <p v-motion-rise-3 class="landing-note motion-el mt-3 max-w-lg text-sm leading-relaxed text-muted">Free float dihitung oleh aplikasi dari kepemilikan yang tercatat. Gratis tanpa
+            <p v-motion-rise-3 class="landing-note motion-el mt-3 max-w-lg text-sm leading-relaxed text-muted max-sm:mt-2">Free float dihitung oleh aplikasi dari kepemilikan yang tercatat. Gratis tanpa
               akun.</p>
-            <div v-motion-rise-4 class="landing-search motion-el mt-8 max-w-xl">
+            <div v-motion-rise-4 class="landing-search motion-el mt-8 max-w-xl max-sm:mt-6">
               <label for="landing-search" class="mb-2 block text-sm font-medium text-highlighted">Cari saham berdasarkan kode atau nama emiten</label>
               <UInputMenu id="landing-search" v-model="selectedTicker" :items="tickers ?? []" :loading="tickerStatus === 'pending'"
                 :filter-fields="['ticker', 'name']" label-key="name" :virtualize="{ estimateSize: 40 }" leading-icon="i-lucide-search" size="xl"
                 class="w-full" aria-label="Cari saham berdasarkan kode atau nama emiten" placeholder="Contoh: BBCA atau Bank Central Asia"
-                :ui="{ trailingIcon: 'hidden' }" @focus="loadTickers">
+                :ui="{ base: 'max-sm:min-h-11', trailingIcon: 'hidden' }" @focus="loadTickers">
                 <template #item-leading="{ item }">
                   <UBadge :label="item.ticker" size="sm" />
                 </template>
@@ -205,9 +205,9 @@ useHead(() => ({
                   'Emiten tidak ditemukan.' }}</template>
               </UInputMenu>
               <UButton v-if="tickerStatus === 'error'" label="Coba muat pencarian lagi" variant="link" class="mt-2" @click="loadTickers" />
-              <div class="landing-actions mt-4 flex flex-wrap gap-3">
-                <UButton to="/saham" label="Lihat Kepemilikan Saham" trailing-icon="i-lucide-arrow-right" size="lg" />
-                <UButton to="/investor" label="Telusuri Investor" color="neutral" variant="outline" size="lg" />
+              <div class="landing-actions mt-4 flex flex-wrap gap-3 max-sm:mt-3">
+                <UButton to="/saham" label="Lihat Kepemilikan Saham" trailing-icon="i-lucide-arrow-right" size="lg" class="max-sm:min-h-11" />
+                <UButton to="/investor" label="Telusuri Investor" color="neutral" variant="outline" size="lg" class="max-sm:min-h-11" />
               </div>
             </div>
           </div>
@@ -220,24 +220,24 @@ useHead(() => ({
 
       <section aria-label="Informasi data" class="landing-stats border-b border-accented px-4 lg:px-8">
         <div class="mx-auto grid max-w-7xl divide-y divide-accented sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-          <div class="py-6 sm:pr-8">
-            <dl v-motion-reveal class="motion-el">
-              <dt class="text-xs text-muted">Emiten dalam basis data</dt>
-              <dd class="mt-1 text-xl font-semibold text-highlighted tabular-nums">{{ emitenCount !== null ? emitenCount.toLocaleString('id-ID') :
+          <div class="py-6 max-sm:py-3 sm:pr-8">
+            <dl v-motion-reveal class="motion-el max-sm:grid max-sm:grid-cols-2 max-sm:items-center max-sm:gap-4">
+              <dt class="text-xs text-muted max-sm:min-w-0 max-sm:wrap-anywhere">Emiten dalam basis data</dt>
+              <dd class="mt-1 text-xl font-semibold text-highlighted tabular-nums max-sm:mt-0 max-sm:min-w-0 max-sm:text-right max-sm:text-base max-sm:wrap-anywhere">{{ emitenCount !== null ? emitenCount.toLocaleString('id-ID') :
                 landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia' }}</dd>
             </dl>
           </div>
-          <div class="py-6 sm:px-8">
-            <dl v-motion-reveal-1 class="motion-el">
-              <dt class="text-xs text-muted">Periode terbaru</dt>
-              <dd class="mt-1 text-xl font-semibold text-highlighted">{{ latestBatch || (landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia') }}
+          <div class="py-6 max-sm:py-3 sm:px-8">
+            <dl v-motion-reveal-1 class="motion-el max-sm:grid max-sm:grid-cols-2 max-sm:items-center max-sm:gap-4">
+              <dt class="text-xs text-muted max-sm:min-w-0 max-sm:wrap-anywhere">Periode terbaru</dt>
+              <dd class="mt-1 text-xl font-semibold text-highlighted max-sm:mt-0 max-sm:min-w-0 max-sm:text-right max-sm:text-base max-sm:wrap-anywhere">{{ latestBatch || (landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia') }}
               </dd>
             </dl>
           </div>
-          <div class="py-6 sm:pl-8">
-            <dl v-motion-reveal-2 class="motion-el">
-              <dt class="text-xs text-muted">Akses data</dt>
-              <dd class="mt-1 text-xl font-semibold text-highlighted">Gratis <span class="text-sm font-normal text-muted">/ tanpa akun</span></dd>
+          <div class="py-6 max-sm:py-3 sm:pl-8">
+            <dl v-motion-reveal-2 class="motion-el max-sm:grid max-sm:grid-cols-2 max-sm:items-center max-sm:gap-4">
+              <dt class="text-xs text-muted max-sm:min-w-0 max-sm:wrap-anywhere">Akses data</dt>
+              <dd class="mt-1 text-xl font-semibold text-highlighted max-sm:mt-0 max-sm:min-w-0 max-sm:text-right max-sm:text-base max-sm:wrap-anywhere">Gratis <span class="text-sm font-normal text-muted">/ tanpa akun</span></dd>
             </dl>
           </div>
         </div>
