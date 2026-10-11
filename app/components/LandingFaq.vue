@@ -17,7 +17,8 @@ const toggle = (i: number) => {
   <div class="divide-y divide-accented border-y border-accented">
     <article v-for="(question, i) in questions" :key="question.title" class="py-1">
       <button type="button" :aria-expanded="open.includes(i)" :aria-controls="`faq-accordion-panel-${i}`"
-        class="faq-question flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg py-5 text-start text-sm font-semibold text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        class="faq-question flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg py-5 text-start text-sm font-semibold text-highlighted
+          lg:py-[clamp(1rem,2svh,1.25rem)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         @click="toggle(i)">
         <span>{{ question.title }}</span>
         <UIcon name="i-lucide-chevron-down" class="size-5 shrink-0 transition-transform"
@@ -37,11 +38,3 @@ const toggle = (i: number) => {
     </article>
   </div>
 </template>
-
-<style scoped>
-@media (min-width: 64rem) {
-  .faq-question {
-    padding-block: clamp(1rem, 2svh, 1.25rem);
-  }
-}
-</style>

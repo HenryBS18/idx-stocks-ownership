@@ -13,12 +13,13 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
 </script>
 
 <template>
-  <article class="ownership-card relative rounded-3xl border border-accented bg-default p-5 shadow-xl shadow-green-950/5 max-sm:p-4 sm:p-7">
+  <article class="ownership-card relative rounded-3xl border border-accented bg-default p-5 shadow-xl shadow-green-950/5
+    max-sm:p-4 sm:p-7 lg:p-[var(--landing-card-padding,1.75rem)]">
     <div class="flex items-center justify-between gap-3 text-xs">
       <span class="font-semibold tracking-widest text-muted uppercase">Ringkasan kepemilikan saham</span>
       <UBadge :label="isLive ? 'Cuplikan data' : 'Contoh tetap'" variant="soft" />
     </div>
-    <div class="ownership-company mt-6 flex items-center gap-3 max-sm:mt-4">
+    <div class="ownership-company mt-6 flex items-center gap-3 max-sm:mt-4 lg:mt-[var(--landing-card-gap,1.5rem)]">
       <span class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
         <UIcon name="i-lucide-building-2" class="size-6" />
       </span>
@@ -27,7 +28,8 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
         <p class="text-xs text-muted wrap-break-word">{{ name }}</p>
       </div>
     </div>
-    <div class="ownership-chart relative mx-auto my-6 size-56 max-sm:my-4 max-sm:size-[clamp(10rem,44vw,11rem)]">
+    <div class="ownership-chart relative mx-auto my-6 size-56 max-sm:my-4 max-sm:size-[clamp(10rem,44vw,11rem)]
+      lg:my-[var(--landing-card-gap,1.5rem)] lg:size-[var(--landing-chart-size,14rem)]">
       <svg viewBox="0 0 200 200" role="img" :aria-label="`${ticker}: kepemilikan tercatat ${float}%, Free float ${freeFloat}%`"
         class="size-full -rotate-90">
         <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="22" class="text-green-100 dark:text-green-950" />
@@ -50,28 +52,10 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
         <dd class="font-semibold text-highlighted tabular-nums">{{ freeFloat }}%</dd>
       </div>
     </dl>
-    <div class="ownership-period mt-5 flex flex-wrap justify-between gap-2 border-t border-accented pt-4 text-xs text-muted max-sm:mt-4 max-sm:pt-3">
+    <div class="ownership-period mt-5 flex flex-wrap justify-between gap-2 border-t border-accented pt-4 text-xs text-muted
+      max-sm:mt-4 max-sm:pt-3 lg:mt-[var(--landing-card-gap,1.5rem)]">
       <span>{{ investorCount }} investor tercatat</span>
       <span>Per {{ batchLabel || 'periode belum tersedia' }}</span>
     </div>
   </article>
 </template>
-
-<style scoped>
-@media (min-width: 64rem) {
-  .ownership-card {
-    padding: var(--landing-card-padding, 1.75rem);
-  }
-
-  .ownership-company,
-  .ownership-period {
-    margin-top: var(--landing-card-gap, 1.5rem);
-  }
-
-  .ownership-chart {
-    width: var(--landing-chart-size, 14rem);
-    height: var(--landing-chart-size, 14rem);
-    margin-block: var(--landing-card-gap, 1.5rem);
-  }
-}
-</style>
