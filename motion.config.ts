@@ -1,10 +1,11 @@
 const EASE_OUT = [0.22, 1, 0.36, 1]
 const EASE_IN = [0.4, 0, 1, 1]
 const DURATION = 600
+const REVEAL_DURATION = 800
 const EXIT_DURATION = 300
 const OFFSET = 12
 
-const transition = (delay: number) => ({ type: 'keyframes', duration: DURATION, ease: EASE_OUT, delay })
+const transition = (delay: number, duration = DURATION) => ({ type: 'keyframes', duration, ease: EASE_OUT, delay })
 
 const exit = { type: 'keyframes', duration: EXIT_DURATION, ease: EASE_IN }
 
@@ -15,12 +16,12 @@ const rise = (delay: number) => ({
 
 const reveal = (delay: number) => ({
   initial: { opacity: 0, y: OFFSET, transition: exit },
-  visible: { opacity: 1, y: 0, transition: transition(delay) },
+  visible: { opacity: 1, y: 0, transition: transition(delay, REVEAL_DURATION) },
 })
 
 const bar = {
   initial: { scaleX: 0, transition: exit },
-  visible: { scaleX: 1, transition: transition(0) },
+  visible: { scaleX: 1, transition: transition(0, REVEAL_DURATION) },
 }
 
 const figure = {

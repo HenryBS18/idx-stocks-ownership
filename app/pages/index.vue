@@ -179,7 +179,6 @@ useHead(() => ({
   <main class="landing [--ui-primary:var(--color-green-700)] dark:[--ui-primary:var(--color-green-400)]">
     <section
       class="relative overflow-hidden border-b border-accented bg-linear-to-br from-green-50/80 via-default to-default px-4 py-12 sm:py-20 lg:px-8 dark:from-green-950/30">
-      <div aria-hidden="true" class="pointer-events-none absolute -right-32 top-0 size-144 rounded-full border border-primary/10" />
       <div class="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
         <div class="min-w-0">
           <p v-motion-rise class="motion-el mb-5 flex items-center gap-2 text-xs font-semibold tracking-widest text-primary uppercase"><span
@@ -219,26 +218,32 @@ useHead(() => ({
     </section>
 
     <section aria-label="Informasi data" class="border-b border-accented px-4 lg:px-8">
-      <dl class="mx-auto grid max-w-7xl divide-y divide-accented sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      <div class="mx-auto grid max-w-7xl divide-y divide-accented sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         <div class="py-6 sm:pr-8">
-          <dt class="text-xs text-muted">Emiten dalam basis data</dt>
-          <dd class="mt-1 text-xl font-semibold text-highlighted tabular-nums">{{ emitenCount !== null ? emitenCount.toLocaleString('id-ID') :
-            landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia' }}</dd>
+          <dl v-motion-reveal class="motion-el">
+            <dt class="text-xs text-muted">Emiten dalam basis data</dt>
+            <dd class="mt-1 text-xl font-semibold text-highlighted tabular-nums">{{ emitenCount !== null ? emitenCount.toLocaleString('id-ID') :
+              landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia' }}</dd>
+          </dl>
         </div>
         <div class="py-6 sm:px-8">
-          <dt class="text-xs text-muted">Periode terbaru</dt>
-          <dd class="mt-1 text-xl font-semibold text-highlighted">{{ latestBatch || (landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia') }}
-          </dd>
+          <dl v-motion-reveal-1 class="motion-el">
+            <dt class="text-xs text-muted">Periode terbaru</dt>
+            <dd class="mt-1 text-xl font-semibold text-highlighted">{{ latestBatch || (landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia') }}
+            </dd>
+          </dl>
         </div>
         <div class="py-6 sm:pl-8">
-          <dt class="text-xs text-muted">Akses data</dt>
-          <dd class="mt-1 text-xl font-semibold text-highlighted">Gratis <span class="text-sm font-normal text-muted">/ tanpa akun</span></dd>
+          <dl v-motion-reveal-2 class="motion-el">
+            <dt class="text-xs text-muted">Akses data</dt>
+            <dd class="mt-1 text-xl font-semibold text-highlighted">Gratis <span class="text-sm font-normal text-muted">/ tanpa akun</span></dd>
+          </dl>
         </div>
-      </dl>
+      </div>
     </section>
 
     <section class="px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="contoh-heading">
-      <div class="mx-auto mb-8 max-w-7xl">
+      <div v-motion-reveal class="motion-el mx-auto mb-8 max-w-7xl">
         <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Cuplikan data</p>
         <h2 id="contoh-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Contoh Data Pemegang Saham Emiten BEI</h2>
         <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat nama investor, jumlah lembar saham, dan persentase kepemilikannya pada periode yang
@@ -373,11 +378,13 @@ useHead(() => ({
 
     <section class="border-y border-accented bg-elevated/50 px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="fitur-heading">
       <div class="mx-auto max-w-7xl">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Jelajahi lebih jauh</p>
-        <h2 id="fitur-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Telusuri Pemegang Saham dan Portofolio Investor
-        </h2>
+        <div v-motion-reveal class="motion-el">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Jelajahi lebih jauh</p>
+          <h2 id="fitur-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Telusuri Pemegang Saham dan Portofolio Investor
+          </h2>
+        </div>
         <div class="mt-10 grid gap-5 lg:grid-cols-3">
-          <article v-for="feature in features" :key="feature.kind" v-motion-reveal
+          <article v-for="(feature, i) in features" :key="feature.kind" v-motion-reveal :delay="i * 80"
             class="motion-el flex min-w-0 flex-col rounded-2xl border border-accented bg-default p-6 motion-safe:transition-transform motion-safe:hover:-translate-y-1">
             <UIcon :name="feature.icon" class="size-7 text-primary" />
             <h3 class="mt-5 text-lg font-semibold text-highlighted">{{ feature.title }}</h3>
@@ -468,10 +475,12 @@ useHead(() => ({
 
     <section id="panduan" class="scroll-mt-24 px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="panduan-heading">
       <div class="mx-auto max-w-7xl">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Mulai di sini</p>
-        <h2 id="panduan-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Cara Cek Kepemilikan Saham di BEI</h2>
+        <div v-motion-reveal class="motion-el">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Mulai di sini</p>
+          <h2 id="panduan-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Cara Cek Kepemilikan Saham di BEI</h2>
+        </div>
         <ol class="mt-10 grid gap-8 md:grid-cols-3">
-          <li v-for="(step, i) in steps" :key="step.title" v-motion-reveal class="motion-el border-t border-accented pt-6">
+          <li v-for="(step, i) in steps" :key="step.title" v-motion-reveal :delay="i * 80" class="motion-el border-t border-accented pt-6">
             <span class="text-sm font-semibold text-primary">0{{ i + 1 }}</span>
             <h3 class="mt-4 text-lg font-semibold text-highlighted">{{ step.title }}</h3>
             <p class="mt-2 max-w-sm text-sm leading-relaxed text-toned">{{ step.text }}</p>
@@ -482,7 +491,7 @@ useHead(() => ({
 
     <section class="border-t border-accented px-4 py-16 sm:py-24 lg:px-8" aria-labelledby="faq-heading">
       <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
-        <div>
+        <div v-motion-reveal class="motion-el">
           <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Sumber & pertanyaan umum</p>
           <h2 id="faq-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Sumber Data dan Perhitungan Free Float</h2>
           <p class="mt-4 text-toned leading-relaxed">Data kepemilikan bersumber dari Pengumuman Bursa ‘Semua Emiten Saham’ yang diterbitkan BEI. Buka
@@ -490,13 +499,14 @@ useHead(() => ({
           <UButton :to="IDX_SOURCE_URL" target="_blank" rel="noopener noreferrer" label="Lihat Pengumuman BEI" trailing-icon="i-lucide-external-link"
             variant="outline" class="mt-6" />
         </div>
-        <LandingFaq />
+        <div v-motion-reveal-1 class="motion-el">
+          <LandingFaq />
+        </div>
       </div>
     </section>
 
     <section class="px-4 pb-16 sm:pb-24 lg:px-8" aria-labelledby="mulai-heading">
       <div v-motion-reveal class="motion-el relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-green-900 p-8 sm:p-14">
-        <div aria-hidden="true" class="pointer-events-none absolute -right-16 -top-32 size-96 rounded-full border-50 border-green-800/60" />
         <div class="relative">
           <p class="text-xs font-semibold tracking-widest text-green-200 uppercase">Terbuka untuk semua</p>
           <h2 id="mulai-heading" class="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">Cek Pemegang Saham Emiten Pilihanmu
