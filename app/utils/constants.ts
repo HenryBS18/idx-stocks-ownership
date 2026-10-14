@@ -40,6 +40,7 @@ export const investorOrigin: string[] = [
 export const investorType: string[] = [
   'Semua',
   'Other',
+  'Association/Social Organizations',
   'Bank',
   'Brokerage Firms',
   'Capital Market Supporting Institutions And Professions',
