@@ -1,34 +1,32 @@
 import { execFileSync } from 'node:child_process'
-import type { SitemapUrl } from '@nuxtjs/sitemap'
 
-type RouteSource = Pick<SitemapUrl, 'loc' | 'priority'> & { sources: string[] }
-
-const routes: RouteSource[] = [
-  { loc: '/', priority: 1, sources: ['app/pages/index.vue'] },
-  { loc: '/saham', priority: 0.8, sources: ['app/pages/saham.vue', 'app/components/SahamAccordion.vue'] },
-  { loc: '/investor', priority: 0.8, sources: ['app/pages/investor.vue', 'app/components/InvestorAccordion.vue'] },
-  { loc: '/lisensi', priority: 0.3, sources: ['app/pages/lisensi.vue', 'app/utils/constants.ts'] },
-  { loc: '/privasi', priority: 0.3, sources: ['app/pages/privasi.vue', 'app/utils/constants.ts'] },
-]
-
-const lastCommitDate = (sources: string[]): string | null => {
+const lastCommitDate = (sources: string[]): string => {
   try {
-    const stdout = execFileSync('git', ['log', '-1', '--format=%cI', '--', ...sources], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    })
-    return stdout.trim() || null
+    return execFileSync('git', ['log', '-1', '--format=%cI', '--', ...sources], {
+      encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim()
   } catch {
-    return null
+    return ''
   }
 }
 
-export const sitemapUrls = (): SitemapUrl[] => {
-  const buildTime = new Date().toISOString()
-
-  return routes.map(({ loc, priority, sources }) => ({
-    loc,
-    priority,
-    lastmod: lastCommitDate(sources) ?? buildTime,
-  }))
+export const sitemapContentDates = () => {
+  const sharedDetail = [
+    'app/components/OwnershipDetailPage.vue', 'app/components/OwnershipDetailView.vue',
+    // Retain historical paths so moving content does not lose its commit date.
+    'app/components/DetailHoldingsTable.vue', 'app/components/OwnershipChanges.vue',
+    'app/components/DataSourceNote.vue', 'app/utils/detail-format.ts', 'app/utils/format-share.ts',
+    'server/services/detail.service.ts', 'server/utils/ownership-detail.ts',
+  ]
+  return {
+    pages: {
+      '/': lastCommitDate(['app/pages/index.vue', 'app/components/LandingFaq.vue', 'server/services/landing.service.ts']),
+      '/saham': lastCommitDate(['app/pages/saham/index.vue', 'app/pages/saham.vue', 'app/components/SahamAccordion.vue', 'app/components/StockInvestorsTable.vue', 'server/services/stock.service.ts']),
+      '/investor': lastCommitDate(['app/pages/investor/index.vue', 'app/pages/investor.vue', 'app/components/InvestorAccordion.vue', 'app/components/InvestorStocksTable.vue', 'server/services/investor.service.ts']),
+      '/lisensi': lastCommitDate(['app/pages/lisensi.vue', 'app/utils/constants.ts']),
+      '/privasi': lastCommitDate(['app/pages/privasi.vue', 'app/utils/constants.ts']),
+    },
+    stocks: lastCommitDate([...sharedDetail, 'app/pages/saham/[ticker].vue', 'app/components/StockInvestorsTable.vue', 'app/components/StockOwnershipChart.vue']),
+    investors: lastCommitDate([...sharedDetail, 'app/pages/investor/[slug].vue', 'app/components/InvestorStocksTable.vue']),
+  }
 }

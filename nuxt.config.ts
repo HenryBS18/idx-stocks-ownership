@@ -1,5 +1,5 @@
 import { motionDirectives } from './motion.config'
-import { sitemapUrls } from './sitemap.config'
+import { sitemapContentDates } from './sitemap.config'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
+    sitemapContentDates: sitemapContentDates(),
     public: {
       motion: { directives: motionDirectives },
     },
@@ -46,9 +47,14 @@ export default defineNuxtConfig({
     credits: false,
     discoverImages: false,
     discoverVideos: false,
-    urls: sitemapUrls(),
-    defaults: {
-      changefreq: 'monthly',
+    excludeAppSources: true,
+    autoLastmod: false,
+    cacheMaxAgeSeconds: false,
+    sitemapsPathPrefix: '/',
+    sitemaps: {
+      'sitemap-pages': { includeAppSources: false, chunks: false },
+      'sitemap-stocks': { includeAppSources: false, chunks: false },
+      'sitemap-investors': { includeAppSources: false, chunks: false },
     },
   },
   gtag: {

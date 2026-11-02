@@ -60,3 +60,11 @@ export type TeaserStock = {
 }
 
 export type Tx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
+
+export type SitemapContentDates = {
+  pages: Record<string, string | null>
+  stocks: string | null
+  investors: string | null
+}
+
+export type SitemapName = 'sitemap-pages' | 'sitemap-stocks' | 'sitemap-investors'
