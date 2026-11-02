@@ -85,7 +85,7 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
 
-  function clearError() {
+  const clearError = () => {
     error.value = false
     errorMessage.value = ''
   }

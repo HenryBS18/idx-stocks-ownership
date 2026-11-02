@@ -21,7 +21,7 @@ export const useDateStore = defineStore('date', () => {
     }
   }
 
-  function clearError() {
+  const clearError = () => {
     error.value = false
     errorMessage.value = ''
   }

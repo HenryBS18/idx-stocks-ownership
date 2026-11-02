@@ -79,7 +79,7 @@ export const useInvestorStore = defineStore('investor', () => {
     }
   }
 
-  function clearError() {
+  const clearError = () => {
     error.value = false
     errorMessage.value = ''
   }

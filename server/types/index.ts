@@ -1,10 +1,3 @@
-import { Browser, Page } from "puppeteer"
-
-export type BrowserPage = {
-  browser: Browser
-  page: Page
-}
-
 export type IdxFileData = {
   time: string
   url: string
@@ -29,7 +22,6 @@ export type HoldingRecord = Omit<StockHolding, 'name'>
 export type InvestorHolding = Omit<StockHolding, 'infoId'>
 
 export type TickerName = Pick<StockHolding, 'ticker' | 'name'>
-
 
 export type GetStockParam = {
   year: number

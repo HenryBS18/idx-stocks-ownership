@@ -2,7 +2,7 @@ export const round2 = (n: number): number => Math.round(n * 100) / 100
 
 export const investorKey = (ticker: string, investorName: string): string => `${ticker}|${investorName}`
 
-export async function getPrevMap(info: { year: number; month: number },): Promise<Map<string, number> | null> {
+export const getPrevMap = async (info: { year: number; month: number },): Promise<Map<string, number> | null> => {
   const prevInfo = await prisma.info.findFirst({
     where: {
       OR: [
