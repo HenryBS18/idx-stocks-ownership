@@ -26,6 +26,11 @@ model Stock {
   stockInvestor StockInvestor[]
 }
 
+model InvestorProfile {
+  investorName String @id @db.VarChar(150)
+  slug         String @unique @db.VarChar(220)
+}
+
 model StockInvestor {
   id                Int     @id @default(autoincrement()) @db.Integer()
   ticker            String  @db.Char(4)
@@ -43,4 +48,5 @@ model StockInvestor {
   info  Info  @relation(fields: [infoId], references: [id])
 
   @@index([infoId, ticker])
+  @@index([investorName, infoId])
 }

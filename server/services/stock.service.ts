@@ -4,6 +4,7 @@ import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, TickerName, Tx } from "../types"
 import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
+import { ensureInvestorProfiles } from "../utils/investor-slug"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
@@ -136,6 +137,7 @@ export class StockService {
 
       const tickerNames = this.dedupTickers(investorHoldings)
       await tx.stock.createMany({ data: tickerNames, skipDuplicates: true })
+      await ensureInvestorProfiles(tx.investorProfile, investorHoldings.map(row => row.investorName))
 
       const records: HoldingRecord[] = investorHoldings.map((
         { ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }

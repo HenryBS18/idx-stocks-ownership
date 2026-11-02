@@ -11,6 +11,7 @@ export type StockDetail = {
     totalHoldingShare: number
     percentage: number
     investorName: string
+    investorSlug?: string | null
     domicile: string
     change: number | null
     hasPrevData: boolean
@@ -19,6 +20,7 @@ export type StockDetail = {
 
 export type InvestorPortfolio = {
   investorName: string
+  investorSlug?: string | null
   investorType: string
   localForeign: string
   domicile: string

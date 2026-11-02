@@ -31,7 +31,7 @@ const loadTickers = () => {
 const selectedTicker = ref<TickerName | undefined>()
 
 watch(selectedTicker, (item) => {
-  if (item) navigateTo({ path: '/saham', query: { q: item.ticker } })
+  if (item) navigateTo(`/saham/${item.ticker}`)
 })
 
 const FALLBACK = {
@@ -176,7 +176,6 @@ useHead(() => ({
 </script>
 
 <template>
-  <!-- Shared desktop sizes stay fluid in short windows without constraining content height. -->
   <main class="landing [--ui-primary:var(--color-green-700)] dark:[--ui-primary:var(--color-green-400)]
     lg:[--landing-section-space:clamp(3rem,calc(16svh_-_4rem),6rem)]
     lg:[--landing-content-gap:clamp(1.5rem,4svh,2.5rem)]
@@ -184,6 +183,7 @@ useHead(() => ({
     lg:[--landing-card-padding:clamp(1.25rem,3svh,1.75rem)]
     lg:[--landing-card-gap:clamp(0.75rem,2svh,1.5rem)]
     lg:[--landing-chart-size:clamp(10rem,calc(20svh_+_1rem),14rem)]">
+    <!-- Shared desktop sizes stay fluid in short windows without constraining content height. -->
     <!-- Include the fixed navigation and safe area below xl in the intro height. -->
     <div class="landing-intro lg:flex lg:min-h-[calc(100dvh-var(--ui-header-height))] lg:flex-col
       lg:max-xl:pb-[calc(4rem+env(safe-area-inset-bottom,0px))]">
@@ -367,7 +367,7 @@ useHead(() => ({
               dalam
               cuplikan.</p>
 
-            <NuxtLink :to="{ path: '/saham', query: { q: sample.ticker } }"
+            <NuxtLink :to="`/saham/${sample.ticker}`"
               class="group inline-flex w-fit shrink-0 items-center gap-x-1 rounded-sm text-[13px] font-semibold text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverted">
               <span
                 class="underline decoration-accented underline-offset-4 transition-[text-decoration-color] duration-150 ease-in-out group-hover:decoration-current motion-reduce:transition-none">

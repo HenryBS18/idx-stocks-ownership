@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
     await invalidateCache('infos')
     await invalidateCache('stock:ticker-names')
     await invalidateCacheByPrefix('landing')
+    await invalidateCacheByPrefix('detail')
 
     return { message: 'Created' }
   } catch (error: any) {

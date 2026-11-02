@@ -9,8 +9,11 @@ export const parseYearMonth = async (event: any): Promise<{ year: number; month:
     return { year: latest.year, month: latest.month }
   }
 
-  const y = parseInt(year!.toString(), 10)
-  const m = parseInt(month!.toString(), 10)
+  if (typeof year !== 'string' || typeof month !== 'string' || !/^\d{4}$/.test(year) || !/^\d{1,2}$/.test(month)) {
+    throw createError({ statusCode: 400, statusMessage: 'Year dan month harus diisi dengan angka' })
+  }
+  const y = Number(year)
+  const m = Number(month)
 
   if (isNaN(y) || isNaN(m)) throw createError({ statusCode: 400, statusMessage: 'Year dan month harus berupa angka' })
   if (m < 1 || m > 12) throw createError({ statusCode: 400, statusMessage: 'Month harus antara 1 - 12' })

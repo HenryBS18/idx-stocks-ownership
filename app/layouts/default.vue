@@ -9,7 +9,7 @@ const pages = [
 ]
 
 const activeIndex = computed(() =>
-  pages.findIndex(page => page.to === route.path)
+  pages.findIndex(page => page.to === route.path || route.path.startsWith(`${page.to}/`))
 )
 
 const isLanding = computed(() => route.path === '/')
@@ -36,7 +36,7 @@ const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(rout
     <div v-if="!isLanding" class="relative hidden xl:flex w-full border-b border-accented">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
         class="flex items-center justify-center w-1/2 py-3 gap-x-1.5 transition-colors duration-200"
-        :class="route.path === page.to ? 'text-primary' : 'text-muted hover:text-highlighted hover:bg-elevated'">
+        :class="route.path === page.to || route.path.startsWith(`${page.to}/`) ? 'text-primary' : 'text-muted hover:text-highlighted hover:bg-elevated'">
         <UIcon :name="page.icon" class="size-5" />
 
         <span class="text-sm font-semibold transition-colors duration-300">
@@ -61,7 +61,7 @@ const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(rout
     class="fixed bottom-0 inset-x-0 z-50 flex xl:hidden items-center justify-around h-[calc(4rem+env(safe-area-inset-bottom,0px))] bg-default/90 backdrop-blur-md border-t border-accented pb-[env(safe-area-inset-bottom,0px)] shadow-lg">
     <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
       class="flex flex-col items-center justify-center flex-1 h-full py-1 text-xs font-medium transition-colors duration-200"
-      :class="route.path === page.to ? 'text-primary font-semibold' : 'text-muted hover:text-default'">
+      :class="route.path === page.to || route.path.startsWith(`${page.to}/`) ? 'text-primary font-semibold' : 'text-muted hover:text-default'">
       <UIcon :name="page.icon" class="size-5 mb-1" />
       <span>{{ page.label }}</span>
     </NuxtLink>

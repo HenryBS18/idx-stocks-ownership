@@ -7,7 +7,11 @@ export default defineEventHandler(async (event) => {
     requireAuth(event)
     const { year, month } = await parseYearMonth(event)
 
-    return await stockService.getStocks({ year, month })
+    const [stocks, slugs] = await Promise.all([stockService.getStocks({ year, month }), getInvestorSlugMap()])
+    return stocks.map(stock => ({
+      ...stock,
+      investors: stock.investors.map(investor => ({ ...investor, investorSlug: slugs.get(investor.investorName) ?? null })),
+    }))
   } catch (error: any) {
     setResponseStatus(event, error.statusCode)
     return { message: error.message }

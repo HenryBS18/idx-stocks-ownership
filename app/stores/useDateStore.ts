@@ -14,7 +14,9 @@ export const useDateStore = defineStore('date', () => {
       })
 
       dates.value = infoResponse
-      selectedDate.value = infoResponse[0]?.value!
+      if (!infoResponse.some(info => info.value === selectedDate.value)) {
+        selectedDate.value = infoResponse[0]?.value ?? ''
+      }
     } catch (e) {
       error.value = true
       errorMessage.value = 'Gagal memuat data tanggal. Periksa koneksi Anda dan coba lagi.'
