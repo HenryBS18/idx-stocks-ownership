@@ -8,16 +8,29 @@ const round = (value: number) => Math.round(value * 100) / 100
 const key = (row: DetailRecord) => JSON.stringify([row.ticker, row.investorName])
 
 export const aggregateHoldings = (records: DetailRecord[]): DetailRecord[] => {
-  const grouped = new Map<string, DetailRecord>()
+  const grouped = new Map<string, {
+    holding: DetailRecord
+    classifications: Set<NonNullable<DetailRecord['controllerOrAffiliate']>>
+  }>()
   for (const record of records) {
-    const previous = grouped.get(key(record))
-    grouped.set(key(record), previous ? {
-      ...previous,
-      percentage: round(previous.percentage + record.percentage),
-      totalHoldingShare: (BigInt(previous.totalHoldingShare) + BigInt(record.totalHoldingShare)).toString(),
-    } : { ...record, totalHoldingShare: record.totalHoldingShare.toString() })
+    const recordKey = key(record)
+    let group = grouped.get(recordKey)
+    if (group) {
+      group.holding.percentage = round(group.holding.percentage + record.percentage)
+      group.holding.totalHoldingShare = (BigInt(group.holding.totalHoldingShare) + BigInt(record.totalHoldingShare)).toString()
+    } else {
+      group = {
+        holding: { ...record, totalHoldingShare: record.totalHoldingShare.toString() },
+        classifications: new Set(),
+      }
+      grouped.set(recordKey, group)
+    }
+    if (record.controllerOrAffiliate !== null) group.classifications.add(record.controllerOrAffiliate)
   }
-  return [...grouped.values()]
+  return [...grouped.values()].map(({ holding, classifications }) => ({
+    ...holding,
+    controllerOrAffiliate: classifications.size === 1 ? [...classifications][0]! : null,
+  }))
 }
 
 export const compareHoldings = (current: DetailRecord[], previous: DetailRecord[] | null) => {

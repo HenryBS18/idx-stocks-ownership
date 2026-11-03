@@ -35,6 +35,7 @@ export class DetailService {
       where: { ...filter, infoId: { in: [info.id, ...(previous ? [previous.id] : [])] } },
       select: {
         infoId: true, ticker: true, investorName: true, investorType: true,
+        controllerOrAffiliate: true,
         localForeign: true, domicile: true, totalHoldingShare: true, percentage: true,
         stock: { select: { name: true } },
       },
@@ -48,6 +49,7 @@ export class DetailService {
       investorName: row.investorName,
       investorSlug: slugs.get(row.investorName) ?? null,
       investorType: getInvestorType(row.investorType),
+      controllerOrAffiliate: row.controllerOrAffiliate,
       localForeign: row.localForeign.trim() === 'L' ? 'D' : row.localForeign.trim(),
       domicile: row.domicile,
       totalHoldingShare: row.totalHoldingShare.toString(),

@@ -5,6 +5,7 @@ import { aggregateHoldings, compareHoldings } from '../server/utils/ownership-de
 const row = (investorName, percentage, extra = {}) => ({
   ticker: 'BBCA', stockName: 'Bank', sector: 'Finance', investorName,
   investorSlug: null, investorType: '', localForeign: 'D', domicile: '',
+  controllerOrAffiliate: null,
   totalHoldingShare: '100', percentage, ...extra,
 })
 
@@ -44,4 +45,40 @@ test('compares grouped holdings and distinguishes different tickers and exact na
   assert.equal(result.holdings[0].change, 0.5)
   assert.equal(result.holdings[1].changeKind, 'new')
   assert.equal(result.holdings[2].changeKind, 'new')
+})
+
+test('combines classifications only when all non-null values agree', () => {
+  const cases = [
+    [[], null],
+    [[null, null], null],
+    [['CONTROLLER', 'CONTROLLER'], 'CONTROLLER'],
+    [['AFFILIATE', 'AFFILIATE'], 'AFFILIATE'],
+    [[null, 'CONTROLLER', null], 'CONTROLLER'],
+    [['AFFILIATE', null], 'AFFILIATE'],
+    [['CONTROLLER', 'AFFILIATE'], null],
+    [['CONTROLLER', 'AFFILIATE', 'CONTROLLER', null], null],
+    [['AFFILIATE', 'CONTROLLER', 'AFFILIATE'], null],
+  ]
+  for (const [values, expected] of cases) {
+    for (const ordered of [values, [...values].reverse()]) {
+      const result = aggregateHoldings(ordered.map(value => row('A', 1, { controllerOrAffiliate: value })))
+      if (!values.length) assert.deepEqual(result, [])
+      else assert.equal(result[0].controllerOrAffiliate, expected, JSON.stringify(ordered))
+    }
+  }
+})
+
+test('classifications stay specific to the stock, investor, and reporting period', () => {
+  const result = compareHoldings([
+    row('A', 2, { controllerOrAffiliate: 'CONTROLLER' }),
+    row('A', 3, { ticker: 'BBRI', controllerOrAffiliate: 'AFFILIATE' }),
+    row('B', 4),
+  ], [
+    row('A', 2, { controllerOrAffiliate: 'AFFILIATE' }),
+    row('C', 5, { controllerOrAffiliate: 'CONTROLLER' }),
+  ])
+  assert.deepEqual(result.holdings.map(holding => holding.controllerOrAffiliate), ['CONTROLLER', 'AFFILIATE', null])
+  assert.equal(result.holdings[0].changeKind, 'unchanged')
+  assert.equal(result.holdings[0].change, 0)
+  assert.equal(result.removedHoldings[0].controllerOrAffiliate, 'CONTROLLER')
 })

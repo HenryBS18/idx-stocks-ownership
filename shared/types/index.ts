@@ -1,3 +1,5 @@
+export type ControllerOrAffiliate = 'CONTROLLER' | 'AFFILIATE'
+
 export type StockDetail = {
   ticker: string
   name: string
@@ -7,6 +9,7 @@ export type StockDetail = {
   freeFloat: number
   investors: {
     investorType: string
+    controllerOrAffiliate: ControllerOrAffiliate | null
     localForeign: string
     totalHoldingShare: number
     percentage: number
@@ -27,6 +30,7 @@ export type InvestorPortfolio = {
   stockCount: number
   stocks: {
     ticker: string
+    controllerOrAffiliate: ControllerOrAffiliate | null
     name: string
     sector: string | null
     totalHoldingShare: number

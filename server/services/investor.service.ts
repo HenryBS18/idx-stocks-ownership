@@ -19,6 +19,7 @@ export class InvestorService {
       select: {
         investorName: true,
         investorType: true,
+        controllerOrAffiliate: true,
         localForeign: true,
         domicile: true,
         ticker: true,
@@ -57,6 +58,7 @@ export class InvestorService {
 
         acc[row.investorName]?.stocks.push({
           ticker: row.ticker,
+          controllerOrAffiliate: row.controllerOrAffiliate,
           name: row.stock.name,
           sector: getSectorByTicker(row.ticker),
           totalHoldingShare: parseInt(row.totalHoldingShare.toString()),

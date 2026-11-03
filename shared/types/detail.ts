@@ -1,3 +1,5 @@
+import type { ControllerOrAffiliate } from './index'
+
 export type DetailPeriod = {
   value: string
   label: string
@@ -14,6 +16,7 @@ export type DetailHolding = {
   investorName: string
   investorSlug: string | null
   investorType: string
+  controllerOrAffiliate: ControllerOrAffiliate | null
   localForeign: string
   domicile: string
   totalHoldingShare: string

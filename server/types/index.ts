@@ -1,3 +1,5 @@
+import type { ControllerOrAffiliate } from '../../shared/types'
+
 export type IdxFileData = {
   time: string
   url: string
@@ -9,6 +11,7 @@ export type StockHolding = {
   name: string
   investorName: string
   investorType: string
+  controllerOrAffiliate: ControllerOrAffiliate | null
   localForeign: string
   domicile: string
   scripless: number
@@ -47,6 +50,7 @@ export type InfoBatch = InfoPeriod & {
 export type TeaserInvestorRow = {
   investorName: string
   investorType: string
+  controllerOrAffiliate: ControllerOrAffiliate | null
   localForeign: string
   domicile: string
   totalHoldingShare: bigint

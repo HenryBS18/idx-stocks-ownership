@@ -37,6 +37,7 @@ export class LandingService {
             select: {
               investorName: true,
               investorType: true,
+              controllerOrAffiliate: true,
               localForeign: true,
               domicile: true,
               totalHoldingShare: true,
@@ -99,6 +100,7 @@ export class LandingService {
         return {
           investorName: investor.investorName,
           investorType: getInvestorType(investor.investorType),
+          controllerOrAffiliate: investor.controllerOrAffiliate,
           localForeign: investor.localForeign === 'L' ? 'D' : investor.localForeign,
           domicile: investor.domicile,
           totalHoldingShare: parseInt(investor.totalHoldingShare.toString()),

@@ -25,6 +25,7 @@ export class StockService {
           select: {
             investorName: true,
             investorType: true,
+            controllerOrAffiliate: true,
             localForeign: true,
             domicile: true,
             totalHoldingShare: true,
@@ -140,8 +141,8 @@ export class StockService {
       await ensureInvestorProfiles(tx.investorProfile, investorHoldings.map(row => row.investorName))
 
       const records: HoldingRecord[] = investorHoldings.map((
-        { ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }
-      ) => ({ ticker, investorName, investorType, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage, infoId: newInfo.id }))
+        { ticker, investorName, investorType, controllerOrAffiliate, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage }
+      ) => ({ ticker, investorName, investorType, controllerOrAffiliate, localForeign, domicile, scripless, scrip, totalHoldingShare, percentage, infoId: newInfo.id }))
 
       await this.batchInsertRecords(tx, records)
     }, { timeout: 1000 * 60 })

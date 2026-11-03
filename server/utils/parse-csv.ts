@@ -4,6 +4,14 @@ import type { InvestorHolding } from '../types'
 
 const toNum = (v: string) => Number(String(v).replace(/,/g, '')) || 0
 
+const toControllerOrAffiliate = (value: string | undefined): InvestorHolding['controllerOrAffiliate'] => {
+  switch (value?.trim().toUpperCase()) {
+    case 'CONTROLLER': return 'CONTROLLER'
+    case 'AFFILIATE OF THE CONTROLLER': return 'AFFILIATE'
+    default: return null
+  }
+}
+
 export const parseCsv = async (filePath: string): Promise<InvestorHolding[]> => {
   const results: InvestorHolding[] = []
 
@@ -15,6 +23,7 @@ export const parseCsv = async (filePath: string): Promise<InvestorHolding[]> => 
       name: row.ISSUER_NAME || '',
       investorName: row.INVESTOR_NAME || '',
       investorType: row.INVESTOR_CLASSIFICATION || '',
+      controllerOrAffiliate: toControllerOrAffiliate(row.CONTROLLER_OR_AFFILIATE),
       localForeign: row.LOCAL_FOREIGN || '',
       domicile: row.DOMICILE || '',
       scripless: toNum(row.HOLDINGS_SCRIPLESS),
