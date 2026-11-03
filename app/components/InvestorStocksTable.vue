@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UBadge, NuxtLink } from '#components'
+import { UBadge, NuxtLink, HoldingRelationshipBadge } from '#components'
 import type { TableColumn } from '@nuxt/ui'
 import type { InvestorStockTableRow } from '~/types/holdings-table'
 import { h } from 'vue'
@@ -40,7 +40,10 @@ const stockColumns: TableColumn<InvestorStockTableRow>[] = [
         td: 'w-64 max-sm:pl-2 max-sm:pr-0.5 sm:w-92 md:w-96 xl:w-110',
       }
     },
-    cell: ({ row }) => h('span', { class: 'whitespace-normal wrap-break-word line-clamp-2 font-bold text-[10px] sm:text-xs xl:text-sm xl:line-clamp-none' }, row.original.name)
+    cell: ({ row }) => h('div', { class: 'flex min-w-0 flex-col items-start gap-x-1.5 gap-y-1 sm:flex-row sm:flex-wrap sm:items-center' }, [
+      h('span', { title: row.original.name, class: 'min-w-0 max-w-full line-clamp-2 whitespace-normal wrap-break-word font-bold text-[10px] sm:text-xs xl:text-sm xl:line-clamp-none' }, row.original.name),
+      h(HoldingRelationshipBadge, { value: row.original.controllerOrAffiliate }),
+    ])
   },
   {
     header: 'Sektor',
@@ -109,5 +112,10 @@ const stockColumns: TableColumn<InvestorStockTableRow>[] = [
 </script>
 
 <template>
-  <UTable :data="rows" :columns="stockColumns" />
+  <div>
+    <UTable :data="rows" :columns="stockColumns" />
+    <p class="px-3 py-2 text-[10px] text-muted sm:px-4 sm:text-xs">
+      Label Pengendali/Afiliasi mengikuti data periode yang dipilih. Tanpa label berarti informasi belum tersedia atau tidak disebutkan.
+    </p>
+  </div>
 </template>

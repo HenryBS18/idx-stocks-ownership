@@ -1,4 +1,7 @@
+import type { ControllerOrAffiliate } from '~~/shared/types'
+
 type HoldingTableRow = {
+  controllerOrAffiliate: ControllerOrAffiliate | null
   totalHoldingShare: string | number
   percentage: number
   change: number | null

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { UBadge, NuxtLink } from '#components'
+import { UBadge, NuxtLink, HoldingRelationshipBadge } from '#components'
 import type { TableColumn } from '@nuxt/ui'
 import type { StockInvestorTableRow } from '~/types/holdings-table'
 import { h } from 'vue'
@@ -27,13 +27,13 @@ const investorColumns: TableColumn<StockInvestorTableRow>[] = [
       }
     },
     cell: ({ row }) => {
-      const { investorName, investorSlug, investorType, localForeign } = row.original
+      const { investorName, investorSlug, investorType, localForeign, controllerOrAffiliate } = row.original
       const normalizedLocalForeign = localForeign?.trim()
       const badges = []
 
       if (investorType) {
-        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'text-[9px] h-auto py-1' },
-          h('span', investorType)
+        badges.push(h(UBadge, { color: 'secondary', variant: 'soft', class: 'max-w-full whitespace-normal text-[9px] h-auto py-1' },
+          h('span', { class: 'wrap-anywhere' }, investorType)
         ))
       }
 
@@ -41,11 +41,18 @@ const investorColumns: TableColumn<StockInvestorTableRow>[] = [
         badges.push(h(UBadge, { label: normalizedLocalForeign, color: normalizedLocalForeign === 'D' ? 'primary' : 'error', variant: 'soft', class: 'text-[9px] h-fit font-bold' }))
       }
 
+      if (controllerOrAffiliate === 'CONTROLLER' || controllerOrAffiliate === 'AFFILIATE') {
+        badges.push(h(HoldingRelationshipBadge, { value: controllerOrAffiliate }))
+      }
+
       return h('div', { class: 'flex flex-col gap-0.5' }, [
-        investorSlug
-          ? h(NuxtLink, { to: `/investor/${investorSlug}`, class: 'line-clamp-2 whitespace-normal wrap-break-word text-[10px] font-bold ownership-link sm:text-xs xl:text-sm xl:line-clamp-none' }, () => investorName)
-          : h('span', { class: 'line-clamp-2 whitespace-normal wrap-break-word text-[10px] font-bold sm:text-xs xl:text-sm xl:line-clamp-none' }, investorName),
-        badges.length ? h('div', { class: 'flex gap-1 sm:hidden' }, badges) : null,
+        h('div', { class: 'flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1' }, [
+          investorSlug
+            ? h(NuxtLink, { to: `/investor/${investorSlug}`, title: investorName, class: 'min-w-0 max-w-full line-clamp-2 whitespace-normal wrap-break-word text-[10px] font-bold ownership-link sm:text-xs xl:text-sm xl:line-clamp-none' }, () => investorName)
+            : h('span', { title: investorName, class: 'min-w-0 max-w-full line-clamp-2 whitespace-normal wrap-break-word text-[10px] font-bold sm:text-xs xl:text-sm xl:line-clamp-none' }, investorName),
+          h(HoldingRelationshipBadge, { value: controllerOrAffiliate, class: 'hidden sm:inline-flex' }),
+        ]),
+        badges.length ? h('div', { class: 'flex flex-wrap items-center gap-1 sm:hidden' }, badges) : null,
       ])
     },
   },
@@ -59,7 +66,7 @@ const investorColumns: TableColumn<StockInvestorTableRow>[] = [
       },
     },
     cell: ({ row }) => {
-      return h('span', { class: 'line-clamp-3 whitespace-normal wrap-break-word sm:text-xs lg:text-sm' }, row.original.investorType || '-')
+      return h('span', { class: 'line-clamp-3 whitespace-normal wrap-anywhere sm:text-xs lg:text-sm' }, row.original.investorType || '-')
     },
   },
   {
@@ -141,5 +148,10 @@ const investorColumns: TableColumn<StockInvestorTableRow>[] = [
 </script>
 
 <template>
-  <UTable :data="rows" :columns="investorColumns" />
+  <div>
+    <UTable :data="rows" :columns="investorColumns" />
+    <p class="px-3 py-2 text-[10px] text-muted sm:px-4 sm:text-xs">
+      Label Pengendali/Afiliasi mengikuti data periode yang dipilih. Tanpa label berarti informasi belum tersedia atau tidak disebutkan.
+    </p>
+  </div>
 </template>
