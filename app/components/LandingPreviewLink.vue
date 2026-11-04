@@ -1,10 +1,11 @@
 <script setup lang="ts">
 defineOptions({ inheritAttrs: false })
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   to: string
   period: string | null
-}>()
+  underline?: boolean
+}>(), { underline: true })
 
 const dateStore = useDateStore()
 
@@ -20,7 +21,8 @@ const followPreview = (event: MouseEvent, navigate: (event: MouseEvent) => unkno
 <template>
   <NuxtLink v-slot="{ href, navigate }" :to="to" custom>
     <a v-bind="$attrs" :href="href ?? undefined"
-      class="ownership-link rounded-sm underline decoration-accented underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      class="ownership-link rounded-sm decoration-accented underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      :class="{ underline: underline !== false }"
       @click="followPreview($event, navigate)"><slot /></a>
   </NuxtLink>
 </template>

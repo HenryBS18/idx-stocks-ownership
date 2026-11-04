@@ -333,7 +333,7 @@ useHead(() => ({
                 <td class="px-2 py-2.5 sm:px-3">
                   <div class="flex flex-col gap-y-0.5">
                     <div class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-                      <LandingPreviewLink v-if="isLive && investor.investorSlug" :to="`/investor/${investor.investorSlug}`" :period="previewPeriod"
+                      <LandingPreviewLink v-if="isLive && investor.investorSlug" :to="`/investor/${investor.investorSlug}`" :period="previewPeriod" :underline="false"
                         class="min-w-0 max-w-full font-semibold whitespace-normal wrap-anywhere">{{ investor.investorName }}</LandingPreviewLink>
                       <span v-else class="font-semibold text-highlighted whitespace-normal wrap-anywhere">{{ investor.investorName }}</span>
                       <HoldingRelationshipBadge :value="investor.controllerOrAffiliate" />
@@ -463,7 +463,7 @@ useHead(() => ({
                     <tr v-for="investor in visibleInvestors.slice(0, 2)" :key="investor.investorName">
                       <td class="px-3 py-2.5">
                         <div class="flex min-w-0 flex-wrap items-center gap-1.5">
-                          <LandingPreviewLink v-if="isLive && investor.investorSlug" :to="`/investor/${investor.investorSlug}`" :period="previewPeriod"
+                          <LandingPreviewLink v-if="isLive && investor.investorSlug" :to="`/investor/${investor.investorSlug}`" :period="previewPeriod" :underline="false"
                             class="min-w-0 max-w-full font-semibold wrap-anywhere">{{ investor.investorName }}</LandingPreviewLink>
                           <span v-else class="font-semibold text-highlighted wrap-anywhere">{{ investor.investorName }}</span>
                           <HoldingRelationshipBadge :value="investor.controllerOrAffiliate" />
@@ -477,7 +477,7 @@ useHead(() => ({
               <template v-else-if="feature.kind === 'portfolio' && portfolioPreview">
                 <div class="space-y-2 p-3">
                   <div class="flex min-w-0 items-center gap-2">
-                    <LandingPreviewLink v-if="isLive && portfolioPreview.investorSlug" :to="`/investor/${portfolioPreview.investorSlug}`" :period="previewPeriod"
+                    <LandingPreviewLink v-if="isLive && portfolioPreview.investorSlug" :to="`/investor/${portfolioPreview.investorSlug}`" :period="previewPeriod" :underline="false"
                       class="min-w-0 font-semibold wrap-anywhere">{{ portfolioPreview.investorName }}</LandingPreviewLink>
                     <span v-else class="font-semibold text-highlighted wrap-anywhere">{{ portfolioPreview.investorName }}</span>
                   </div>
