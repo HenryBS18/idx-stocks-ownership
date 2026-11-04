@@ -2,17 +2,30 @@
 
 - **Commits:** Do NOT add `Co-Authored-By: Claude`, `Co-authored-by: Copilot`, or any co-author attribution in commit messages. Use simple commit prefixes (e.g. `feat: description`, `fix: description`) without adding scope parens like `feat(scope):`.
 
+### Runtime and package manager
+
+- **Bun is required:** AI agents must use Bun as both the JavaScript/TypeScript runtime and package manager for every test, script, build, development server, CLI, and temporary verification tool they execute in this project, including browser automation.
+- Use `bun <file>` or `bun -e '<code>'` for scripts, `bun test ./tests` for the test suite, `bun --bun run <script>` for package scripts, and `bunx --bun <command>` for package executables. The `--bun` flag forces Bun even when a CLI has a Node.js shebang.
+- Do not execute `node`, `npm`, `npx`, `pnpm`, or `yarn`, including indirectly through a package script or helper. Inspect package scripts before running them. The current `test` and `backfill-investors` scripts invoke Node; use the direct Bun commands below instead.
+- Use `bun install`, `bun add`, and `bun remove` to manage dependencies, and maintain `bun.lock`. Do not generate another package manager's lockfile.
+- If a tool cannot run under Bun, report the incompatibility instead of falling back to another runtime or package manager.
+
 ## Commands
 
 | Command | Purpose |
 |---------|---------|
-| `npm run dev` | Start dev server (port 3000) |
-| `npm run build` | Production build |
-| `npm run generate` | Static site generation |
-| `npm run preview` | Preview production build locally |
-| `npm run clean` | Clean Nuxt cache |
-| `npm run prisma-gen` | Generate Prisma client |
-| `npx nuxt typecheck` | Type-check the project |
+| `bun install` | Install dependencies |
+| `bun --bun run dev` | Start dev server (port 3000) |
+| `bun --bun run build` | Production build |
+| `bun --bun run generate` | Static site generation |
+| `bun --bun run preview` | Preview production build locally |
+| `bun --bun run clean` | Clean Nuxt cache |
+| `bun test ./tests` | Run the test suite with Bun |
+| `bun --bun run db:gen` | Generate Prisma client |
+| `bun --bun run db:deploy` | Apply existing database migrations |
+| `bun --bun run db:migrate` | Create and apply development migrations |
+| `bun scripts/backfill-investors.mjs` | Backfill investor slugs with Bun |
+| `bunx --bun nuxt typecheck` | Type-check the project |
 
 ## Architecture
 
@@ -87,6 +100,6 @@ curl -X POST "$SITE/api/stock" \
 
 ### Deployment
 
-- Docker multi-stage build with `oven/npm`, exposes port 3000
+- Docker multi-stage build with `oven/bun`, frozen `bun.lock` installation, and Nitro's `bun` preset; the server listens on port 3000 by default
 - Production host: Vercel (`preset: 'vercel'` when `NODE_ENV=production`)
 - Redis via `REDIS_URL` env var for caching and rate limiting
