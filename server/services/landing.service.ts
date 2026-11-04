@@ -4,7 +4,7 @@ import { round2 } from "../utils/investor-change"
 import { getInvestorSlugMap } from "../utils/investor-profiles"
 import { sortStockInvestors } from "../utils/sort-stock-investors"
 
-const FALLBACK_TICKER = 'BBCA'
+const TEASER_TICKER = 'BBCA'
 const TEASER_ROW_LIMIT = 25
 
 const toIsoMonth = (period: InfoPeriod): string =>
@@ -27,11 +27,9 @@ export class LandingService {
     const cached = await getCache<LandingTeaser>(cacheKey)
     if (cached) return this.withInvestorSlugs(cached)
 
-    const ticker = await this.getDeepestTicker(info.id)
-
     const [stock, emitenCount] = await Promise.all([
       prisma.stock.findFirst({
-        where: { ticker },
+        where: { ticker: TEASER_TICKER },
         select: {
           ticker: true,
           name: true,
@@ -81,18 +79,6 @@ export class LandingService {
         })),
       },
     }
-  }
-
-  private async getDeepestTicker(infoId: number): Promise<string> {
-    const [deepest] = await prisma.stockInvestor.groupBy({
-      by: ['ticker'],
-      where: { infoId },
-      _count: { ticker: true },
-      orderBy: { _count: { ticker: 'desc' } },
-      take: 1,
-    })
-
-    return deepest?.ticker ?? FALLBACK_TICKER
   }
 
   private async toStockDetail(stock: TeaserStock, info: InfoBatch): Promise<StockDetail> {
