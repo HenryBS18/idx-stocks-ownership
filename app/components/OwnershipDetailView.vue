@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { OwnershipDetail } from '~~/shared/types/detail'
 import type { InvestorStockTableRow, StockInvestorTableRow } from '~/types/holdings-table'
+import { getLargestShareholder } from '~/utils/ownership-ranking'
 
 const props = defineProps<{ detail: OwnershipDetail }>()
 defineEmits<{ selectPeriod: [value: string] }>()
 const isStock = computed(() => props.detail.kind === 'stock')
+const largestShareholder = computed(() => isStock.value ? getLargestShareholder(props.detail.holdings) : undefined)
 const tableRows = computed(() => props.detail.holdings.map(row => ({
   ...row,
   name: row.stockName,
@@ -49,10 +51,10 @@ const decreases = computed(() => props.detail.holdings.filter(row => row.changeK
         <template v-if="isStock">
           <div class="rounded-xl border border-accented bg-default p-5">
             <dt class="text-sm text-muted">Pemegang saham terbesar yang tercatat</dt>
-            <dd class="mt-2 space-y-1">
-              <span class="text-3xl font-semibold tabular-nums text-highlighted">{{ formatOwnership(detail.holdings[0]!.percentage) }}%</span>
-              <NuxtLink v-if="detail.holdings[0]!.investorSlug" :to="`/investor/${detail.holdings[0]!.investorSlug}`" class="block break-words text-sm ownership-link">{{ detail.holdings[0]!.investorName }}</NuxtLink>
-              <span v-else class="block break-words text-sm text-default">{{ detail.holdings[0]!.investorName }}</span>
+            <dd v-if="largestShareholder" class="mt-2 space-y-1">
+              <span class="text-3xl font-semibold tabular-nums text-highlighted">{{ formatOwnership(largestShareholder.percentage) }}%</span>
+              <NuxtLink v-if="largestShareholder.investorSlug" :to="`/investor/${largestShareholder.investorSlug}`" class="block break-words text-sm ownership-link">{{ largestShareholder.investorName }}</NuxtLink>
+              <span v-else class="block break-words text-sm text-default">{{ largestShareholder.investorName }}</span>
             </dd>
           </div>
           <div class="rounded-xl border border-accented bg-primary/5 p-5">

@@ -2,6 +2,14 @@
 
 Detail pages use the shared date selector. A new browser visit opens the latest reporting period; navigation within the app keeps the selected date. URLs do not encode that date. Unknown entities return 404, while known entities without records for a period show an empty state.
 
+## Shareholder ordering
+
+The stock listing, stock detail, and landing APIs order shareholders as Pengendali, Afiliasi, then investors without either classification. Each group uses descending ownership percentage, with investor name A–Z to break ties. Stock details sort after aggregation; landing previews sort before the 25-row limit. Tables render the API order directly. Investor portfolios retain ticker ordering.
+
+The stock-detail chart independently selects the five largest holders by percentage. The largest-shareholder summary finds the maximum percentage, regardless of relationship classification. Both use investor name A–Z to break ties without changing table rows.
+
+Cache keys remain unversioned: `stock:<year>-<month>`, `detail:<kind>:<identifier>:<year>-<month>`, and `landing:<year>-<month>`. When deploying this ordering change, manually clear the stock-period, stock-detail, and landing entries. Until cleared or expired, existing entries can still return the previous order. Cache TTLs and upload invalidation behavior are unchanged.
+
 ## Database rollout
 
 Before deploying this version, apply the additive migration and backfill investor URLs against the intended database:

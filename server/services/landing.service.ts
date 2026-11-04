@@ -2,6 +2,7 @@ import { getCache, setCache } from "~~/server/utils/cache"
 import type { InfoBatch, InfoPeriod, TeaserStock } from "../types"
 import { round2 } from "../utils/investor-change"
 import { getInvestorSlugMap } from "../utils/investor-profiles"
+import { sortStockInvestors } from "../utils/sort-stock-investors"
 
 const FALLBACK_TICKER = 'BBCA'
 const TEASER_ROW_LIMIT = 25
@@ -22,7 +23,7 @@ export class LandingService {
 
     if (!info) return { batchLabel: '', emitenCount: 0, coverage: null, stock: null }
 
-    const cacheKey = `landing:v2:${info.year}-${info.month}`
+    const cacheKey = `landing:${info.year}-${info.month}`
     const cached = await getCache<LandingTeaser>(cacheKey)
     if (cached) return this.withInvestorSlugs(cached)
 
@@ -111,7 +112,7 @@ export class LandingService {
       investorCount: stock.stockInvestor.length,
       float,
       freeFloat: parseFloat((100 - float).toFixed(2)),
-      investors: stock.stockInvestor.slice(0, TEASER_ROW_LIMIT).map((investor) => {
+      investors: sortStockInvestors(stock.stockInvestor.map((investor) => {
         const percentage = parseFloat(String(investor.percentage))
 
         return {
@@ -129,7 +130,7 @@ export class LandingService {
               : null)
             : null,
         }
-      }),
+      })).slice(0, TEASER_ROW_LIMIT),
     }
   }
 

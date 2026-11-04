@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { DetailHolding } from '~~/shared/types/detail'
+import { sortByOwnershipPercentage } from '~/utils/ownership-ranking'
 const props = defineProps<{ holdings: DetailHolding[]; remainder: number }>()
 const colors = ['#15803d', '#0d9488', '#0284c7', '#7c3aed', '#c2410c', '#64748b', '#d1d5db']
 const segments = computed(() => {
-  const largest = props.holdings.slice(0, 5).map((row, i) => ({ label: row.investorName, value: row.percentage, color: colors[i] }))
-  const rest = props.holdings.slice(5).reduce((sum, row) => sum + row.percentage, 0)
+  const ranked = sortByOwnershipPercentage(props.holdings)
+  const largest = ranked.slice(0, 5).map((row, i) => ({ label: row.investorName, value: row.percentage, color: colors[i] }))
+  const rest = ranked.slice(5).reduce((sum, row) => sum + row.percentage, 0)
   const items = [...largest, { label: 'Investor tercatat lainnya', value: rest, color: colors[5] }, { label: 'Sisa perhitungan aplikasi', value: props.remainder, color: colors[6] }]
   let offset = 0
   return items.map((item) => {

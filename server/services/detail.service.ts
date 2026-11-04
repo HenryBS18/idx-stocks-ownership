@@ -1,6 +1,7 @@
 import type { DetailPeriod, OwnershipDetail } from '../../shared/types/detail'
 import type { Prisma } from '../generated/prisma/client'
 import { compareHoldings, type DetailRecord } from '../utils/ownership-detail'
+import { sortStockInvestors } from '../utils/sort-stock-investors'
 
 type Batch = { id: number; year: number; month: number; idxLastUpdated: string; createdAt: Date }
 const period = (info: Batch): DetailPeriod => ({
@@ -59,9 +60,9 @@ export class DetailService {
       records.filter(row => row.infoId === info.id).map(toRecord),
       previous ? records.filter(row => row.infoId === previous.id).map(toRecord) : null,
     )
-    comparison.holdings.sort((a, b) => kind === 'stock'
-      ? b.percentage - a.percentage || a.investorName.localeCompare(b.investorName)
-      : a.ticker.localeCompare(b.ticker))
+    comparison.holdings = kind === 'stock'
+      ? sortStockInvestors(comparison.holdings)
+      : comparison.holdings.sort((a, b) => a.ticker.localeCompare(b.ticker))
     const representative = comparison.holdings[0]
     const total = stock && comparison.holdings.length
       ? Math.round(comparison.holdings.reduce((sum, row) => sum + row.percentage, 0) * 100) / 100 : null

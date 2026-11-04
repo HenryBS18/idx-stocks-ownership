@@ -287,7 +287,7 @@ useHead(() => ({
       <div v-motion-reveal class="landing-section-heading motion-el mx-auto mb-8 max-w-7xl lg:mb-(--landing-content-gap)">
         <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Cuplikan data</p>
         <h2 id="contoh-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Contoh Data Pemegang Saham Emiten BEI</h2>
-        <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat pemegang saham dengan kepemilikan terbesar yang tercatat pada periode ini.
+        <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat pemegang saham yang tercatat pada periode ini.
           Klik nama investor yang memiliki tautan untuk menelusuri portofolionya.</p>
         <p role="status" class="mt-3 text-xs font-medium text-muted">{{ dataStatus }}<span v-if="!isLive"> Per {{ sample.batchLabel }}.</span></p>
       </div>

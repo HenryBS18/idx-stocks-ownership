@@ -5,6 +5,7 @@ import { getCache, setCache } from "~~/server/utils/cache"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, TickerName, Tx } from "../types"
 import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
 import { ensureInvestorProfiles } from "../utils/investor-slug"
+import { sortStockInvestors } from "../utils/sort-stock-investors"
 
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
@@ -66,7 +67,7 @@ export class StockService {
         investorCount,
         float,
         freeFloat,
-        investors: s.stockInvestor.map((investor) => ({
+        investors: sortStockInvestors(s.stockInvestor.map((investor) => ({
           ...investor,
           investorType: getInvestorType(investor.investorType),
           localForeign: investor.localForeign === 'L' ? 'D' : investor.localForeign,
@@ -81,7 +82,7 @@ export class StockService {
               )
               : null)
             : null,
-        })),
+        }))),
       }
     })
 
