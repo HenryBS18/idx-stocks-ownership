@@ -2,6 +2,8 @@
 
 Detail pages use the shared date selector. A new browser visit opens the latest reporting period; navigation within the app keeps the selected date. URLs do not encode that date. Unknown entities return 404, while known entities without records for a period show an empty state.
 
+The Saham listing includes only stocks with at least one investor record in the selected period. Empty entries in existing stock-period caches are filtered on read. The master ticker search and direct stock detail URLs remain available for browsing other periods.
+
 ## Shareholder ordering
 
 The stock listing, stock detail, and landing APIs order shareholders as Pengendali, Afiliasi, then investors without either classification. Each group uses descending ownership percentage, with investor name A–Z to break ties. Stock details sort after aggregation; landing previews sort before the 25-row limit. Tables render the API order directly. Investor portfolios retain ticker ordering.

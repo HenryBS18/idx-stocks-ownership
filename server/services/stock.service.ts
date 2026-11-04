@@ -10,7 +10,7 @@ import { sortStockInvestors } from "../utils/sort-stock-investors"
 export class StockService {
   async getStocks({ year, month }: GetStockParam): Promise<StockDetail[]> {
     const cached = await getCache<StockDetail[]>(`stock:${year}-${month}`)
-    if (cached) return cached
+    if (cached) return cached.filter(stock => stock.investors.length > 0)
 
     const info = await prisma.info.findFirst({
       where: { year, month }
@@ -19,6 +19,9 @@ export class StockService {
     if (!info) throw new Error('Data tidak tersedia')
 
     const stocks = await prisma.stock.findMany({
+      where: {
+        stockInvestor: { some: { infoId: info.id } },
+      },
       select: {
         ticker: true,
         name: true,
