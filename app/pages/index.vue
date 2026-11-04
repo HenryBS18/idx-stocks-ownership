@@ -72,6 +72,21 @@ const sample = computed(() => {
 const settling = computed(() => landingStatus.value === 'pending' && !isLive.value)
 
 const visibleInvestors = computed(() => sample.value.investors.slice(0, 5))
+const teaserTable = ref<HTMLElement | null>(null)
+const animateOwnershipLines = ref(false)
+let teaserObserver: IntersectionObserver | undefined
+
+onMounted(() => {
+  if (!teaserTable.value || !('IntersectionObserver' in window)) return
+
+  teaserObserver = new IntersectionObserver((entries) => {
+    animateOwnershipLines.value = entries.some(entry => entry.isIntersecting)
+  })
+  teaserObserver.observe(teaserTable.value)
+})
+
+onUnmounted(() => teaserObserver?.disconnect())
+
 const previewPeriod = computed(() => isLive.value ? landing.value?.coverage?.end ?? null : null)
 const stockPreviewPath = computed(() => `/saham/${sample.value.ticker}`)
 
@@ -308,7 +323,7 @@ useHead(() => ({
 
         <div class="overflow-x-auto border-t border-accented transition-opacity duration-300 ease-out motion-reduce:transition-none"
           :class="settling ? 'opacity-55' : 'opacity-100'">
-          <table aria-label="Cuplikan investor emiten" class="w-full text-xs sm:text-sm tabular-nums">
+          <table ref="teaserTable" aria-label="Cuplikan investor emiten" class="w-full text-xs sm:text-sm tabular-nums">
             <thead>
               <tr class="text-muted font-semibold">
                 <th scope="col" class="sticky top-0 z-10 border-b border-accented bg-muted px-2 py-2.5 text-center font-semibold sm:px-3">#</th>
@@ -327,7 +342,9 @@ useHead(() => ({
 
             <tbody class="divide-y divide-accented">
               <tr v-for="(investor, i) in visibleInvestors" :key="investor.investorName"
-                class="relative transition-colors duration-150 ease-in-out hover:bg-elevated">
+                class="ownership-row bg-no-repeat transition-colors duration-150 ease-in-out hover:bg-elevated"
+                :class="{ 'ownership-row-animate': animateOwnershipLines }"
+                :style="{ '--ownership-width': `${Math.min(100, Math.max(0, investor.percentage))}%` }">
                 <td class="px-2 py-2.5 text-center text-muted sm:px-3">{{ i + 1 }}</td>
 
                 <td class="px-2 py-2.5 sm:px-3">
@@ -378,9 +395,6 @@ useHead(() => ({
                       (Baru)
                     </span>
                   </span>
-
-                  <span v-motion-bar :delay="Math.min(i, 7) * 50" aria-hidden="true"
-                    class="motion-el absolute bottom-0 right-0 h-0.5 origin-right bg-inverted/30" :style="{ width: `${investor.percentage}%` }" />
                 </td>
               </tr>
             </tbody>
@@ -592,3 +606,22 @@ useHead(() => ({
     </section>
   </main>
 </template>
+
+<style scoped>
+.ownership-row {
+  background-image: linear-gradient(to right, color-mix(in srgb, var(--ui-bg-inverted) 30%, transparent), color-mix(in srgb, var(--ui-bg-inverted) 30%, transparent));
+  background-position: right bottom;
+  background-size: var(--ownership-width) 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ownership-row-animate {
+    animation: ownership-line-grow 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes ownership-line-grow {
+    from { background-size: 0% 2px; }
+    to { background-size: var(--ownership-width) 2px; }
+  }
+}
+</style>
