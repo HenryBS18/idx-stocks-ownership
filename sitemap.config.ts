@@ -20,7 +20,7 @@ export const sitemapContentDates = () => {
   ]
   return {
     pages: {
-      '/': lastCommitDate(['app/pages/index.vue', 'app/components/LandingFaq.vue', 'server/services/landing.service.ts']),
+      '/': lastCommitDate(['app/pages/index.vue', 'app/components/LandingFaq.vue', 'app/components/LandingOwnership.vue', 'app/components/LandingPreviewLink.vue', 'app/components/HoldingRelationshipBadge.vue', 'server/services/landing.service.ts']),
       '/saham': lastCommitDate(['app/pages/saham/index.vue', 'app/pages/saham.vue', 'app/components/SahamAccordion.vue', 'app/components/StockInvestorsTable.vue', 'server/services/stock.service.ts']),
       '/investor': lastCommitDate(['app/pages/investor/index.vue', 'app/pages/investor.vue', 'app/components/InvestorAccordion.vue', 'app/components/InvestorStocksTable.vue', 'server/services/investor.service.ts']),
       '/lisensi': lastCommitDate(['app/pages/lisensi.vue', 'app/utils/constants.ts']),

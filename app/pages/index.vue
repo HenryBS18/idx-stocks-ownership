@@ -34,7 +34,7 @@ watch(selectedTicker, (item) => {
   if (item) navigateTo(`/saham/${item.ticker}`)
 })
 
-const FALLBACK = {
+const FALLBACK: StockDetail & { batchLabel: string } = {
   ticker: 'BBCA',
   name: 'BANK CENTRAL ASIA Tbk',
   sector: 'Finance' as string | null,
@@ -43,11 +43,11 @@ const FALLBACK = {
   freeFloat: 40.79,
   batchLabel: '8 Mei 2026',
   investors: [
-    { investorName: 'PT DWIMURIA INVESTAMA ANDALAN', investorType: '', localForeign: 'D', domicile: '', totalHoldingShare: 67_729_950_000, percentage: 54.94, change: null, hasPrevData: false },
-    { investorName: 'ANTHONI SALIM', investorType: 'Individual', localForeign: 'D', domicile: '', totalHoldingShare: 1_416_306_835, percentage: 1.15, change: null, hasPrevData: false },
-    { investorName: 'PT TRICIPTA MANDHALA GUMILANG', investorType: '', localForeign: 'D', domicile: '', totalHoldingShare: 1_313_250_000, percentage: 1.07, change: null, hasPrevData: false },
-    { investorName: 'GOVERNMENT OF NORWAY', investorType: 'Sovereign Wealth Fund', localForeign: 'F', domicile: 'NORWAY', totalHoldingShare: 1_267_492_336, percentage: 1.03, change: null, hasPrevData: false },
-    { investorName: 'PT CATURGUWIRATNA SUMAPALA', investorType: '', localForeign: 'D', domicile: '', totalHoldingShare: 1_261_750_000, percentage: 1.02, change: null, hasPrevData: false },
+    { investorName: 'PT DWIMURIA INVESTAMA ANDALAN', investorType: '', controllerOrAffiliate: null, localForeign: 'D', domicile: '', totalHoldingShare: 67_729_950_000, percentage: 54.94, change: null, hasPrevData: false },
+    { investorName: 'ANTHONI SALIM', investorType: 'Individual', controllerOrAffiliate: null, localForeign: 'D', domicile: '', totalHoldingShare: 1_416_306_835, percentage: 1.15, change: null, hasPrevData: false },
+    { investorName: 'PT TRICIPTA MANDHALA GUMILANG', investorType: '', controllerOrAffiliate: null, localForeign: 'D', domicile: '', totalHoldingShare: 1_313_250_000, percentage: 1.07, change: null, hasPrevData: false },
+    { investorName: 'GOVERNMENT OF NORWAY', investorType: 'Sovereign Wealth Fund', controllerOrAffiliate: null, localForeign: 'F', domicile: 'NORWAY', totalHoldingShare: 1_267_492_336, percentage: 1.03, change: null, hasPrevData: false },
+    { investorName: 'PT CATURGUWIRATNA SUMAPALA', investorType: '', controllerOrAffiliate: null, localForeign: 'D', domicile: '', totalHoldingShare: 1_261_750_000, percentage: 1.02, change: null, hasPrevData: false },
   ],
 }
 
@@ -72,9 +72,13 @@ const sample = computed(() => {
 
 const settling = computed(() => landingStatus.value === 'pending' && !isLive.value)
 
-const visibleInvestors = computed(() => sample.value.investors)
+const visibleInvestors = computed(() => sample.value.investors.slice(0, 5))
+const previewPeriod = computed(() => isLive.value ? landing.value?.coverage?.end ?? null : null)
+const stockPreviewPath = computed(() => `/saham/${sample.value.ticker}`)
 
 const portfolioPreview = computed(() => sample.value.investors[0])
+const portfolioPreviewPath = computed(() => isLive.value && portfolioPreview.value?.investorSlug
+  ? `/investor/${portfolioPreview.value.investorSlug}` : null)
 const changePreview = computed(() => sample.value.investors.find(investor =>
   investor.change !== 0 && (investor.change !== null || investor.hasPrevData)
 ))
@@ -90,15 +94,30 @@ const dataStatus = computed(() => {
   return `Cuplikan data periode ${sample.value.batchLabel}`
 })
 
-const features = [
-  { icon: 'i-lucide-users', title: 'Pemegang saham emiten', text: 'Lihat investor yang tercatat pada suatu emiten, beserta persentase kepemilikan dan asal lokal atau asing.', to: '/saham', link: 'Lihat Pemegang Saham', kind: 'owners' },
-  { icon: 'i-lucide-folders', title: 'Portofolio saham investor', text: 'Cari nama investor untuk melihat saham yang dimilikinya berdasarkan catatan pada periode pilihanmu.', to: '/investor', link: 'Cari Investor', kind: 'portfolio' },
-  { icon: 'i-lucide-chart-no-axes-combined', title: 'Perubahan kepemilikan saham', text: 'Bandingkan persentase kepemilikan dengan periode sebelumnya yang tersedia. Lihat kenaikan, penurunan, dan investor yang baru tercatat.', to: '/saham', link: 'Lihat Perubahan Kepemilikan', kind: 'change' },
-]
+const features = computed(() => [
+  {
+    icon: 'i-lucide-users', title: 'Rincian kepemilikan emiten', kind: 'owners',
+    text: 'Lihat daftar pemegang saham dan grafik kepemilikan. Kenali pengendali atau afiliasi saat klasifikasinya tersedia dalam data.',
+    to: stockPreviewPath.value, preview: true,
+    link: isLive.value ? `Lihat detail ${sample.value.ticker}` : `Lihat data terbaru ${sample.value.ticker}`,
+  },
+  {
+    icon: 'i-lucide-folders', title: 'Portofolio saham investor', kind: 'portfolio',
+    text: 'Telusuri saham yang tercatat atas nama investor dan sebaran sektornya. Klik kode saham untuk melihat pemegang saham emiten tersebut.',
+    to: portfolioPreviewPath.value ?? '/investor', preview: Boolean(portfolioPreviewPath.value),
+    link: portfolioPreviewPath.value ? 'Lihat portofolio investor' : 'Telusuri investor',
+  },
+  {
+    icon: 'i-lucide-chart-no-axes-combined', title: 'Perubahan antarperiode', kind: 'change',
+    text: 'Bandingkan kepemilikan dengan periode sebelumnya: meningkat, menurun, baru tercatat, atau tidak lagi tercatat dalam dataset.',
+    to: `${stockPreviewPath.value}#changes-heading`, preview: true,
+    link: isLive.value ? `Lihat perubahan ${sample.value.ticker}` : `Lihat perubahan terbaru ${sample.value.ticker}`,
+  },
+])
 const steps = [
-  { title: 'Cari emiten atau investor', text: 'Buka halaman Saham untuk mencari kode atau nama perusahaan. Gunakan halaman Investor untuk mencari nama pemegang saham.' },
-  { title: 'Pilih periode data', text: 'Pilih bulan dan tahun yang tersedia untuk melihat catatan kepemilikan pada periode tersebut.' },
-  { title: 'Baca rincian kepemilikan', text: 'Periksa jumlah saham dan persentase kepemilikan. Jika data pembanding tersedia, kamu juga bisa melihat perubahan dari periode sebelumnya.' },
+  { title: 'Cari emiten atau investor', text: 'Cari kode atau nama emiten lewat pencarian di atas untuk membuka halaman detailnya. Untuk mencari pemegang saham, buka halaman Investor.' },
+  { title: 'Pilih periode data', text: 'Pilih bulan dan tahun di halaman detail untuk membaca kepemilikan dan perubahan dari periode sebelumnya yang tersedia.' },
+  { title: 'Telusuri kepemilikan terkait', text: 'Klik nama investor untuk membuka portofolionya, lalu klik kode saham untuk melihat pemegang saham emiten lain. Periode pilihanmu tetap digunakan saat berpindah halaman detail.' },
 ]
 
 const siteConfig = useSiteConfig()
@@ -203,9 +222,8 @@ useHead(() => ({
                 lg:text-[clamp(2.5rem,min(4.6vw,6svh),4.5rem)]">Data Kepemilikan
               Saham dan <span class="text-primary">Free Float Emiten BEI</span></h1>
             <p v-motion-rise-2 class="landing-description motion-el mt-6 max-w-lg text-base leading-relaxed text-toned max-sm:mt-4 sm:text-lg
-              lg:mt-[clamp(0.75rem,2svh,1.5rem)] lg:text-[clamp(1rem,2svh,1.125rem)]">Kenali pemegang saham emiten di Bursa
-              Efek Indonesia (BEI) dan telusuri portofolio investornya. Lihat porsi kepemilikan serta perubahan antarperiode dari pengumuman bulanan
-              BEI.</p>
+              lg:mt-[clamp(0.75rem,2svh,1.5rem)] lg:text-[clamp(1rem,2svh,1.125rem)]">Lihat pemegang saham emiten BEI, telusuri portofolio investor,
+              dan bandingkan kepemilikan antarperiode.</p>
             <p v-motion-rise-3 class="landing-note motion-el mt-3 max-w-lg text-sm leading-relaxed text-muted max-sm:mt-2
               lg:mt-[clamp(0.5rem,1svh,0.75rem)]">Free float dihitung oleh aplikasi dari kepemilikan yang tercatat. Gratis tanpa
               akun.</p>
@@ -222,6 +240,10 @@ useHead(() => ({
                   'Emiten tidak ditemukan.' }}</template>
               </UInputMenu>
               <UButton v-if="tickerStatus === 'error'" label="Coba muat pencarian lagi" variant="link" class="mt-2" @click="loadTickers" />
+              <p role="status" class="mt-3 flex items-start gap-2 text-xs text-muted">
+                <UIcon name="i-lucide-calendar-days" class="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
+                <span>Periode terbaru: <strong class="font-medium text-toned">{{ latestBatch || (landingStatus === 'pending' ? 'Memuat...' : 'Belum tersedia') }}</strong></span>
+              </p>
               <div class="landing-actions mt-4 flex flex-wrap gap-3 max-sm:mt-3 lg:mt-[clamp(0.75rem,2svh,1rem)]">
                 <UButton to="/saham" label="Lihat Kepemilikan Saham" trailing-icon="i-lucide-arrow-right" size="lg" class="max-sm:min-h-11" />
                 <UButton to="/investor" label="Telusuri Investor" color="neutral" variant="outline" size="lg" class="max-sm:min-h-11" />
@@ -230,7 +252,7 @@ useHead(() => ({
           </div>
           <div v-motion-rise-2 class="motion-el mx-auto w-full max-w-md lg:rotate-2 motion-reduce:rotate-0">
             <LandingOwnership :ticker="sample.ticker" :name="sample.name" :float="sample.float" :free-float="sample.freeFloat"
-              :investor-count="sample.investorCount" :batch-label="sample.batchLabel" :is-live="isLive" />
+              :investor-count="sample.investorCount" :batch-label="sample.batchLabel" :is-live="isLive" :period="previewPeriod" />
           </div>
         </div>
       </section>
@@ -265,8 +287,8 @@ useHead(() => ({
       <div v-motion-reveal class="landing-section-heading motion-el mx-auto mb-8 max-w-7xl lg:mb-(--landing-content-gap)">
         <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary">Cuplikan data</p>
         <h2 id="contoh-heading" class="text-2xl font-bold tracking-tight text-highlighted sm:text-3xl">Contoh Data Pemegang Saham Emiten BEI</h2>
-        <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat nama investor, jumlah lembar saham, dan persentase kepemilikannya pada periode yang
-          ditampilkan.</p>
+        <p class="mt-4 max-w-2xl leading-relaxed text-toned">Lihat pemegang saham dengan kepemilikan terbesar yang tercatat pada periode ini.
+          Klik nama investor yang memiliki tautan untuk menelusuri portofolionya.</p>
         <p role="status" class="mt-3 text-xs font-medium text-muted">{{ dataStatus }}<span v-if="!isLive"> Per {{ sample.batchLabel }}.</span></p>
       </div>
       <article v-motion-reveal class="motion-el mx-auto w-full max-w-7xl bg-default border border-accented shadow-sm rounded-2xl overflow-hidden">
@@ -278,14 +300,14 @@ useHead(() => ({
             </p>
           </div>
 
-          <div class="flex gap-x-2 sm:gap-x-3">
+          <div class="flex flex-wrap gap-2 sm:gap-x-3">
             <UBadge :label="`${sample.investorCount} Investor`" color="neutral" variant="soft" class="w-fit text-xs xl:text-sm" />
             <UBadge :label="`Free float (${sample.freeFloat}%)`" color="secondary" variant="soft" class="w-fit text-xs xl:text-sm" />
             <UBadge v-if="sample.sector" :label="sample.sector" color="sector" variant="soft" class="w-fit text-xs xl:text-sm" />
           </div>
         </div>
 
-        <div class="max-h-96 overflow-auto border-t border-accented transition-opacity duration-300 ease-out"
+        <div class="overflow-x-auto border-t border-accented transition-opacity duration-300 ease-out motion-reduce:transition-none"
           :class="settling ? 'opacity-55' : 'opacity-100'">
           <table aria-label="Cuplikan investor emiten" class="w-full text-xs sm:text-sm tabular-nums">
             <thead>
@@ -311,10 +333,15 @@ useHead(() => ({
 
                 <td class="px-2 py-2.5 sm:px-3">
                   <div class="flex flex-col gap-y-0.5">
-                    <span class="font-semibold text-highlighted whitespace-normal">{{ investor.investorName }}</span>
-                    <span class="flex gap-x-1 sm:hidden">
+                    <div class="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                      <LandingPreviewLink v-if="isLive && investor.investorSlug" :to="`/investor/${investor.investorSlug}`" :period="previewPeriod"
+                        class="min-w-0 max-w-full font-semibold whitespace-normal wrap-anywhere">{{ investor.investorName }}</LandingPreviewLink>
+                      <span v-else class="font-semibold text-highlighted whitespace-normal wrap-anywhere">{{ investor.investorName }}</span>
+                      <HoldingRelationshipBadge :value="investor.controllerOrAffiliate" />
+                    </div>
+                    <span class="flex flex-wrap gap-1 sm:hidden">
                       <UBadge v-if="investor.investorType" :label="investor.investorType" color="secondary" variant="soft"
-                        class="text-xs h-auto py-0.5" />
+                        class="max-w-full text-xs h-auto whitespace-normal wrap-anywhere py-0.5" />
                       <UBadge v-if="['D','F'].includes(investor.localForeign?.trim() ?? '')" :label="investor.localForeign.trim()"
                         :color="investor.localForeign.trim() === 'D' ? 'primary' : 'error'" variant="soft"
                         class="text-xs h-fit font-bold" />
@@ -344,8 +371,9 @@ useHead(() => ({
                   <span class="flex items-center justify-end gap-1.5 max-sm:flex-col max-sm:items-end max-sm:gap-0">
                     <span class="font-bold">{{ investor.percentage }}%</span>
                     <span v-if="investor.change !== null && investor.change !== 0"
+                      class="whitespace-nowrap"
                       :class="investor.change > 0 ? 'font-semibold text-success' : 'font-semibold text-error'">
-                      ({{ formatChange(investor.change) }})
+                      ({{ formatPercentagePoints(investor.change) }} pp)
                     </span>
                     <span v-else-if="investor.change === null && investor.hasPrevData" class="font-semibold text-success">
                       (Baru)
@@ -367,16 +395,16 @@ useHead(() => ({
               dalam
               cuplikan.</p>
 
-            <NuxtLink :to="`/saham/${sample.ticker}`"
+            <LandingPreviewLink :to="stockPreviewPath" :period="previewPeriod"
               class="group inline-flex w-fit shrink-0 items-center gap-x-1 rounded-sm text-[13px] font-semibold text-highlighted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-inverted">
               <span
                 class="underline decoration-accented underline-offset-4 transition-[text-decoration-color] duration-150 ease-in-out group-hover:decoration-current motion-reduce:transition-none">
-                Lihat kepemilikan saham {{ sample.ticker }}
+                {{ isLive ? 'Lihat seluruh pemegang saham' : `Lihat data terbaru ${sample.ticker}` }}
               </span>
               <UIcon name="i-lucide-arrow-right"
                 class="size-3.5 shrink-0 transition-transform duration-150 ease-in-out group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
                 aria-hidden="true" />
-            </NuxtLink>
+            </LandingPreviewLink>
           </div>
 
           <p class="text-[13px] text-muted">
@@ -391,6 +419,7 @@ useHead(() => ({
               Menampilkan {{ sample.investorCount }} investor yang tercatat untuk emiten ini pada periode {{ sample.batchLabel }}.
             </template>
           </p>
+          <p class="text-xs text-muted">Selisih kepemilikan ditampilkan dalam poin persentase (pp). Label Pengendali/Afiliasi mengikuti klasifikasi dalam data sumber.</p>
         </div>
       </article>
     </section>
@@ -433,7 +462,14 @@ useHead(() => ({
                   </thead>
                   <tbody class="divide-y divide-accented">
                     <tr v-for="investor in visibleInvestors.slice(0, 2)" :key="investor.investorName">
-                      <td class="truncate px-3 py-2.5 font-semibold text-highlighted" :title="investor.investorName">{{ investor.investorName }}</td>
+                      <td class="px-3 py-2.5">
+                        <div class="flex min-w-0 flex-wrap items-center gap-1.5">
+                          <LandingPreviewLink v-if="isLive && investor.investorSlug" :to="`/investor/${investor.investorSlug}`" :period="previewPeriod"
+                            class="min-w-0 max-w-full font-semibold wrap-anywhere">{{ investor.investorName }}</LandingPreviewLink>
+                          <span v-else class="font-semibold text-highlighted wrap-anywhere">{{ investor.investorName }}</span>
+                          <HoldingRelationshipBadge :value="investor.controllerOrAffiliate" />
+                        </div>
+                      </td>
                       <td class="px-3 py-2.5 text-right font-semibold tabular-nums">{{ investor.percentage }}%</td>
                     </tr>
                   </tbody>
@@ -442,9 +478,9 @@ useHead(() => ({
               <template v-else-if="feature.kind === 'portfolio' && portfolioPreview">
                 <div class="space-y-2 p-3">
                   <div class="flex min-w-0 items-center gap-2">
-                    <span class="truncate font-semibold text-highlighted" :title="portfolioPreview.investorName">{{ portfolioPreview.investorName
-                    }}</span>
-                    <UIcon name="i-lucide-chevron-up" class="ml-auto size-3 shrink-0 text-muted" aria-hidden="true" />
+                    <LandingPreviewLink v-if="isLive && portfolioPreview.investorSlug" :to="`/investor/${portfolioPreview.investorSlug}`" :period="previewPeriod"
+                      class="min-w-0 font-semibold wrap-anywhere">{{ portfolioPreview.investorName }}</LandingPreviewLink>
+                    <span v-else class="font-semibold text-highlighted wrap-anywhere">{{ portfolioPreview.investorName }}</span>
                   </div>
                   <div class="flex flex-wrap gap-1.5">
                     <UBadge v-if="portfolioPreview.investorType" :label="portfolioPreview.investorType" color="secondary" variant="soft" size="sm" />
@@ -453,6 +489,7 @@ useHead(() => ({
                       size="sm" />
                   </div>
                 </div>
+                <p class="border-t border-accented px-3 py-2 text-muted">Salah satu kepemilikan yang tercatat</p>
                 <table class="w-full table-fixed border-t border-accented text-[11px]" aria-label="Cuplikan saham investor">
                   <thead class="bg-elevated/50 text-muted">
                     <tr>
@@ -464,7 +501,10 @@ useHead(() => ({
                   <tbody>
                     <tr>
                       <td class="px-3 py-2.5">
-                        <UBadge :label="sample.ticker" size="sm" />
+                        <LandingPreviewLink :to="stockPreviewPath" :period="previewPeriod"
+                          :aria-label="isLive ? `Lihat detail saham ${sample.ticker}` : `Lihat data terbaru ${sample.ticker}`">
+                          <UBadge :label="sample.ticker" size="sm" />
+                        </LandingPreviewLink>
                       </td>
                       <td class="truncate px-2 py-2.5 font-semibold text-highlighted" :title="sample.name">{{ sample.name }}</td>
                       <td class="px-3 py-2.5 text-right font-semibold tabular-nums">{{ portfolioPreview.percentage }}%</td>
@@ -478,17 +518,22 @@ useHead(() => ({
                   <span class="text-xl font-semibold text-highlighted">{{ changePreview.percentage }}%</span>
                   <span v-if="changePreview.change !== null" :class="changePreview.change > 0 ? 'text-success' : 'text-error'"
                     class="font-semibold">({{
-                      formatChange(changePreview.change) }})</span>
+                      formatPercentagePoints(changePreview.change) }} pp)</span>
                   <span v-else class="font-semibold text-success">(Baru)</span>
                 </div>
                 <p v-else class="mt-4 text-muted">Belum ada perubahan persentase untuk ditampilkan.</p>
-                <p class="mt-2 text-muted">Dibandingkan periode sebelumnya yang tersedia</p>
+                <p class="mt-2 text-muted">Selisih dalam poin persentase (pp), dibandingkan periode sebelumnya yang tersedia.</p>
               </div>
               <p class="border-t border-accented px-3 py-2 text-[10px] text-muted">{{ isLive ? 'Cuplikan' : 'Data arsip' }} · {{ sample.batchLabel }}
               </p>
             </div>
-            <UButton :to="feature.to" :label="feature.link" variant="link" trailing-icon="i-lucide-arrow-right"
-              class="mt-auto self-start px-0 pt-6" />
+            <LandingPreviewLink v-if="feature.preview" :to="feature.to" :period="previewPeriod"
+              class="mt-auto inline-flex min-h-11 items-center gap-2 self-start pt-6 text-sm font-semibold">
+              {{ feature.link }}
+              <UIcon name="i-lucide-arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+            </LandingPreviewLink>
+            <UButton v-else :to="feature.to" :label="feature.link" variant="link" trailing-icon="i-lucide-arrow-right"
+              class="mt-auto min-h-11 self-start px-0 pt-6" />
           </article>
         </div>
       </div>

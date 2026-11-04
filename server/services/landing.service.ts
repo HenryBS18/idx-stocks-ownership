@@ -1,6 +1,7 @@
 import { getCache, setCache } from "~~/server/utils/cache"
 import type { InfoBatch, InfoPeriod, TeaserStock } from "../types"
 import { round2 } from "../utils/investor-change"
+import { getInvestorSlugMap } from "../utils/investor-profiles"
 
 const FALLBACK_TICKER = 'BBCA'
 const TEASER_ROW_LIMIT = 25
@@ -21,9 +22,9 @@ export class LandingService {
 
     if (!info) return { batchLabel: '', emitenCount: 0, coverage: null, stock: null }
 
-    const cacheKey = `landing:${info.year}-${info.month}`
+    const cacheKey = `landing:v2:${info.year}-${info.month}`
     const cached = await getCache<LandingTeaser>(cacheKey)
-    if (cached) return cached
+    if (cached) return this.withInvestorSlugs(cached)
 
     const ticker = await this.getDeepestTicker(info.id)
 
@@ -62,7 +63,23 @@ export class LandingService {
 
     await setCache(cacheKey, teaser)
 
-    return teaser
+    return this.withInvestorSlugs(teaser)
+  }
+
+  private async withInvestorSlugs(teaser: LandingTeaser): Promise<LandingTeaser> {
+    if (!teaser.stock) return teaser
+
+    const slugs = await getInvestorSlugMap()
+    return {
+      ...teaser,
+      stock: {
+        ...teaser.stock,
+        investors: teaser.stock.investors.map(investor => ({
+          ...investor,
+          investorSlug: slugs.get(investor.investorName) ?? null,
+        })),
+      },
+    }
   }
 
   private async getDeepestTicker(infoId: number): Promise<string> {

@@ -7,6 +7,7 @@ const props = defineProps<{
   investorCount: number
   batchLabel: string
   isLive: boolean
+  period: string | null
 }>()
 
 const arc = computed(() => Math.min(100, Math.max(0, props.float)))
@@ -57,5 +58,10 @@ const arc = computed(() => Math.min(100, Math.max(0, props.float)))
       <span>{{ investorCount }} investor tercatat</span>
       <span>Per {{ batchLabel || 'periode belum tersedia' }}</span>
     </div>
+    <LandingPreviewLink :to="`/saham/${ticker}`" :period="period"
+      class="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold">
+      {{ isLive ? `Lihat detail saham ${ticker}` : `Lihat data terbaru ${ticker}` }}
+      <UIcon name="i-lucide-arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+    </LandingPreviewLink>
   </article>
 </template>
