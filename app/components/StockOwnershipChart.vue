@@ -16,6 +16,8 @@ const segments = computed(() => {
   }).filter(item => item.value > 0)
 })
 const valid = computed(() => props.remainder >= 0 && props.remainder <= 100 && props.holdings.every(row => row.percentage >= 0))
+const activeIndex = ref<number | null>(null)
+watch(() => props.remainder, () => { activeIndex.value = null })
 </script>
 
 <template>
@@ -24,11 +26,19 @@ const valid = computed(() => props.remainder >= 0 && props.remainder <= 100 && p
     <div v-if="valid" class="mt-5 flex flex-col items-center gap-6 sm:flex-row sm:gap-10">
       <svg viewBox="0 0 200 200" role="img" aria-labelledby="distribution-heading distribution-desc" class="size-52 shrink-0">
         <desc id="distribution-desc">Lima pemegang saham terbesar, investor tercatat lainnya, dan free float. Persentase tersedia pada legenda.</desc>
-        <circle v-for="segment in segments" :key="segment.label" cx="100" cy="100" r="78" fill="none" :stroke="segment.color" stroke-width="28"
-          pathLength="100" :stroke-dasharray="`${segment.value} ${100 - segment.value}`" :stroke-dashoffset="-segment.offset" transform="rotate(-90 100 100)" />
+        <circle v-for="(segment, i) in segments" :key="segment.label" cx="100" cy="100" r="78" fill="none" :stroke="segment.color"
+          pathLength="100" :stroke-dasharray="`${segment.value} ${100 - segment.value}`" :stroke-dashoffset="-segment.offset" transform="rotate(-90 100 100)"
+          class="transition-[stroke-width,opacity] duration-200 ease-out motion-reduce:transition-none"
+          :stroke-width="activeIndex === i ? 34 : 28"
+          :opacity="activeIndex === null || activeIndex === i ? 1 : 0.3"
+          @pointerenter="activeIndex = i" @pointerleave="activeIndex = null" />
       </svg>
-      <dl class="w-full min-w-0 space-y-3 text-sm">
-        <div v-for="segment in segments" :key="segment.label" class="flex items-start justify-between gap-4">
+      <dl class="w-full min-w-0 space-y-1 text-sm">
+        <div v-for="(segment, i) in segments" :key="segment.label" tabindex="0"
+          class="flex items-start justify-between gap-4 rounded-sm px-2 -mx-2 py-1 transition-opacity duration-200 ease-out motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          :class="[activeIndex === null || activeIndex === i ? 'opacity-100' : 'opacity-40', activeIndex === i ? 'bg-elevated font-semibold' : '']"
+          @pointerenter="activeIndex = i" @pointerleave="activeIndex = null"
+          @focus="activeIndex = i" @blur="activeIndex = null">
           <dt class="flex min-w-0 items-start gap-2"><span class="mt-1 size-2.5 shrink-0 rounded-full" :style="{ backgroundColor: segment.color }" /><span class="break-words">{{ segment.label }}</span></dt>
           <dd class="shrink-0 font-medium tabular-nums">{{ formatOwnership(segment.value) }}%</dd>
         </div>
