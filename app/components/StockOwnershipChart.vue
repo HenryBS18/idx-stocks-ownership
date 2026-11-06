@@ -7,7 +7,7 @@ const segments = computed(() => {
   const ranked = sortByOwnershipPercentage(props.holdings)
   const largest = ranked.slice(0, 5).map((row, i) => ({ label: row.investorName, value: row.percentage, color: colors[i] }))
   const rest = ranked.slice(5).reduce((sum, row) => sum + row.percentage, 0)
-  const items = [...largest, { label: 'Investor tercatat lainnya', value: rest, color: colors[5] }, { label: 'Sisa perhitungan aplikasi', value: props.remainder, color: colors[6] }]
+  const items = [...largest, { label: 'Investor tercatat lainnya', value: rest, color: colors[5] }, { label: 'Free float', value: props.remainder, color: colors[6] }]
   let offset = 0
   return items.map((item) => {
     const segment = { ...item, offset }
@@ -23,11 +23,9 @@ const valid = computed(() => props.remainder >= 0 && props.remainder <= 100 && p
     <h2 id="distribution-heading" class="text-xl font-semibold text-highlighted">Distribusi kepemilikan</h2>
     <div v-if="valid" class="mt-5 flex flex-col items-center gap-6 sm:flex-row sm:gap-10">
       <svg viewBox="0 0 200 200" role="img" aria-labelledby="distribution-heading distribution-desc" class="size-52 shrink-0">
-        <desc id="distribution-desc">Lima pemegang saham terbesar, investor tercatat lainnya, dan sisa perhitungan aplikasi. Persentase tersedia pada legenda.</desc>
+        <desc id="distribution-desc">Lima pemegang saham terbesar, investor tercatat lainnya, dan free float. Persentase tersedia pada legenda.</desc>
         <circle v-for="segment in segments" :key="segment.label" cx="100" cy="100" r="78" fill="none" :stroke="segment.color" stroke-width="28"
           pathLength="100" :stroke-dasharray="`${segment.value} ${100 - segment.value}`" :stroke-dashoffset="-segment.offset" transform="rotate(-90 100 100)" />
-        <text x="100" y="96" text-anchor="middle" class="fill-current text-2xl font-semibold">{{ formatOwnership(remainder) }}%</text>
-        <text x="100" y="117" text-anchor="middle" class="fill-current text-xs">sisa perhitungan</text>
       </svg>
       <dl class="w-full min-w-0 space-y-3 text-sm">
         <div v-for="segment in segments" :key="segment.label" class="flex items-start justify-between gap-4">
@@ -37,6 +35,6 @@ const valid = computed(() => props.remainder >= 0 && props.remainder <= 100 && p
       </dl>
     </div>
     <p v-else class="mt-4 text-sm text-muted">Grafik tidak ditampilkan karena total persentase berada di luar rentang 0–100%. Periksa angka pada tabel kepemilikan.</p>
-    <p class="mt-5 text-xs leading-relaxed text-muted">Sisa perhitungan adalah 100% dikurangi kepemilikan tercatat. Angka ini bukan penetapan free float resmi BEI.</p>
+    <p class="mt-5 text-xs leading-relaxed text-muted">Free float dihitung dari 100% dikurangi total persentase kepemilikan yang tercatat. Angka ini bukan penetapan free float resmi BEI.</p>
   </section>
 </template>

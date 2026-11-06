@@ -58,7 +58,7 @@ const decreases = computed(() => props.detail.holdings.filter(row => row.changeK
             </dd>
           </div>
           <div class="rounded-xl border border-accented bg-primary/5 p-5">
-            <dt class="text-sm text-muted">Free float perhitungan aplikasi</dt>
+            <dt class="text-sm text-muted">Free float</dt>
             <dd class="mt-2 text-3xl font-semibold tabular-nums text-primary">{{ formatOwnership(detail.freeFloat!) }}%</dd>
           </div>
         </template>
