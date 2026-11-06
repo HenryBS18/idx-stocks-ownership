@@ -38,7 +38,7 @@ export class DetailService {
         infoId: true, ticker: true, investorName: true, investorType: true,
         controllerOrAffiliate: true,
         localForeign: true, domicile: true, totalHoldingShare: true, percentage: true,
-        stock: { select: { name: true } },
+        stock: { select: { name: true, sector: true } },
       },
       orderBy: [{ ticker: 'asc' }, { investorName: 'asc' }, { id: 'asc' }],
     })
@@ -46,7 +46,7 @@ export class DetailService {
     const toRecord = (row: typeof records[number]): DetailRecord => ({
       ticker: row.ticker,
       stockName: row.stock.name,
-      sector: getSectorByTicker(row.ticker),
+      sector: getSectorLabel(row.stock.sector),
       investorName: row.investorName,
       investorSlug: slugs.get(row.investorName) ?? null,
       investorType: getInvestorType(row.investorType),
@@ -72,7 +72,7 @@ export class DetailService {
         name: stock?.name ?? investor!.investorName,
         ticker: stock?.ticker ?? null,
         slug: investor?.slug ?? null,
-        sector: stock ? getSectorByTicker(stock.ticker) : null,
+        sector: stock ? getSectorLabel(stock.sector) : null,
         investorType: investor ? representative?.investorType ?? null : null,
         localForeign: investor ? representative?.localForeign ?? null : null,
         domicile: investor ? representative?.domicile ?? null : null,

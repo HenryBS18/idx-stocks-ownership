@@ -24,7 +24,7 @@ export const stockSector: string[] = [
   'Finance',
   'Health',
   'Industrial',
-  'Infrastrucures',
+  'Infrastructures',
   'Non-Cyclical',
   'Property',
   'Technology',

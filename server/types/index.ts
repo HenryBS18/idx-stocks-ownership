@@ -1,4 +1,5 @@
 import type { ControllerOrAffiliate } from '../../shared/types'
+import type { Sector } from '../generated/prisma/enums'
 
 export type IdxFileData = {
   time: string
@@ -60,6 +61,7 @@ export type TeaserInvestorRow = {
 export type TeaserStock = {
   ticker: string
   name: string
+  sector: Sector | null
   hscConcentration: unknown
   stockInvestor: TeaserInvestorRow[]
 }

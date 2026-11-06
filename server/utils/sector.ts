@@ -1,9 +1,19 @@
-import sectorMap from "../data/sector.json"
+import type { Sector } from '../generated/prisma/enums'
 
-const map = sectorMap as Record<string, string>
+const labels: Record<Sector, string> = {
+  BASIC_MAT: 'Basic Mat',
+  CYCLICAL: 'Cyclical',
+  ENERGY: 'Energy',
+  FINANCE: 'Finance',
+  HEALTH: 'Health',
+  INDUSTRIAL: 'Industrial',
+  INFRASTRUCTURES: 'Infrastructures',
+  NON_CYCLICAL: 'Non-Cyclical',
+  PROPERTY: 'Property',
+  TECHNOLOGY: 'Technology',
+  TRANSPORT: 'Transport',
+}
 
-export const getSectorByTicker = (ticker: string | undefined): string | null => {
-  if (!ticker) return null
-  const sector = map[ticker.trim().toUpperCase()]
-  return sector ? sector.trim() : null
+export const getSectorLabel = (sector: Sector | null | undefined): string | null => {
+  return sector ? labels[sector] : null
 }

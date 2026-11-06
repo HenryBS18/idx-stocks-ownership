@@ -25,6 +25,7 @@ export class StockService {
       select: {
         ticker: true,
         name: true,
+        sector: true,
         hscConcentration: true,
         stockInvestor: {
           select: {
@@ -67,7 +68,7 @@ export class StockService {
       return {
         ticker: s.ticker,
         name: s.name,
-        sector: getSectorByTicker(s.ticker),
+        sector: getSectorLabel(s.sector),
         investorCount,
         float,
         freeFloat,

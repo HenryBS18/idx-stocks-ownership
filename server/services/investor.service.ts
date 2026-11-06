@@ -27,7 +27,8 @@ export class InvestorService {
         percentage: true,
         stock: {
           select: {
-            name: true
+            name: true,
+            sector: true
           }
         }
       },
@@ -60,7 +61,7 @@ export class InvestorService {
           ticker: row.ticker,
           controllerOrAffiliate: row.controllerOrAffiliate,
           name: row.stock.name,
-          sector: getSectorByTicker(row.ticker),
+          sector: getSectorLabel(row.stock.sector),
           totalHoldingShare: parseInt(row.totalHoldingShare.toString()),
           percentage,
           change: prev === undefined ? null : round2(percentage - prev),

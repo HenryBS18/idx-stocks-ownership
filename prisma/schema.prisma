@@ -19,9 +19,24 @@ model Info {
   @@index([year, month])
 }
 
+enum Sector {
+  BASIC_MAT       @map("Basic Mat")
+  CYCLICAL        @map("Cyclical")
+  ENERGY          @map("Energy")
+  FINANCE         @map("Finance")
+  HEALTH          @map("Health")
+  INDUSTRIAL      @map("Industrial")
+  INFRASTRUCTURES @map("Infrastructures")
+  NON_CYCLICAL    @map("Non-Cyclical")
+  PROPERTY        @map("Property")
+  TECHNOLOGY      @map("Technology")
+  TRANSPORT       @map("Transport")
+}
+
 model Stock {
-  ticker String @id @db.Char(4)
-  name   String @db.VarChar(60)
+  ticker String  @id @db.Char(4)
+  name   String  @db.VarChar(60)
+  sector Sector?
 
   hscConcentration Decimal? @db.Decimal(5, 2)
 

@@ -33,6 +33,7 @@ export class LandingService {
         select: {
           ticker: true,
           name: true,
+          sector: true,
           hscConcentration: true,
           stockInvestor: {
             select: {
@@ -95,7 +96,7 @@ export class LandingService {
     return {
       ticker: stock.ticker,
       name: stock.name,
-      sector: getSectorByTicker(stock.ticker),
+      sector: getSectorLabel(stock.sector),
       investorCount: stock.stockInvestor.length,
       float,
       freeFloat: parseFloat((100 - float).toFixed(2)),
