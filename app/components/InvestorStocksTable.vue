@@ -114,8 +114,5 @@ const stockColumns: TableColumn<InvestorStockTableRow>[] = [
 <template>
   <div>
     <UTable :data="rows" :columns="stockColumns" />
-    <p class="px-3 py-2 text-[10px] text-muted sm:px-4 sm:text-xs">
-      Label Pengendali/Afiliasi mengikuti data periode yang dipilih. Tanpa label berarti informasi belum tersedia atau tidak disebutkan.
-    </p>
   </div>
 </template>
