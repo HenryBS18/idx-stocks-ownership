@@ -67,6 +67,7 @@ const retry = () => dateStore.error ? reloadNuxtApp({ force: true }) : refresh()
         <p v-if="kind === 'stock'" class="text-lg text-toned">{{ name }}</p>
         <div v-if="data" class="flex flex-wrap items-center gap-2">
           <UBadge v-if="data.identity.sector" :label="data.identity.sector" color="sector" variant="soft" />
+          <UBadge v-if="data.identity.hscConcentration !== null" :label="`HSC ${data.identity.hscConcentration}%`" color="error" variant="soft" />
           <UBadge v-if="data.identity.investorType && status !== 'pending'" :label="data.identity.investorType" color="secondary" variant="soft" />
           <UBadge v-if="data.identity.localForeign && status !== 'pending'"
             :label="data.identity.localForeign === 'D' ? 'Domestic' : data.identity.localForeign === 'F' ? 'Foreign' : data.identity.localForeign"

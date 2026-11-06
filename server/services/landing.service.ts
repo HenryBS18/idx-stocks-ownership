@@ -33,6 +33,7 @@ export class LandingService {
         select: {
           ticker: true,
           name: true,
+          hscConcentration: true,
           stockInvestor: {
             select: {
               investorName: true,
@@ -98,6 +99,7 @@ export class LandingService {
       investorCount: stock.stockInvestor.length,
       float,
       freeFloat: parseFloat((100 - float).toFixed(2)),
+      hscConcentration: stock.hscConcentration === null ? null : Number(stock.hscConcentration),
       investors: sortStockInvestors(stock.stockInvestor.map((investor) => {
         const percentage = parseFloat(String(investor.percentage))
 

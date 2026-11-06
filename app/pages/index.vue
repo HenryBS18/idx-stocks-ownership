@@ -41,6 +41,7 @@ const FALLBACK: StockDetail & { batchLabel: string } = {
   investorCount: 4,
   float: 58.18,
   freeFloat: 41.82,
+  hscConcentration: null,
   batchLabel: '31 Oktober 2026',
   investors: [
     { investorName: 'PT DWIMURIA INVESTAMA ANDALAN', investorType: 'Corporate', controllerOrAffiliate: 'CONTROLLER', localForeign: 'D', domicile: 'INDONESIA', totalHoldingShare: 67_729_950_000, percentage: 54.94, change: null, hasPrevData: false },
@@ -64,6 +65,7 @@ const sample = computed(() => {
     investorCount: live.investorCount,
     float: live.float,
     freeFloat: live.freeFloat,
+    hscConcentration: live.hscConcentration,
     batchLabel: landing.value?.batchLabel ?? '',
     investors: live.investors,
   }

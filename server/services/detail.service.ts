@@ -76,6 +76,7 @@ export class DetailService {
         investorType: investor ? representative?.investorType ?? null : null,
         localForeign: investor ? representative?.localForeign ?? null : null,
         domicile: investor ? representative?.domicile ?? null : null,
+        hscConcentration: stock?.hscConcentration == null ? null : Number(stock.hscConcentration),
       },
       period: period(info),
       previousPeriod: previous ? period(previous) : null,

@@ -23,6 +23,8 @@ model Stock {
   ticker String @id @db.Char(4)
   name   String @db.VarChar(60)
 
+  hscConcentration Decimal? @db.Decimal(5, 2)
+
   stockInvestor StockInvestor[]
 }
 

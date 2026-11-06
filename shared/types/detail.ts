@@ -36,6 +36,7 @@ export type OwnershipDetail = {
     investorType: string | null
     localForeign: string | null
     domicile: string | null
+    hscConcentration: number | null
   }
   period: DetailPeriod
   previousPeriod: DetailPeriod | null

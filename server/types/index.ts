@@ -60,6 +60,7 @@ export type TeaserInvestorRow = {
 export type TeaserStock = {
   ticker: string
   name: string
+  hscConcentration: unknown
   stockInvestor: TeaserInvestorRow[]
 }
 

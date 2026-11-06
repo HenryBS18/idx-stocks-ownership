@@ -105,6 +105,7 @@ const decreases = computed(() => props.detail.holdings.filter(row => row.changeK
       <h2 id="method-heading" class="font-semibold text-highlighted">Sumber dan cakupan data</h2>
       <p>Catatan mengikuti pengumuman BEI pada periode yang dipilih. Jumlah {{ isStock ? 'investor' : 'saham' }} mencakup entri yang tersedia dalam dataset ini.</p>
       <p v-if="isStock">Free float dihitung dari 100% dikurangi total persentase kepemilikan yang tercatat. Angka ini bukan penetapan free float resmi BEI.</p>
+      <p v-if="isStock">HSC (High Shareholding Concentration) menandai emiten yang sahamnya terkonsentrasi pada segelintir pihak menurut BEI. Angka HSC ditampilkan sebagaimana dipublikasikan dan tidak dihitung oleh aplikasi.</p>
       <p v-else>Halaman ini menampilkan kepemilikan atas nama investor yang tercatat dalam dataset, sehingga belum tentu mencakup seluruh portofolionya.</p>
       <DataSourceNote />
     </section>

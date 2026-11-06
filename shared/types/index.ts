@@ -7,6 +7,7 @@ export type StockDetail = {
   investorCount: number
   float: number
   freeFloat: number
+  hscConcentration: number | null
   investors: {
     investorType: string
     controllerOrAffiliate: ControllerOrAffiliate | null

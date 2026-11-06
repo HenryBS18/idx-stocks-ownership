@@ -25,6 +25,7 @@ export class StockService {
       select: {
         ticker: true,
         name: true,
+        hscConcentration: true,
         stockInvestor: {
           select: {
             investorName: true,
@@ -70,6 +71,7 @@ export class StockService {
         investorCount,
         float,
         freeFloat,
+        hscConcentration: s.hscConcentration === null ? null : Number(s.hscConcentration),
         investors: sortStockInvestors(s.stockInvestor.map((investor) => ({
           ...investor,
           investorType: getInvestorType(investor.investorType),
