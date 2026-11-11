@@ -1,0 +1,1 @@
+ALTER TABLE "Stock" ALTER COLUMN "hscConcentration" TYPE DECIMAL(5,3);
