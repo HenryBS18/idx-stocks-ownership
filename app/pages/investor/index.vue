@@ -6,7 +6,7 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const store = useInvestorStore()
-const { investorCount, search, selectedInvestorOrigin, selectedInvestorTypes, showInvestorsAccordion, sortField, sortOrder, fetchedDate, error, errorMessage } = storeToRefs(store)
+const { investorCount, totalInvestorCount, isFiltered, search, selectedInvestorOrigin, selectedInvestorTypes, showInvestorsAccordion, sortField, sortOrder, fetchedDate, error, errorMessage } = storeToRefs(store)
 const { error: dateError } = storeToRefs(dateStore)
 const { fetchInvestors, resetFilter, toggleSort, clearError } = store
 
@@ -20,6 +20,11 @@ const activeFilterCount = computed(() => {
   if (sortField.value !== 'name' || sortOrder.value !== 'asc') count++
 
   return count
+})
+
+const investorCountLabel = computed(() => {
+  const total = `${totalInvestorCount.value.toLocaleString('id-ID')} investor`
+  return isFiltered.value ? `${investorCount.value.toLocaleString('id-ID')} dari ${total}` : total
 })
 
 const filterButtonLabel = computed(() => activeFilterCount.value > 0 ? `Filter (${activeFilterCount.value})` : 'Filter')
@@ -182,9 +187,7 @@ definePageMeta({
 
             <USeparator v-if="showInvestorsAccordion" class="h-6" orientation="vertical" color="primary" />
 
-            <p v-if="showInvestorsAccordion" class="text-[13px] md:text-sm text-muted text-nowrap">{{
-              investorCount.toLocaleString()
-              }} investor</p>
+            <p v-if="showInvestorsAccordion" class="text-[13px] md:text-sm text-muted text-nowrap">{{ investorCountLabel }}</p>
           </div>
         </div>
       </div>
@@ -245,7 +248,7 @@ definePageMeta({
       </Transition>
 
       <p v-if="showInvestorsAccordion" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
-        {{ investorCount.toLocaleString() }} investor
+        {{ investorCountLabel }}
       </p>
 
       <DataSourceNote v-if="!error && !dateError" class="w-full 2xl:mt-3" />

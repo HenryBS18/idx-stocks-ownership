@@ -53,6 +53,10 @@ export const useStockStore = defineStore('stock', () => {
 
   const stockCount = computed<number>(() => filteredStocks.value.length)
 
+  const totalStockCount = computed<number>(() => stockDetails.value.length)
+
+  const isFiltered = computed<boolean>(() => searchDebounced.value.trim() !== '' || !selectedSectors.value.includes('Semua'))
+
   const toggleSort = (field: StockSortField): void => {
     if (sortField.value === field) {
       sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
@@ -111,6 +115,8 @@ export const useStockStore = defineStore('stock', () => {
     selectedSectors,
     filteredStocks,
     stockCount,
+    totalStockCount,
+    isFiltered,
     fetchedDate,
     error,
     errorMessage,

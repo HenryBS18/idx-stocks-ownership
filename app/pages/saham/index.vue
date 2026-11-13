@@ -7,7 +7,7 @@ const dateStore = useDateStore()
 const { dates, selectedDate } = storeToRefs(dateStore)
 
 const stockStore = useStockStore()
-const { search, searchDebounced, showStockAccordion, sortField, sortOrder, selectedSectors, stockCount, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
+const { search, searchDebounced, showStockAccordion, sortField, sortOrder, selectedSectors, stockCount, totalStockCount, isFiltered, fetchedDate, error, errorMessage } = storeToRefs(stockStore)
 const { error: dateError } = storeToRefs(dateStore)
 const { fetchStocks, resetFilter, toggleSort, clearError } = stockStore
 
@@ -18,6 +18,11 @@ const activeFilterCount = computed(() => {
   if (sortField.value !== 'ticker' || sortOrder.value !== 'asc') count++
   if (!selectedSectors.value.includes('Semua')) count++
   return count
+})
+
+const stockCountLabel = computed(() => {
+  const total = `${totalStockCount.value.toLocaleString('id-ID')} emiten`
+  return isFiltered.value ? `${stockCount.value.toLocaleString('id-ID')} dari ${total}` : total
 })
 
 const filterButtonLabel = computed(() => activeFilterCount.value > 0 ? `Filter (${activeFilterCount.value})` : 'Filter')
@@ -182,9 +187,7 @@ definePageMeta({
 
             <USeparator v-if="showStockAccordion" orientation="vertical" color="primary" class="h-6" />
 
-            <p v-if="showStockAccordion" class="text-[13px] md:text-sm text-muted text-nowrap">{{ stockCount.toLocaleString() }}
-              emiten
-            </p>
+            <p v-if="showStockAccordion" class="text-[13px] md:text-sm text-muted text-nowrap">{{ stockCountLabel }}</p>
           </div>
         </div>
       </div>
@@ -245,7 +248,7 @@ definePageMeta({
       </Transition>
 
       <p v-if="showStockAccordion" class="self-start text-[13px] text-muted text-nowrap xl:hidden">
-        {{ stockCount.toLocaleString() }} emiten
+        {{ stockCountLabel }}
       </p>
 
       <DataSourceNote v-if="!error && !dateError" class="w-full 2xl:mt-3" />

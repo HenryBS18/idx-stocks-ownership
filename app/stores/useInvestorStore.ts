@@ -51,6 +51,14 @@ export const useInvestorStore = defineStore('investor', () => {
 
   const investorCount = computed<number>(() => filteredInvestors.value.length)
 
+  const totalInvestorCount = computed<number>(() => portfolios.value.length)
+
+  const isFiltered = computed<boolean>(() =>
+    searchDebounced.value.trim() !== '' ||
+    selectedInvestorOrigin.value !== 'Semua' ||
+    !selectedInvestorTypes.value.includes('Semua')
+  )
+
   const toggleSort = (field: InvestorSortField) => {
     sortField.value = field
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
@@ -107,6 +115,8 @@ export const useInvestorStore = defineStore('investor', () => {
     selectedInvestorTypes,
     filteredInvestors,
     investorCount,
+    totalInvestorCount,
+    isFiltered,
     fetchedDate,
     error,
     errorMessage,
