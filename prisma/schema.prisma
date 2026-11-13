@@ -43,6 +43,12 @@ model Stock {
   stockInvestor StockInvestor[]
 }
 
+model HscInfo {
+  id         Int      @id @default(1) @db.Integer
+  announceAt DateTime @db.Date
+  updatedAt  DateTime @updatedAt @db.Timestamptz(0)
+}
+
 model InvestorProfile {
   investorName String @id @db.VarChar(150)
   slug         String @unique @db.VarChar(220)

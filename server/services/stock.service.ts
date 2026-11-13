@@ -4,6 +4,7 @@ import path from "path"
 import { getCache, setCache } from "~~/server/utils/cache"
 import type { GetStockParam, HoldingRecord, InsertStockParam, InvestorHolding, TickerName, Tx } from "../types"
 import { getPrevMap, investorKey, round2 } from "../utils/investor-change"
+import type { HscPayload } from "../utils/parse-hsc-payload"
 import { ensureInvestorProfiles } from "../utils/investor-slug"
 import { sortStockInvestors } from "../utils/sort-stock-investors"
 
@@ -125,31 +126,67 @@ export class StockService {
     return stocks
   }
 
-  async getHscStocks(): Promise<HscStock[]> {
-    const cached = await getCache<HscStock[]>('stock:hsc')
+  async getHscStocks(): Promise<HscResponse> {
+    const cached = await getCache<HscResponse>('stock:hsc-list')
     if (cached) return cached
 
-    const stocks = await prisma.stock.findMany({
-      where: { hscConcentration: { not: null } },
-      select: {
-        ticker: true,
-        name: true,
-        sector: true,
-        hscConcentration: true,
-      },
-      orderBy: [{ hscConcentration: 'desc' }, { ticker: 'asc' }],
-    })
+    const [stocks, info] = await Promise.all([
+      prisma.stock.findMany({
+        where: { hscConcentration: { not: null } },
+        select: {
+          ticker: true,
+          name: true,
+          sector: true,
+          hscConcentration: true,
+        },
+        orderBy: [{ hscConcentration: 'desc' }, { ticker: 'asc' }],
+      }),
+      prisma.hscInfo.findUnique({ where: { id: 1 }, select: { announceAt: true } }),
+    ])
 
-    const result = stocks.map(stock => ({
-      ticker: stock.ticker.trim(),
-      name: stock.name,
-      sector: getSectorLabel(stock.sector),
-      hscConcentration: Number(stock.hscConcentration),
-    }))
+    const result: HscResponse = {
+      announceAt: info ? info.announceAt.toISOString().slice(0, 10) : null,
+      stocks: stocks.map(stock => ({
+        ticker: stock.ticker.trim(),
+        name: stock.name,
+        sector: getSectorLabel(stock.sector),
+        hscConcentration: Number(stock.hscConcentration),
+      })),
+    }
 
-    await setCache('stock:hsc', result)
+    await setCache('stock:hsc-list', result)
 
     return result
+  }
+
+  async upsertHsc({ announceAt, data }: HscPayload): Promise<{ updated: number; announceAt: string }> {
+    const tickers = data.map(item => item.ticker)
+    const concentrations = data.map(item => item.concentration)
+
+    await prisma.$transaction(async (tx) => {
+      const existing = await tx.stock.findMany({ where: { ticker: { in: tickers } }, select: { ticker: true } })
+      const known = new Set(existing.map(stock => stock.ticker.trim()))
+      const unknown = tickers.filter(ticker => !known.has(ticker))
+
+      if (unknown.length) {
+        throw createError({ statusCode: 400, statusMessage: `Ticker tidak dikenal: ${unknown.join(', ')}` })
+      }
+
+      await tx.$executeRaw`
+        UPDATE "Stock" AS s
+        SET "hscConcentration" = d.concentration
+        FROM unnest(${tickers}::text[], ${concentrations}::numeric[]) AS d(ticker, concentration)
+        WHERE s."ticker" = d.ticker
+      `
+
+      await tx.hscInfo.upsert({
+        where: { id: 1 },
+        create: { id: 1, announceAt },
+        update: { announceAt },
+      })
+    })
+
+    return { updated: data.length, announceAt: announceAt.toISOString().slice(0, 10) }
   }
 
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {

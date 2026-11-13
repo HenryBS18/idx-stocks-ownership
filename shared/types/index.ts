@@ -66,3 +66,8 @@ export type HscStock = {
   sector: string | null
   hscConcentration: number
 }
+
+export type HscResponse = {
+  announceAt: string | null
+  stocks: HscStock[]
+}

@@ -7,7 +7,7 @@ import { HSC_THRESHOLD, IDX_HSC_SOURCE_URL, stockSector } from '~/utils/constant
 
 type SortField = 'ticker' | 'hscConcentration'
 
-const { data, status, error, refresh } = await useFetch<HscStock[]>('/api/stock/hsc', { key: 'hsc-stocks' })
+const { data, status, error, refresh } = await useFetch<HscResponse>('/api/stock/hsc', { key: 'hsc-stocks' })
 
 const search = ref('')
 const searchDebounced = refDebounced(search, 200)
@@ -15,7 +15,14 @@ const selectedSectors = ref<string[]>(['Semua'])
 const sortField = ref<SortField>('hscConcentration')
 const sortOrder = ref<'asc' | 'desc'>('desc')
 
-const stocks = computed(() => data.value ?? [])
+const stocks = computed(() => data.value?.stocks ?? [])
+
+const announceFormatter = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+
+const announceLabel = computed(() => {
+  const value = data.value?.announceAt
+  return value ? announceFormatter.format(new Date(`${value}T00:00:00Z`)) : null
+})
 
 const rows = computed(() => {
   const query = searchDebounced.value.trim().toLowerCase()
@@ -254,6 +261,11 @@ useSeoMeta({
         <p v-if="data && isFiltered" class="text-[13px] md:text-sm text-muted text-nowrap">
           {{ rows.length.toLocaleString('id-ID') }} dari {{ stocks.length.toLocaleString('id-ID') }} emiten
         </p>
+      </div>
+
+      <div v-if="announceLabel" class="flex flex-wrap items-center gap-x-2 sm:ml-auto">
+        <p class="text-[13px] md:text-sm font-medium text-muted text-nowrap">PENGUMUMAN BEI TERBARU</p>
+        <p class="text-[13px] md:text-sm font-semibold text-highlighted text-nowrap">{{ announceLabel }}</p>
       </div>
 
       <DataSourceNote v-if="!error" :href="IDX_HSC_SOURCE_URL" label="Kepemilikan Saham Terkonsentrasi Tinggi (IDX)" class="w-full" />
