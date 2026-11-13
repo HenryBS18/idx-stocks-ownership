@@ -255,6 +255,8 @@ useSeoMeta({
           {{ rows.length.toLocaleString('id-ID') }} dari {{ stocks.length.toLocaleString('id-ID') }} emiten
         </p>
       </div>
+
+      <DataSourceNote v-if="!error" :href="IDX_HSC_SOURCE_URL" label="Kepemilikan Saham Terkonsentrasi Tinggi (IDX)" class="w-full" />
     </div>
 
     <div v-if="status === 'pending'" class="space-y-3">
@@ -268,7 +270,5 @@ useSeoMeta({
     <EmptyCard v-else-if="!rows.length" message="Tidak ada emiten HSC yang cocok dengan pencarian atau filter saat ini." :on-reset="resetFilter" />
 
     <UTable v-else :data="rows" :columns="columns" :ui="{ tr: 'even:bg-elevated/50' }" />
-
-    <DataSourceNote :href="IDX_HSC_SOURCE_URL" label="Kepemilikan Saham Terkonsentrasi Tinggi (IDX)" />
   </main>
 </template>
