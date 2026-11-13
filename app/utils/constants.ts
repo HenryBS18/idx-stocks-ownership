@@ -80,5 +80,3 @@ export const investorType: string[] = [
 export const IDX_HSC_SOURCE_URL = 'https://www.idx.co.id/id/perusahaan-tercatat/kepemilikan-saham-terkonsentrasi-tinggi'
 
 export const HSC_THRESHOLD = '92,5%'
-
-export const HSC_EVALUATION_DATE = '30 Oktober 2026'
