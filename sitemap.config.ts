@@ -24,6 +24,7 @@ export const sitemapContentDates = () => {
       '/': lastCommitDate(['app/pages/index.vue', 'app/components/LandingFaq.vue', 'app/components/LandingOwnership.vue', 'app/components/LandingPreviewLink.vue', 'app/components/HoldingRelationshipBadge.vue', 'server/services/landing.service.ts', shareholderSort]),
       '/saham': lastCommitDate(['app/pages/saham/index.vue', 'app/pages/saham.vue', 'app/components/SahamAccordion.vue', 'app/components/StockInvestorsTable.vue', 'server/services/stock.service.ts', shareholderSort]),
       '/investor': lastCommitDate(['app/pages/investor/index.vue', 'app/pages/investor.vue', 'app/components/InvestorAccordion.vue', 'app/components/InvestorStocksTable.vue', 'server/services/investor.service.ts']),
+      '/hsc': lastCommitDate(['app/pages/hsc.vue', 'server/api/stock/hsc/index.ts', 'server/services/stock.service.ts', 'app/components/DataSourceNote.vue', 'app/utils/constants.ts']),
       '/lisensi': lastCommitDate(['app/pages/lisensi.vue', 'app/utils/constants.ts']),
       '/privasi': lastCommitDate(['app/pages/privasi.vue', 'app/utils/constants.ts']),
     },
