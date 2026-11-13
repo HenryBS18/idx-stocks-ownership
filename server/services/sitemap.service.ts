@@ -8,8 +8,12 @@ const batchFields = { id: true, year: true, month: true, createdAt: true } as co
 export class SitemapService {
   async getEntries(name: SitemapName, content: SitemapContentDates) {
     // Re-read lightweight metadata so concurrent uploads cannot restore a stale URL set.
-    const current = await prisma.info.findFirst({ orderBy: newest, select: batchFields })
-    if (!current) return buildSitemapEntries(name, { tickers: [], slugs: [] }, content, [])
+    const [current, hsc] = await Promise.all([
+      prisma.info.findFirst({ orderBy: newest, select: batchFields }),
+      prisma.hscInfo.findUnique({ where: { id: 1 }, select: { updatedAt: true } }),
+    ])
+    const hscDate = hsc?.updatedAt.toISOString() ?? null
+    if (!current) return buildSitemapEntries(name, { tickers: [], slugs: [] }, content, [], hscDate)
     const previous = await prisma.info.findFirst({
       where: { OR: [{ year: { lt: current.year } }, { year: current.year, month: { lt: current.month } }] },
       orderBy: newest, select: batchFields,
@@ -29,6 +33,6 @@ export class SitemapService {
       entities = { tickers: stocks.map(stock => stock.ticker), slugs: investors.map(investor => investor.slug) }
       await setCache(cacheKey, entities)
     }
-    return buildSitemapEntries(name, entities, content, [current.createdAt.toISOString(), previous?.createdAt.toISOString() ?? null])
+    return buildSitemapEntries(name, entities, content, [current.createdAt.toISOString(), previous?.createdAt.toISOString() ?? null], hscDate)
   }
 }

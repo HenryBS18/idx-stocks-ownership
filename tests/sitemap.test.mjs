@@ -47,3 +47,17 @@ test('an empty database can still publish the main pages', () => {
   assert.deepEqual(maps['sitemap-stocks'], [])
   assert.deepEqual(maps['sitemap-investors'], [])
 })
+
+test('a newer HSC update moves only the pages and stocks that show HSC data', () => {
+  const entities = { tickers: ['BBCA'], slugs: ['abdi-andre'] }
+  const batches = ['2026-10-01T00:00:00Z']
+  const before = buildAllSitemaps(entities, content, batches)
+  const after = Object.fromEntries(['sitemap-pages', 'sitemap-stocks', 'sitemap-investors'].map(name =>
+    [name, buildSitemapEntries(name, entities, content, batches, '2026-11-13T05:00:00Z')]))
+  const pageDate = (maps, loc) => maps['sitemap-pages'].find(entry => entry.loc === loc).lastmod
+  for (const loc of ['/', '/saham', '/hsc']) assert.equal(pageDate(after, loc), '2026-11-13T05:00:00.000Z')
+  for (const loc of ['/investor', '/lisensi', '/privasi']) assert.equal(pageDate(after, loc), pageDate(before, loc))
+  assert.equal(after['sitemap-stocks'][0].lastmod, '2026-11-13T05:00:00.000Z')
+  assert.deepEqual(after['sitemap-investors'], before['sitemap-investors'])
+  assert.equal(pageDate(buildAllSitemaps(entities, content, []), '/hsc'), undefined)
+})
