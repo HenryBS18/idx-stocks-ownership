@@ -59,3 +59,10 @@ export type Info = {
 }
 
 export type InfoResponse = Info[]
+
+export type HscStock = {
+  ticker: string
+  name: string
+  sector: string | null
+  hscConcentration: number
+}

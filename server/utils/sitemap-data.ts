@@ -18,7 +18,7 @@ export const buildSitemapEntries = (
   const entry = (loc: string, date: string | undefined): SitemapUrl => ({ loc, ...(date ? { lastmod: date } : {}) })
   if (name === 'sitemap-pages') {
     const dataPages = new Set(['/', '/saham', '/investor'])
-    return ['/', '/saham', '/investor', '/lisensi', '/privasi'].map(loc =>
+    return ['/', '/saham', '/investor', '/hsc', '/lisensi', '/privasi'].map(loc =>
       entry(loc, newestSitemapDate(content.pages[loc], dataPages.has(loc) ? dataDate : null)))
   }
   const isStock = name === 'sitemap-stocks'

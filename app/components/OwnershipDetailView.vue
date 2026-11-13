@@ -2,6 +2,7 @@
 import type { OwnershipDetail } from '~~/shared/types/detail'
 import type { InvestorStockTableRow, StockInvestorTableRow } from '~/types/holdings-table'
 import { getLargestShareholder } from '~/utils/ownership-ranking'
+import { HSC_EVALUATION_DATE, HSC_THRESHOLD } from '~/utils/constants'
 
 const props = defineProps<{ detail: OwnershipDetail }>()
 defineEmits<{ selectPeriod: [value: string] }>()
@@ -105,7 +106,7 @@ const decreases = computed(() => props.detail.holdings.filter(row => row.changeK
       <h2 id="method-heading" class="font-semibold text-highlighted">Sumber dan cakupan data</h2>
       <p>Catatan mengikuti pengumuman BEI pada periode yang dipilih. Jumlah {{ isStock ? 'investor' : 'saham' }} mencakup entri yang tersedia dalam dataset ini.</p>
       <p v-if="isStock">Free float dihitung dari 100% dikurangi total persentase kepemilikan yang tercatat. Angka ini bukan penetapan free float resmi BEI.</p>
-      <p v-if="isStock">HSC (High Shareholding Concentration) menandai emiten yang sahamnya terkonsentrasi pada segelintir pihak menurut BEI. Angka HSC ditampilkan sebagaimana dipublikasikan dan tidak dihitung oleh aplikasi.</p>
+      <p v-if="isStock">HSC (Kepemilikan Saham Terkonsentrasi Tinggi) menandai emiten yang kepemilikan kumulatif hingga 10 pemegang saham scripless ditambah scrip mencapai paling sedikit {{ HSC_THRESHOLD }}, menurut evaluasi BEI per {{ HSC_EVALUATION_DATE }}. Angka HSC ditampilkan sebagaimana dipublikasikan dan tidak dihitung oleh aplikasi. Lihat daftar lengkap di <NuxtLink to="/hsc" class="underline decoration-accented underline-offset-2 transition-colors hover:text-default">halaman HSC</NuxtLink>.</p>
       <p v-else>Halaman ini menampilkan kepemilikan atas nama investor yang tercatat dalam dataset, sehingga belum tentu mencakup seluruh portofolionya.</p>
       <DataSourceNote />
     </section>

@@ -5,7 +5,8 @@ const route = useRoute()
 
 const pages = [
   { label: 'Saham', icon: 'i-lucide-chart-candlestick', to: '/saham' },
-  { label: 'Investor', icon: 'i-lucide-user', to: '/investor' }
+  { label: 'Investor', icon: 'i-lucide-user', to: '/investor' },
+  { label: 'HSC', icon: 'i-lucide-gauge', to: '/hsc' }
 ]
 
 const activeIndex = computed(() =>
@@ -35,7 +36,7 @@ const showFooter = computed(() => isLanding.value || FOOTER_ROUTES.includes(rout
   )">
     <div v-if="!isLanding" class="relative hidden xl:flex w-full border-b border-accented">
       <NuxtLink v-for="page in pages" :key="page.to" :to="page.to"
-        class="flex items-center justify-center w-1/2 py-3 gap-x-1.5 transition-colors duration-200"
+        class="flex flex-1 items-center justify-center py-3 gap-x-1.5 transition-colors duration-200"
         :class="route.path === page.to || route.path.startsWith(`${page.to}/`) ? 'text-primary' : 'text-muted hover:text-highlighted hover:bg-elevated'">
         <UIcon :name="page.icon" class="size-5" />
 

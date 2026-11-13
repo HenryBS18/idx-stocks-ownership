@@ -125,6 +125,33 @@ export class StockService {
     return stocks
   }
 
+  async getHscStocks(): Promise<HscStock[]> {
+    const cached = await getCache<HscStock[]>('stock:hsc')
+    if (cached) return cached
+
+    const stocks = await prisma.stock.findMany({
+      where: { hscConcentration: { not: null } },
+      select: {
+        ticker: true,
+        name: true,
+        sector: true,
+        hscConcentration: true,
+      },
+      orderBy: [{ hscConcentration: 'desc' }, { ticker: 'asc' }],
+    })
+
+    const result = stocks.map(stock => ({
+      ticker: stock.ticker.trim(),
+      name: stock.name,
+      sector: getSectorLabel(stock.sector),
+      hscConcentration: Number(stock.hscConcentration),
+    }))
+
+    await setCache('stock:hsc', result)
+
+    return result
+  }
+
   async insertStock({ fileBuffer, idxLastUpdated }: InsertStockParam): Promise<void> {
     const tempFilePath = path.join(os.tmpdir(), `csv-${Date.now()}.csv`)
     fs.writeFileSync(tempFilePath, fileBuffer)

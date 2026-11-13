@@ -8,13 +8,13 @@ const buildAllSitemaps = (entities, dates, batches) => Object.fromEntries(
 )
 
 const content = {
-  pages: { '/': null, '/saham': null, '/investor': null, '/lisensi': '2026-01-01T00:00:00Z', '/privasi': null },
+  pages: { '/': null, '/saham': null, '/investor': null, '/hsc': null, '/lisensi': '2026-01-01T00:00:00Z', '/privasi': null },
   stocks: '2026-08-01T00:00:00Z', investors: null,
 }
 
 test('sitemaps contain unique canonical paths and exactly the five main pages', () => {
   const maps = buildAllSitemaps({ tickers: ['BBRI', 'bbca ', 'BBCA'], slugs: ['abdi-andre', 'abdi-andre', 'abdi-andre-12345678'] }, content, [])
-  assert.deepEqual(maps['sitemap-pages'].map(entry => entry.loc), ['/', '/saham', '/investor', '/lisensi', '/privasi'])
+  assert.deepEqual(maps['sitemap-pages'].map(entry => entry.loc), ['/', '/saham', '/investor', '/hsc', '/lisensi', '/privasi'])
   assert.deepEqual(maps['sitemap-stocks'].map(entry => entry.loc), ['/saham/BBCA', '/saham/BBRI'])
   assert.deepEqual(maps['sitemap-investors'].map(entry => entry.loc), ['/investor/abdi-andre', '/investor/abdi-andre-12345678'])
   assert.ok(Object.values(maps).flat().every(entry => !entry.loc.includes('?')))
@@ -37,13 +37,13 @@ test('uses committed content dates when newer and omits dates without evidence',
   const maps = buildAllSitemaps({ tickers: ['BBCA'], slugs: ['abdi-andre'] }, content, [])
   assert.equal(maps['sitemap-stocks'][0].lastmod, '2026-08-01T00:00:00.000Z')
   assert.equal('lastmod' in maps['sitemap-investors'][0], false)
-  assert.equal('lastmod' in maps['sitemap-pages'][4], false)
+  assert.equal('lastmod' in maps['sitemap-pages'][5], false)
   assert.equal(newestSitemapDate(null, undefined, 'invalid'), undefined)
 })
 
 test('an empty database can still publish the main pages', () => {
   const maps = buildAllSitemaps({ tickers: [], slugs: [] }, content, [])
-  assert.equal(maps['sitemap-pages'].length, 5)
+  assert.equal(maps['sitemap-pages'].length, 6)
   assert.deepEqual(maps['sitemap-stocks'], [])
   assert.deepEqual(maps['sitemap-investors'], [])
 })

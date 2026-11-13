@@ -10,6 +10,7 @@ const pages = [
   { label: 'Beranda', to: '/' },
   { label: 'Saham', to: '/saham' },
   { label: 'Investor', to: '/investor' },
+  { label: 'HSC', to: '/hsc' },
 ]
 
 const legalPages = [
